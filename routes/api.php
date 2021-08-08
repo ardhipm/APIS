@@ -4,6 +4,7 @@ use App\Http\Controllers\API\RoleController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\DrivePhotoController;
 use App\Http\Controllers\API\InvoiceController;
 use Illuminate\Support\Facades\Auth;
 
@@ -44,9 +45,9 @@ Route::post('registerUser', [UserController::class, 'register']);
 // Route::middleware('auth:api')->group(function () {
 //     Route::post('customer/create', 'API\CustomerController@store');
 // });
-// Route::middleware('auth:api')->group(function () {
-//     Route::get('customer/show', 'API\CustomerController@show');
-// });
+Route::middleware('auth:api')->group(function () {
+    Route::get('customer/show', 'API\CustomerController@show');
+});
 // Route::middleware('auth:api')->group(function ($id) {
 //     Route::post('customer/update/{id}', 'API\CustomerController@update');
 // });
@@ -92,6 +93,16 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('role/view', 'API\RoleController');
 });
 
+//drive
+Route::middleware('auth:api')->group(function () {
+    Route::get('drive/get_choice_photo', 'API\DrivePhotoController@getChoicePhoto');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::get('drive/get_final_photo', 'API\DrivePhotoController@getFinalPhoto');
+});
+
+
+
 
 Route::get('test', function() {
     // Storage::disk('google')->create('yuk.txt', 'Ardhi Putra Mahardika');
@@ -99,7 +110,7 @@ Route::get('test', function() {
     // Storage::disk('google')->makeDirectory('AMOR1');
     // return 'Directory was created in Google Drive';
 
-        Storage::disk('google')->makeDirectory('tes');
+        Storage::disk('google')->makeDirectory('aawwew');
 
         $dir = '/';
         $recursive = false; // Get subdirectories also?
@@ -150,20 +161,20 @@ Route::get('test2', function () {
 
             $rawData = Storage::cloud()->get($file['3']['path']);
 
-            return response($rawData, 200)
-                ->header('ContentType', 'image/png')
-                ->header('Content-Disposition', "attachment; filename='a.png'");
+            // return response($rawData, 200)
+            //     ->header('ContentType', 'image/png')
+            //     ->header('Content-Disposition', "attachment; filename='a.png'");
 
 
-            // return $files->mapWithKeys(function ($file) {
-            //     $filename = $file['filename'] . '.' . $file['extension'];
-            //     $path = $file['path'];
+            return $file->mapWithKeys(function ($file) {
+                $filename = $file['filename'] . '.' . $file['extension'];
+                $path = $file['path'];
 
-            //     // Use the path to download each file via a generated link..
-            //     // Storage::cloud()->get($file['path']);
+                // Use the path to download each file via a generated link..
+                // Storage::cloud()->get($file['path']);
 
-            //     return [$filename => $path];
-            // });
+                return [$filename => $path];
+            });
 
     }
 
