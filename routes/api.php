@@ -23,19 +23,21 @@ use Illuminate\Support\Facades\Auth;
 
 //user customer
 Route::post('login', [UserController::class, 'login']);
-Route::post('register', [UserController::class, 'registerUserCustomer']);
+Route::middleware('auth:api')->group(function () {
+    Route::post('admin/register_customer', [UserController::class, 'registerUserCustomer']);
+});
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', [UserController::class, 'logout']);
 });
 Route::middleware('auth:api')->group(function () {
-    Route::post('update/{id}', [UserController::class, 'updateUserCustomer']);
+    Route::post('admin/update_customer/{id}', [UserController::class, 'updateUserCustomer']);
 });
 
 //user
 Route::middleware('auth:api')->group(function () {
-    Route::post('is_active/{id}', [UserController::class, 'updateIsActive']);
+    Route::post('admin/is_active_user/{id}', [UserController::class, 'updateIsActive']);
 });
-Route::post('registerUser', [UserController::class, 'register']);
+Route::post('admin/register_admin', [UserController::class, 'registerAdmin']);
 
 
 //customer
@@ -56,32 +58,46 @@ Route::middleware('auth:api')->group(function () {
 // });
 
 //invoice
+// Route::middleware('auth:api')->group(function () {
+//     Route::post('invoice/create', 'API\InvoiceController@store');
+// });
 Route::middleware('auth:api')->group(function () {
-    Route::post('invoice/create', 'API\InvoiceController@store');
+    Route::get('admin/invoice/view', 'API\InvoiceController@index');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::get('invoice/view', 'API\InvoiceController@index');
+    Route::post('admin/invoice/update/{id}', 'API\InvoiceController@update');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::post('invoice/update/{id}', 'API\InvoiceController@update');
+    Route::post('admin/invoice/delete/{id}', 'API\InvoiceController@destroy');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::post('invoice/delete/{id}', 'API\InvoiceController@destroy');
+    Route::get('admin/invoice/detail/{id}', 'API\InvoiceController@viewAdmin');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::get('invoice/view', 'API\InvoiceController@viewCustomer');
 });
 
+
 //shipment
+// Route::middleware('auth:api')->group(function () {
+//     Route::post('shipment/create', 'API\ShipmentController@store');
+// });
 Route::middleware('auth:api')->group(function () {
-    Route::post('shipment/create', 'API\ShipmentController@store');
+    Route::get('admin/shipment/view', 'API\ShipmentController@index');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::get('shipment/view', 'API\ShipmentController@index');
+    Route::post('admin/shipment/update/{id}', 'API\ShipmentController@update');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::post('shipment/update/{id}', 'API\ShipmentController@update');
+    Route::post('admin/shipment/delete/{id}', 'API\ShipmentController@destroy');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::post('shipment/delete/{id}', 'API\ShipmentController@destroy');
+    Route::get('admin/shipment/detail/{id}', 'API\ShipmentController@viewAdmin');
 });
+Route::middleware('auth:api')->group(function () {
+    Route::get('shipment/view', 'API\ShipmentController@viewCustomer');
+});
+
 
 //order status
 Route::middleware('auth:api')->group(function () {
@@ -100,6 +116,13 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::get('drive/get_final_photo', 'API\DrivePhotoController@getFinalPhoto');
 });
+Route::middleware('auth:api')->group(function () {
+    Route::get('drive/get_video', 'API\DrivePhotoController@getVideo');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::get('drive/get_album', 'API\DrivePhotoController@getAlbum');
+});
+
 
 
 
@@ -110,7 +133,7 @@ Route::get('test', function() {
     // Storage::disk('google')->makeDirectory('AMOR1');
     // return 'Directory was created in Google Drive';
 
-        Storage::disk('google')->makeDirectory('aawwew');
+        Storage::disk('main_google')->makeDirectory('tesssssss');
 
         $dir = '/';
         $recursive = false; // Get subdirectories also?

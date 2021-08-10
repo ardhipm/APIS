@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
 use App\Shipment;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 
 class ShipmentController extends Controller
@@ -22,6 +24,97 @@ class ShipmentController extends Controller
         ];
 
         return response()->json($response, 200);
+    }
+
+    public function viewAdmin($id)
+    {
+        $shipment = Shipment::find($id);
+
+        if (count($shipment) == 0) {
+            $response = [
+                'success' => false,
+                'message' => 'Shipment not found.',
+            ];
+            return response()->json($response, 404);
+        } else {
+            $customer = DB::table('shipments')
+                ->leftJoin('customers', 'shipments.id_customer', 'customers.id')
+                ->select('customers.id', 'customers.id_user', 'customers.name', 'customers.phone_no', 'customers.partner_name')
+                ->where('shipments.id', '=', $id)
+                ->get()->toArray();
+
+            $folder = $customer[0]->id . ' - ' . $customer[0]->name;
+
+            $contents = collect(\Storage::cloud()->listContents('/', false));
+            $dir = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', $folder)
+                ->first(); // There could be duplicate directory names!
+
+            $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+            $dir = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', 'Shipment')
+                ->first(); // There could be duplicate directory names!
+
+            $filedirchild = collect(\Storage::cloud()->listContents($dir['path'], false))->where('type', '=', 'file');
+
+            if(count($filedirchild) == 0){
+                $shipment['shimpent_photo_link'] = '';
+
+            } else {
+                $shipment['shimpent_photo_link'] = $filedirchild[0]['basename'];
+            }
+            
+
+            $response = [
+                'success' => true,
+                'data' => $shipment,
+                'message' => 'Invoice retrieved successfully.',
+            ];
+
+        }
+
+        return response()->json($response, 200);
+    }
+
+    public function viewCustomer()
+    {
+        $customer = DB::table('shipments')
+        ->leftJoin('customers', 'shipments.id_customer', 'customers.id')
+        ->select('shipments.id as shipment_id', 'customers.id', 'customers.name')
+        ->where('customers.id_user', '=', Auth::Id())
+        ->get()->toArray();
+
+        $invoice= Shipment::find($customer[0]->shipment_id);
+
+        $folder = $customer[0]->id . ' - ' . $customer[0]->name;
+
+        $contents = collect(\Storage::cloud()->listContents('/', false));
+        $dir = $contents->where('type', '=', 'dir')
+            ->where('filename', '=', $folder)
+            ->first(); // There could be duplicate directory names!
+
+        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+        $dir = $contents->where('type', '=', 'dir')
+            ->where('filename', '=', 'Shipment')
+            ->first(); // There could be duplicate directory names!
+
+        $filedirchild = collect(\Storage::cloud()->listContents($dir['path'], false))->where('type', '=', 'file');
+
+        if (count($filedirchild) == 0) {
+            $invoice['shimpent_photo_link'] = '';
+
+        } else {
+            $invoice['shipment_photo_link'] = $filedirchild[0]['basename'];
+        }
+
+
+        $response = [
+                'success' => true,
+                'data' => $invoice,
+                'message' => 'Invoice retrieved successfully.',
+            ];
+
+            return response()->json($response, 200);
     }
 
     public function store(Request $request)
@@ -55,9 +148,8 @@ class ShipmentController extends Controller
         $bodyJson = json_decode($body, true);
 
         $rules = [
-            'receipt_no' => 'required|unique:shipments',
-            'receipt_link' => 'required',
-            'id_customer' => 'required'
+            'receipt_no' => 'required',
+            'receipt_link' => 'required'
         ];
 
         $validator = Validator::make($bodyJson, $rules);
@@ -76,7 +168,6 @@ class ShipmentController extends Controller
         } else {
             $dataShipment->receipt_no = $bodyJson['receipt_no'];
             $dataShipment->receipt_link = $bodyJson['receipt_link'];
-            $dataShipment->id_customer = $bodyJson['id_customer'];
             $dataShipment->save();
 
             $response = [

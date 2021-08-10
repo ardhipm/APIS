@@ -25,9 +25,9 @@ return [
     | will be bound as the Cloud disk implementation in the container.
     |
     */
-
+    
     // 'cloud' => env('FILESYSTEM_CLOUD', 's3'),
-    'cloud' => 'google',
+    'cloud' => 'amor_photo',
 
     /*
     |--------------------------------------------------------------------------
@@ -65,12 +65,28 @@ return [
             'url' => env('AWS_URL'),
         ],
 
-        'google' => [
+        'main_google' => [
             'driver' => 'google',
             'clientId' => env('GOOGLE_DRIVE_CLIENT_ID'),
             'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
             'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
             'folderId' => env('GOOGLE_DRIVE_FOLDER_ID'),
+        ],
+
+        'amor_photo' => [
+            'driver' => 'google',
+            'clientId' => env('GOOGLE_DRIVE_CLIENT_ID_PHOTO'),
+            'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET_PHOTO'),
+            'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN_PHOTO'),
+            'folderId' => env('GOOGLE_DRIVE_FOLDER_ID_PHOTO'),
+        ],
+
+        'amor_marketing' => [
+            'driver' => 'google',
+            'clientId' => env('GOOGLE_DRIVE_CLIENT_ID_MARKETING'),
+            'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET_MARKETING'),
+            'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN_MARKETING'),
+            'folderId' => env('GOOGLE_DRIVE_FOLDER_ID_MARKETING'),
         ],
 
     ],

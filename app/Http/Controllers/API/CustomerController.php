@@ -144,7 +144,6 @@ class CustomerController extends Controller
         if (sizeof($data) < 1) {
             $response = [
                 'success' => false,
-                'data' => 'Empty',
                 'message' => 'Customer not found.',
             ];
             return response()->json($response, 404);
