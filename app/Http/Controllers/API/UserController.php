@@ -305,7 +305,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             return $validator->errors();
         } else {
-            if (!Auth::attempt(['username' => $bodyJson['username'], 'password' => '123123', 'is_active' => 1])) {
+            if (!Auth::attempt(['username' => $bodyJson['username'], 'password' => $bodyJson['password'], 'is_active' => 1])) {
                 return response(['success' => false, 'message' => 'This User does not exist, check your details'], 400);
             }
             $accessToken = auth()->user()->createToken('authToken')->accessToken;

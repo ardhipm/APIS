@@ -13,10 +13,10 @@ class CreateSubPackageTable extends Migration
      */
     public function up()
     {
-        Schema::create('sub_package', function (Blueprint $table) {
+        Schema::create('sub_packages', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('sub_package_name');
-            $table->text('description');
+            $table->text('sub_package_description');
             $table->integer('num_edit_photo');
             $table->integer('num_print_photo');
             $table->integer('id_package');
