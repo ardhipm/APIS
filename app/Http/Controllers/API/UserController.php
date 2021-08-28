@@ -23,7 +23,7 @@ class UserController extends Controller
     {
         $user = User::find(Auth::Id());
 
-        if ($user['role_id'] == 2) {
+        if ($user['role_id'] == 2 OR $user['role_id'] == 3) {
 
             $body = $request->getContent();
             $bodyJson = json_decode($body,true);
@@ -78,6 +78,7 @@ class UserController extends Controller
                 ->where('filename', '=', $customer->id . ' - ' . $bodyJson['name'])
                 ->first(); // There could be duplicate directory names!
 
+                \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Mentah');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Pilihan');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Akhir');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Video');
@@ -132,6 +133,29 @@ class UserController extends Controller
                     \Storage::cloud()->makeDirectory($dir2['path'] . '/' . $subPackageList[$x]['sub_package_name']);
                 }
 
+                $dir3 = $contents->where('type', '=', 'dir')
+                    ->where('filename', '=', "Foto Mentah")
+                    ->first(); // There could be duplicate directory names!
+
+                // if (!$dir) {$response = [
+                //     'success' => false,
+                //     'data' => 'Directory does not exist',
+                //     'message' => $validator->errors(),
+                // ];
+                //     return response()->json($response, 404);
+                //     return 'Directory does not exist!';
+                // }
+
+                $subPackageList = $bodyJson['sub_package'];
+                for ($x = 0; $x <= count($subPackageList) - 1; $x++) {
+                    $subPackageList[$x]['id_package'] = $package->id;
+
+                    SubPackage::create($subPackageList[$x]);
+
+                    \Storage::cloud()->makeDirectory($dir3['path'] . '/' . $subPackageList[$x]['sub_package_name']);
+                }
+
+
                 return response(['success' => true, 'message' => 'Account register successfully'], 201);
             } 
         } else {
@@ -143,7 +167,7 @@ class UserController extends Controller
     {
         $user = User::find(Auth::Id());
 
-        if ($user['role_id'] == 2) {
+        if ($user['role_id'] == 2 OR $user['role_id'] == 3) {
 
             $body = $request->getContent();
             $bodyJson = json_decode($body,true);
@@ -214,7 +238,6 @@ class UserController extends Controller
             }
         } else {
             return response(['success' => false, 'message' => 'No access to do action'], 201);
-
         }
     }
 
@@ -259,35 +282,39 @@ class UserController extends Controller
     }
 
     public function registerAdmin(Request $request){
-        $body = $request->getContent();
-        $bodyJson = json_decode($body,true);
+        $user = User::find(Auth::Id());
 
-        $rules = [
-            'username' => 'required|unique:users',
-            'password' => 'required',
-            'email' => 'required|email|unique:users',
-        ];
+        if ($user['role_id'] == 3) {
+            $body = $request->getContent();
+            $bodyJson = json_decode($body,true);
 
-        $validator = Validator::make($bodyJson, $rules);
-        if ($validator->fails()) { 
-            return response(['success' => false, 'message' => $validator->errors()], 201);
-        } else {
-            $bodyJson['plain_password'] = $bodyJson['password'];
-            $bodyJson['password'] = Hash::make($bodyJson['password']);
-            $bodyJson['role_id'] = '2';
-            $bodyJson['is_active'] = TRUE;
-
-            $user = User::create($bodyJson);
-
-
-            $response = [
-                'success' => true,
-                'message' => 'User created successfully.'
+            $rules = [
+                'username' => 'required|unique:users',
+                'password' => 'required',
+                'email' => 'required|email|unique:users',
             ];
-            return response()->json($response, 404);
-        }
 
-       
+            $validator = Validator::make($bodyJson, $rules);
+            if ($validator->fails()) { 
+                return response(['success' => false, 'message' => $validator->errors()], 201);
+            } else {
+                $bodyJson['plain_password'] = $bodyJson['password'];
+                $bodyJson['password'] = Hash::make($bodyJson['password']);
+                $bodyJson['role_id'] = '2';
+                $bodyJson['is_active'] = TRUE;
+
+                $user = User::create($bodyJson);
+
+
+                $response = [
+                    'success' => true,
+                    'message' => 'User created successfully.'
+                ];
+                return response()->json($response, 404);
+            }
+        }  else {
+            return response(['success' => false, 'message' => 'No access to do action'], 201);
+        }       
     }
 
     public function login(Request $request)

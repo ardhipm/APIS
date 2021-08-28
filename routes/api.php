@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\DrivePhotoController;
+use App\Http\Controllers\API\PhotoSelectedController;
 use App\Http\Controllers\API\InvoiceController;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,9 +42,9 @@ Route::post('admin/register_admin', [UserController::class, 'registerAdmin']);
 
 
 //customer
-// Route::middleware('auth:api')->group(function () {
-//     Route::resource('customer/view', 'API\CustomerController');
-// });
+Route::middleware('auth:api')->group(function () {
+    Route::resource('customer/view', 'API\CustomerController');
+});
 // Route::middleware('auth:api')->group(function () {
 //     Route::post('customer/create', 'API\CustomerController@store');
 // });
@@ -111,6 +112,9 @@ Route::middleware('auth:api')->group(function () {
 
 //drive
 Route::middleware('auth:api')->group(function () {
+    Route::get('drive/get_origin_photo', 'API\DrivePhotoController@getOriginPhoto');
+});
+Route::middleware('auth:api')->group(function () {
     Route::get('drive/get_choice_photo', 'API\DrivePhotoController@getChoicePhoto');
 });
 Route::middleware('auth:api')->group(function () {
@@ -123,6 +127,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('drive/get_album', 'API\DrivePhotoController@getAlbum');
 });
 
+//selected photo
+Route::middleware('auth:api')->group(function () {
+    Route::post('selected_photo', 'API\DrivePhotoController@insertSelected');
+});
 
 
 

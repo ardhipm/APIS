@@ -25,7 +25,7 @@ return [
     | will be bound as the Cloud disk implementation in the container.
     |
     */
-    
+            
     // 'cloud' => env('FILESYSTEM_CLOUD', 's3'),
     'cloud' => 'amor_photo',
 
