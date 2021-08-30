@@ -350,4 +350,72 @@ class UserController extends Controller
             return response()->json(['success' => false, 'message' =>'Token not found or already logout'], 500);
         }
     }
+
+    public function update(Request $request, $id)
+    {
+        $body = $request->getContent();
+        $bodyJson = json_decode($body, true);
+
+        $rules = [
+            'username' => 'required',
+            'role_id' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'is_active' => 'required'
+        ];
+
+        $validator = Validator::make($bodyJson, $rules);
+        if ($validator->fails()) { 
+            return response(['success' => false, 'message' => $validator->errors()], 201);
+        } else {
+
+            $dataUser = User::find($id);
+
+            if (count($dataUser) == 0) {
+                $response = [
+                    'success' => false,
+                    'message' => 'User not found.',
+                ];
+                return response()->json($response, 404);
+            } else {
+                $dataUser->username = $bodyJson['username'];
+                $dataUser->role_id = $bodyJson['role_id'];
+                $dataUser->email = $bodyJson['email'];
+                $dataUser->password = Hash::make($bodyJson['password']);
+                $dataUser->is_active = $bodyJson['is_active'];
+                $dataUser->plain_password = $bodyJson['password'];
+                $dataUser->save();
+
+                $response = [
+                    'success' => true,
+                    'message' => 'User updated successfully.',
+                ];
+            }
+
+            return response()->json($response, 200);
+         }
+    }
+
+    public function destroy($id)
+    {
+        $user = User::find($id);
+
+        if (count($user) == 0) {
+            $response = [
+                'success' => false,
+                'message' => 'User not found.',
+            ];
+            return response()->json($response, 404);
+        } else {
+            $user->delete();
+
+            $response = [
+                'success' => true,
+                'message' => 'User deleted successfully.',
+            ];
+
+        }
+
+        return response()->json($response, 200);
+    }
 }
