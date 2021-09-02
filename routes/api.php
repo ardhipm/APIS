@@ -45,11 +45,16 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::post('admin/user/delete/{id}', [UserController::class, 'destroy']);
 });
-
+Route::middleware('auth:api')->group(function () {
+    Route::post('user/delete_multiple', 'API\UserController@deleteMultiple');
+});
 
 //customer
 Route::middleware('auth:api')->group(function () {
     Route::resource('customer/view', 'API\CustomerController');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::post('customer/delete_multiple', 'API\CustomerController@deleteMultiple');
 });
 // Route::middleware('auth:api')->group(function () {
 //     Route::post('customer/create', 'API\CustomerController@store');
@@ -83,6 +88,10 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::get('invoice/view', 'API\InvoiceController@viewCustomer');
 });
+Route::middleware('auth:api')->group(function () {
+    Route::post('invoice/delete_multiple', 'API\InvoiceController@deleteMultiple');
+});
+
 
 
 //shipment
@@ -104,6 +113,10 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::get('shipment/view', 'API\ShipmentController@viewCustomer');
 });
+Route::middleware('auth:api')->group(function () {
+    Route::post('shipment/delete_multiple', 'API\ShipmentController@deleteMultiple');
+});
+
 
 //FAQ
 Route::middleware('auth:api')->group(function () {

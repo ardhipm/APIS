@@ -418,4 +418,18 @@ class UserController extends Controller
 
         return response()->json($response, 200);
     }
+
+    public function deleteMultiple(Request $request)
+    {
+        $body = $request->getContent();
+        $bodyJson = json_decode($body, true);
+
+        $listDelete = $bodyJson['list_delete'];
+        for ($x = 0; $x <= count($listDelete) - 1; $x++) {
+            DB::delete('DELETE from users where id = ' .$listDelete[$x]['delete']);
+        }
+
+        return response(['success' => true, 'message' => 'Deleted Successfully'], 201);
+
+    }
 }
