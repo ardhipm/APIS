@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Customer;
+use App\Package;
 use App\SubPackage;
 use Validator;
 use Illuminate\Support\Facades\Auth;
@@ -132,22 +133,29 @@ class CustomerController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {
         $customer = DB::table('customers')
-                ->leftJoin('users', 'customers.id_user', 'users.id')
-                ->select('customers.id_user','users.email','customers.name','customers.phone_no','customers.partner_name')
-                ->where('customers.id_user', '=', Auth::Id())
-                ->get();
-        $data = $customer->toArray();
+        ->leftJoin('users', 'customers.id_user', 'users.id')
+        ->leftJoin('packages', 'customers.id', 'packages.id_customer')
+        ->select('customers.id', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name', 'users.is_active', 'packages.id as packages_id', 'packages.package_name')
+        ->where('customers.id', '=', $id)
+        ->get();
 
-        if (sizeof($data) < 1) {
-            $response = [
-                'success' => false,
-                'message' => 'Customer not found.',
-            ];
-            return response()->json($response, 404);
-        }
+
+        $data = Package::find($id);
+        // $data = SubPackage::all();
+        $sub = Package::find($id)->sub_packages->toArray();
+        $data->sub_package = $sub;
+        // $data = $customer->sub_packages();
+
+        // if (sizeof($data) < 1) {
+        //     $response = [
+        //         'success' => false,
+        //         'message' => 'Customer not found.',
+        //     ];
+        //     return response()->json($response, 404);
+        // }
 
         $response = [
             'success' => true,
