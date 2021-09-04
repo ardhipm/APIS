@@ -93,6 +93,13 @@ class UserController extends Controller
                     ->where('filename', '=', "Foto Pilihan")
                     ->first(); // There could be duplicate directory names!
 
+                $dir2 = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', "Foto Akhir")
+                ->first(); // There could be duplicate directory names!
+
+                $dir3 = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', "Foto Mentah")
+                ->first(); // There could be duplicate directory names!
                 // if (!$dir) {$response = [
                 //     'success' => false,
                 //     'data' => 'Directory does not exist',
@@ -109,49 +116,7 @@ class UserController extends Controller
                     SubPackage::create($subPackageList[$x]);
 
                     \Storage::cloud()->makeDirectory($dir['path'] . '/' .$subPackageList[$x]['sub_package_name']);
-                }
-
-                $dir2 = $contents->where('type', '=', 'dir')
-                    ->where('filename', '=', "Foto Akhir")
-                    ->first(); // There could be duplicate directory names!
-
-                // if (!$dir) {$response = [
-                //     'success' => false,
-                //     'data' => 'Directory does not exist',
-                //     'message' => $validator->errors(),
-                // ];
-                //     return response()->json($response, 404);
-                //     return 'Directory does not exist!';
-                // }
-
-                $subPackageList = $bodyJson['sub_package'];
-                for ($x = 0; $x <= count($subPackageList) - 1; $x++) {
-                    $subPackageList[$x]['id_package'] = $package->id;
-
-                    SubPackage::create($subPackageList[$x]);
-
                     \Storage::cloud()->makeDirectory($dir2['path'] . '/' . $subPackageList[$x]['sub_package_name']);
-                }
-
-                $dir3 = $contents->where('type', '=', 'dir')
-                    ->where('filename', '=', "Foto Mentah")
-                    ->first(); // There could be duplicate directory names!
-
-                // if (!$dir) {$response = [
-                //     'success' => false,
-                //     'data' => 'Directory does not exist',
-                //     'message' => $validator->errors(),
-                // ];
-                //     return response()->json($response, 404);
-                //     return 'Directory does not exist!';
-                // }
-
-                $subPackageList = $bodyJson['sub_package'];
-                for ($x = 0; $x <= count($subPackageList) - 1; $x++) {
-                    $subPackageList[$x]['id_package'] = $package->id;
-
-                    SubPackage::create($subPackageList[$x]);
-
                     \Storage::cloud()->makeDirectory($dir3['path'] . '/' . $subPackageList[$x]['sub_package_name']);
                 }
 

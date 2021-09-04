@@ -54,20 +54,17 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('customer/view', 'API\CustomerController');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::post('customer/delete_multiple', 'API\CustomerController@deleteMultiple');
+    Route::post('customer/create', 'API\CustomerController@store');
 });
-// Route::middleware('auth:api')->group(function () {
-//     Route::post('customer/create', 'API\CustomerController@store');
-// });
 Route::middleware('auth:api')->group(function () {
-    Route::get('customer/show', 'API\CustomerController@show');
+    Route::get('customer/show/{id}', 'API\CustomerController@show');
 });
-// Route::middleware('auth:api')->group(function ($id) {
-//     Route::post('customer/update/{id}', 'API\CustomerController@update');
-// });
-// Route::middleware('auth:api')->group(function ($id) {
-//     Route::post('customer/delete/{id}', 'API\CustomerController@destroy');
-// });
+Route::middleware('auth:api')->group(function ($id) {
+    Route::post('customer/update/{id}', 'API\CustomerController@update');
+});
+Route::middleware('auth:api')->group(function ($id) {
+    Route::post('customer/delete/{id}', 'API\CustomerController@destroy');
+});
 
 //invoice
 // Route::middleware('auth:api')->group(function () {
