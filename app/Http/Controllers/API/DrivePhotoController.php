@@ -259,7 +259,7 @@ class DrivePhotoController extends Controller
             ->where('customers.id_user', '=', Auth::Id())
             ->get()->toArray();
 
-        DB::delete('DELETE from selected_photos where id_customer = ?', [$customer[0]->id]);
+        DB::delete('DELETE from selected_photos where id_customer = '/$customer[0]->id);
 
 
         $listBasename = $bodyJson['list_basename'];
