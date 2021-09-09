@@ -57,13 +57,19 @@ Route::middleware('auth:api')->group(function () {
     Route::post('customer/create', 'API\CustomerController@store');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::get('customer/show/{id}', 'API\CustomerController@show');
+    Route::post('customer/show/{id}', 'API\CustomerController@show');
 });
 Route::middleware('auth:api')->group(function ($id) {
     Route::post('customer/update/{id}', 'API\CustomerController@update');
 });
 Route::middleware('auth:api')->group(function ($id) {
     Route::post('customer/delete/{id}', 'API\CustomerController@destroy');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::post('customer/updateCustomer', 'API\CustomerController@updateCustomer');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::post('customer/sub_package/delete_multiple', 'API\CustomerController@deleteMultipleSubpackage');
 });
 
 //invoice
