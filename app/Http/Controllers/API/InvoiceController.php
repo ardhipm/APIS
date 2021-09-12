@@ -15,7 +15,13 @@ class InvoiceController extends Controller
 {
     public function index()
     {
-        $invoice = Invoice::all();
+        // $invoice = Invoice::all();
+
+        $invoice = DB::table('invoices')
+        ->leftJoin('customers', 'customers.id', 'invoices.id_customer')
+        ->select('invoices.id as invoice_id', 'invoices.invoice_no', 'invoices.id_customer as customer_id','invoices.id_payment_status', 'customers.name', 'customers.partner_name')
+        ->get();
+        
         $data = $invoice->toArray();
 
         $response = [

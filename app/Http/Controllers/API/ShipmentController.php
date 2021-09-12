@@ -14,7 +14,12 @@ class ShipmentController extends Controller
 {
     public function index()
     {
-        $shipment = Shipment::all();
+        // $shipment = Shipment::all();
+
+        $shipment = DB::table('shipments')
+        ->leftJoin('customers', 'customers.id', 'shipments.id_customer')
+        ->select('shipments.id as shipment_id', 'shipments.receipt_no','shipments.receipt_link', 'shipments.id_customer as customer_id','customers.name', 'customers.partner_name')
+        ->get();
         $data = $shipment->toArray();
 
         $response = [
