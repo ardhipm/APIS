@@ -48,6 +48,14 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::post('user/delete_multiple', 'API\UserController@deleteMultiple');
 });
+Route::middleware('auth:api')->group(function () {
+    Route::get('admin/member/view', 'API\UserController@viewMember');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::post('admin/member/register', 'API\UserController@createMember');
+});
+
+
 
 //customer
 Route::middleware('auth:api')->group(function () {
@@ -176,6 +184,9 @@ Route::middleware('auth:api')->group(function () {
 });
 Route::middleware('auth:api')->group(function () {
     Route::get('drive/get_album', 'API\DrivePhotoController@getAlbum');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::get('drive/download_file', 'API\DrivePhotoController@downloadFile');
 });
 
 //selected photo

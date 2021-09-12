@@ -277,4 +277,49 @@ class DrivePhotoController extends Controller
         return response(['success' => true, 'message' => 'Selected Photo inserted'], 201);
 
     }
+
+    public function downloadFile(){
+        $customer = DB::table('customers')
+        ->leftJoin('users', 'customers.id_user', 'users.id')
+        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
+        ->where('customers.id_user', '=', Auth::Id())
+        ->get()->toArray();
+
+        
+        $folder = $customer[0]->id .' - ' .$customer[0]->name;
+
+        $contents = collect(\Storage::cloud()->listContents('/', false));
+        $dir = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', $folder)
+                ->first(); // There could be duplicate directory names!
+        
+        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+        $dir = $contents->where('type', '=', 'dir')
+        ->where('filename', '=', 'Foto Mentah')
+        ->first(); // There could be duplicate directory names!
+
+        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+
+        $dir = $contents->where('type', '=', 'dir')
+        ->where('filename', '=', 'PaketCuy2')
+        ->first(); 
+
+        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+
+        // die($contents);
+        foreach($contents as $item){
+            // echo print_r($item);
+            
+            $ulala = \Storage::cloud()->get($item['path']);
+
+            echo print_r($ulala);
+            echo "\r\n";
+        }
+
+        die();
+
+        // $ulala = \Storage::cloud()->get($dir['path']);
+        // die(print_r($ulala));
+
+    }
 }
