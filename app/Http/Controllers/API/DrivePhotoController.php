@@ -5,15 +5,55 @@ use App\SelectedPhoto;
 use App\Customer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\RedirectResponse;
 
-
+use ZipArchive;
+use File;
+use Zip;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use GuzzleHttp\Client;
+
 
 class DrivePhotoController extends Controller
 {
     public function index(){
 
+    }
+
+    public function getChoicePhotoFolder($folderName){
+        $decodeName =  urldecode($folderName);
+
+        $customer = DB::table('customers')
+        ->leftJoin('users', 'customers.id_user', 'users.id')
+        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
+        ->where('customers.id_user', '=', Auth::Id())
+        ->get()->toArray();
+
+        
+        $folder = $customer[0]->id .' - ' .$customer[0]->name;
+
+        $contents = collect(\Storage::cloud()->listContents('/', false));
+        $dir = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', $folder)
+                ->first(); // There could be duplicate directory names!
+        
+        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+        $dir = $contents->where('type', '=', 'dir')
+        ->where('filename', '=', 'Foto Mentah')
+        ->first(); // There could be duplicate directory names!
+
+        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+
+        $dir = $contents->where('type', '=', 'dir')
+        ->where('filename', '=', $decodeName)
+        ->first(); 
+
+        $files = collect(\Storage::cloud()->listContents($dir['path'], false))
+        ->where('type', '=', 'file');
+
+        return response(['success' => true,'data'=>'$files', 'message' => 'Selected Photo inserted'], 201);
     }
 
     public function getChoicePhoto(){
@@ -137,10 +177,13 @@ class DrivePhotoController extends Controller
     
         $customer = DB::table('customers')
         ->leftJoin('users', 'customers.id_user', 'users.id')
-        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
+        ->leftJoin('packages', 'customers.id', 'packages.id_customer')
+        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name', 'packages.id as package_id')
         ->where('customers.id_user', '=', Auth::Id())
         ->get()->toArray();
 
+        $sub_package = DB::table('sub_packages')->where('id_package', '=', $customer[0]->package_id)->get()->toArray();
+        // die(print_r($sub_package));
         
         $folder = $customer[0]->id .' - ' .$customer[0]->name;
 
@@ -163,11 +206,21 @@ class DrivePhotoController extends Controller
 
         for($i = 0; $i < count($directory); $i++){
             $dataFile = array();
+            
 
             $filedirchild = collect(\Storage::cloud()->listContents($directory[$i]['path'], false))->where('type', '=', 'file');
         
             $parent = new \ArrayObject();
             $parent['folder'] = $directory[$i]['name'];
+            for($j = 0; $j < count($sub_package); $j++){
+                if($sub_package[$j]->sub_package_name == $directory[$i]['name']){
+                    $parent['num_edit_photo'] = $sub_package[$i]->num_edit_photo;
+                    $parent['num_print_photo'] = $sub_package[$i]->num_print_photo;
+                }else{
+                    continue;
+                }
+            }
+            
             $parent['file'] = $filedirchild;
 
             array_push($data, $parent);
@@ -278,7 +331,38 @@ class DrivePhotoController extends Controller
 
     }
 
-    public function downloadFile(){
+    public function createZipFile($folderName){
+        // Enter the name of directory
+        $pathdir = $folderName;
+        
+        // Enter the name to creating zipped directory
+        $zipcreated = $folderName.".zip";
+
+        // Create new zip class
+        $zip = new ZipArchive;
+
+        if($zip -> open($zipcreated, ZipArchive::CREATE ) === TRUE) {
+      
+            // Store the path into the variable
+            $dir = opendir($pathdir);
+               
+            while($file = readdir($dir)) {
+                if(is_file($pathdir.$file)) {
+                    // echo (print_r($file));
+                    $zip -> addFile($pathdir.$file, $file);
+                }
+            }
+            $zip ->close();
+        }
+
+        echo print_r($zip);
+  
+    }
+
+    public function getOriginChildFolder($folderName){
+
+        $decodeName =  urldecode($folderName);
+
         $customer = DB::table('customers')
         ->leftJoin('users', 'customers.id_user', 'users.id')
         ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
@@ -301,25 +385,202 @@ class DrivePhotoController extends Controller
         $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
 
         $dir = $contents->where('type', '=', 'dir')
-        ->where('filename', '=', 'PaketCuy2')
+        ->where('filename', '=', $decodeName)
         ->first(); 
 
+        $files = collect(\Storage::cloud()->listContents($dir['path'], false))
+        ->where('type', '=', 'file');
+
+
+        $tempFileCustomer = $customer[0]->id."-".$customer[0]->name."-".$folderName;
+        $tempFolderName = "tmp/".$tempFileCustomer;
+
+
+        
+        
+        // Enter the name of directory
+        $pathdir = $tempFolderName;
+        
+        // Enter the name to creating zipped directory
+        $zipcreated = $tempFolderName.".zip";
+
+        if(!file_exists($zipcreated)){
+            
+
+            if(!file_exists($tempFolderName)){
+                mkdir($tempFolderName);
+            }
+
+
+            // Create new zip class
+            $zip = new ZipArchive;
+                    
+                    
+            echo "folder created!";
+
+            if($zip -> open($zipcreated, ZipArchive::CREATE ) === TRUE) {
+                $files->mapWithKeys(function($file) use ($tempFolderName,$zip) {
+                    $filename = $file['filename'].'.'.$file['extension'];
+                    $path = $file['path'];
+                    
+                    // Use the path to download each file via a generated link..
+                    $test = \Storage::cloud()->get($file['path']);
+                    // echo print_r($test);
+                    // die(gettype($test));
+                    file_put_contents($tempFolderName."/".$filename,$test);
+                    $zip -> addFile($tempFolderName."/".$filename, $filename);
+                    
+                    return [$filename => $path];
+                });
+
+                $zip->close();
+            }
+        }
+        
+
+        // $this->createZipFile($tempFolderName);
+
+        $headers = [
+            'Content-Type: application/zip',
+            'Content-Length: '. filesize($zipcreated),
+            'Content-Disposition : attachment; filename='.$tempFileCustomer
+         ];
+
+
+         if(file_exists($zipcreated)){
+            return response()->download(public_path($zipcreated),$tempFileCustomer,$headers);
+         }else{
+            return ['status'=>'zip file does not exist'];
+         }
+        
+        // return response(['success' => true,'data' => $files, 'message' => 'Selected Photo inserted'], 201);
+
+        // return response(['success' => true,'data' => $files 'message' => 'Selected Photo inserted'], 201);
+    }
+
+
+    public function moveOriginToChoice(Request $request){
+        $body = $request->getContent();
+        $bodyJson = json_decode($body, true);
+
+        $customer = DB::table('customers')
+        ->leftJoin('users', 'customers.id_user', 'users.id')
+        ->leftJoin('packages', 'customers.id', 'packages.id_customer')
+        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name', 'packages.id as package_id')
+        ->where('customers.id_user', '=', Auth::Id())
+        ->get()->toArray();
+
+        $sub_package = DB::table('sub_packages')->where('id_package', '=', $customer[0]->package_id)->get()->toArray();
+        // die(print_r($sub_package));
+        
+        $folder = $customer[0]->id .' - ' .$customer[0]->name;
+
+        $contents = collect(\Storage::cloud()->listContents('/', false));
+        $dir = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', $folder)
+                ->first(); // There could be duplicate directory names!
+        
         $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
 
-        // die($contents);
-        foreach($contents as $item){
-            // echo print_r($item);
-            
-            $ulala = \Storage::cloud()->get($item['path']);
+        $originPhotoDir = $contents->where('type', '=', 'dir')
+        ->where('filename', '=', 'Foto Mentah')
+        ->first(); // There could be duplicate directory names!
 
-            echo print_r($ulala);
-            echo "\r\n";
+        $choicePhotoDir = $contents->where('type', '=', 'dir')
+        ->where('filename', '=', 'Foto Pilihan')
+        ->first(); // There could be duplicate directory names!
+
+        $fileOriginDir = collect(\Storage::cloud()->listContents($originPhotoDir['path'], false));
+        $fileChoiceDir = collect(\Storage::cloud()->listContents($choicePhotoDir['path'], false));
+
+        $filesSubOrigin = $fileOriginDir->where('type', '=', 'dir')
+        ->where('filename', '=', $bodyJson['folderName'])
+        ->first(); // There could be duplicate directory names!
+
+        $filesSubChoice = $fileChoiceDir->where('type', '=', 'dir')
+        ->where('filename', '=', $bodyJson['folderName'])
+        ->first(); // There could be duplicate directory names!
+
+        // $subPackageDirFile = collect(\Storage::cloud()->listContents($filesSubOrigin['path'], false));
+
+        $filePhoto = $bodyJson['pictures'];
+
+        $data = array();
+
+        foreach($filePhoto as $picture){
+            if($picture['selected']){
+                    \Storage::cloud()->move($filesSubOrigin['path']."/".$picture['img'], $filesSubChoice['path']."/".$picture['name']);
+                    // echo "move ".$filesSubOrigin['path'].$picture['img']." to ".$filesSubChoice['path'].$picture['img'];
+                    array_push($data, $picture);
+
+            }
         }
 
-        die();
+        return response(['success' => true,'data' => $data, 'message' => 'Selected Photo inserted'], 201);
+        //get data from origin photo
 
-        // $ulala = \Storage::cloud()->get($dir['path']);
-        // die(print_r($ulala));
+        //get folder 
+    }
 
+    public function moveChoiceToOrigin(Request $request){
+        $body = $request->getContent();
+        $bodyJson = json_decode($body, true);
+
+        $customer = DB::table('customers')
+        ->leftJoin('users', 'customers.id_user', 'users.id')
+        ->leftJoin('packages', 'customers.id', 'packages.id_customer')
+        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name', 'packages.id as package_id')
+        ->where('customers.id_user', '=', Auth::Id())
+        ->get()->toArray();
+
+        $sub_package = DB::table('sub_packages')->where('id_package', '=', $customer[0]->package_id)->get()->toArray();
+        // die(print_r($sub_package));
+        
+        $folder = $customer[0]->id .' - ' .$customer[0]->name;
+
+        $contents = collect(\Storage::cloud()->listContents('/', false));
+        $dir = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', $folder)
+                ->first(); // There could be duplicate directory names!
+        
+        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+
+        $originPhotoDir = $contents->where('type', '=', 'dir')
+        ->where('filename', '=', 'Foto Mentah')
+        ->first(); // There could be duplicate directory names!
+
+        $choicePhotoDir = $contents->where('type', '=', 'dir')
+        ->where('filename', '=', 'Foto Pilihan')
+        ->first(); // There could be duplicate directory names!
+
+        $fileOriginDir = collect(\Storage::cloud()->listContents($originPhotoDir['path'], false));
+        $fileChoiceDir = collect(\Storage::cloud()->listContents($choicePhotoDir['path'], false));
+
+        $filesSubOrigin = $fileOriginDir->where('type', '=', 'dir')
+        ->where('filename', '=', $bodyJson['folderName'])
+        ->first(); // There could be duplicate directory names!
+
+        $filesSubChoice = $fileChoiceDir->where('type', '=', 'dir')
+        ->where('filename', '=', $bodyJson['folderName'])
+        ->first(); // There could be duplicate directory names!
+
+        // $subPackageDirFile = collect(\Storage::cloud()->listContents($filesSubOrigin['path'], false));
+
+        $filePhoto = $bodyJson['pictures'];
+
+        $data = array();
+
+        foreach($filePhoto as $picture){
+            if($picture['selected']){
+                    \Storage::cloud()->move($filesSubChoice['path']."/".$picture['img'], $filesSubOrigin['path']."/".$picture['name']);
+                    array_push($data, $picture);
+
+            }
+        }
+
+        return response(['success' => true,'data' => $data, 'message' => 'Selected Photo inserted'], 201);
+        //get data from origin photo
+
+        //get folder 
     }
 }
