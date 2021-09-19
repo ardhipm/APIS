@@ -36,14 +36,7 @@ class InvoiceController extends Controller
     public function viewAdmin($id)
     {
         $invoice = Invoice::find($id);
-
-        if (count($invoice) == 0) {
-            $response = [
-                'success' => false,
-                'message' => 'Invoice not found.',
-            ];
-            return response()->json($response, 404);
-        } else {
+        
             $customer = DB::table('invoices')
             ->leftJoin('customers', 'invoices.id_customer', 'customers.id')
             ->select('customers.id', 'customers.id_user', 'customers.name', 'customers.phone_no', 'customers.partner_name')
@@ -78,7 +71,7 @@ class InvoiceController extends Controller
                 'message' => 'Invoice retrieved successfully.',
             ];
 
-        }
+        
 
         return response()->json($response, 200);
     }

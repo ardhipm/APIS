@@ -65,7 +65,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('customer/create', 'API\CustomerController@store');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::post('customer/show/{id}', 'API\CustomerController@show');
+    Route::get('customer/show/{id}', 'API\CustomerController@show');
 });
 Route::middleware('auth:api')->group(function ($id) {
     Route::post('customer/update/{id}', 'API\CustomerController@update');

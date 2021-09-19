@@ -35,13 +35,13 @@ class ShipmentController extends Controller
     {
         $shipment = Shipment::find($id);
 
-        if (count($shipment) == 0) {
-            $response = [
-                'success' => false,
-                'message' => 'Shipment not found.',
-            ];
-            return response()->json($response, 404);
-        } else {
+        // if (count($shipment) == 0) {
+        //     $response = [
+        //         'success' => false,
+        //         'message' => 'Shipment not found.',
+        //     ];
+        //     return response()->json($response, 404);
+        // } else {
             $customer = DB::table('shipments')
                 ->leftJoin('customers', 'shipments.id_customer', 'customers.id')
                 ->select('customers.id', 'customers.id_user', 'customers.name', 'customers.phone_no', 'customers.partner_name')
@@ -76,7 +76,7 @@ class ShipmentController extends Controller
                 'message' => 'Invoice retrieved successfully.',
             ];
 
-        }
+        // }
 
         return response()->json($response, 200);
     }
