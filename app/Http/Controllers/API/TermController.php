@@ -13,7 +13,7 @@ class TermController extends Controller
 {
     public function index()
     {
-        $data = DB::table('Terms')->get()->toArray();
+        $data = DB::table('terms')->get()->toArray();
 
         $response = [
             'success' => true,
