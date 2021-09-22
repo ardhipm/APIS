@@ -35,54 +35,49 @@ class ShipmentController extends Controller
     {
         $shipment = Shipment::find($id);
 
-        // if (count($shipment) == 0) {
-        //     $response = [
-        //         'success' => false,
-        //         'message' => 'Shipment not found.',
-        //     ];
-        //     return response()->json($response, 404);
-        // } else {
+        if ($shipment == null) {
+            $response = [
+                'success' => false,
+                'message' => 'Shipment not found.',
+            ];
+            return response()->json($response, 404);
+        } else {
             $customer = DB::table('shipments')
                 ->leftJoin('customers', 'shipments.id_customer', 'customers.id')
                 ->select('customers.id', 'customers.id_user', 'customers.name', 'customers.phone_no', 'customers.partner_name')
                 ->where('shipments.id', '=', $id)
                 ->get()->toArray();
-        
-        $shipment = DB::table('shipments')
-            ->leftJoin('customers', 'shipments.id_customer', 'customers.id')
-            ->select('customers.id as customer_id', 'customers.id_user', 'customers.name as customer_name', 'customers.phone_no', 'customers.partner_name', 'shipments.receipt_no', 'shipments.receipt_link')
-            ->where('shipments.id', '=', $id)
-            ->get()->toArray();
+            $shipments['customer_name'] = $customer[0]->name;
+            $shipments['partner_name'] = $customer[0]->partner_name;
+            $folder = $customer[0]->id . ' - ' . $customer[0]->name;
 
-        $folder = $shipment[0]->customer_id . ' - ' . $shipment[0]->customer_name;
+            $contents = collect(\Storage::cloud()->listContents('/', false));
+            $dir = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', $folder)
+                ->first(); // There could be duplicate directory names!
 
-        $contents = collect(\Storage::cloud()->listContents('/', false));
-        $dir = $contents->where('type', '=', 'dir')
-            ->where('filename', '=', $folder)
-            ->first(); // There could be duplicate directory names!
+            $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+            $dir = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', 'Shipment')
+                ->first(); // There could be duplicate directory names!
 
-        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
-        $dir = $contents->where('type', '=', 'dir')
-            ->where('filename', '=', 'Shipment')
-            ->first(); // There could be duplicate directory names!
+            $filedirchild = collect(\Storage::cloud()->listContents($dir['path'], false))->where('type', '=', 'file');
 
-        $filedirchild = collect(\Storage::cloud()->listContents($dir['path'], false))->where('type', '=', 'file');
+            if(count($filedirchild) == 0){
+                $shipment['shimpent_photo_link'] = '';
 
-        if(count($filedirchild) == 0){
-            $shipment['shimpent_photo_link'] = '';
+            } else {
+                $shipment['shimpent_photo_link'] = $filedirchild[0]['basename'];
+            }
+            
 
-        } else {
-            $shipment['shimpent_photo_link'] = $filedirchild[0]['basename'];
+            $response = [
+                'success' => true,
+                'data' => $shipment,
+                'message' => 'Invoice retrieved successfully.',
+            ];
+
         }
-        
-
-        $response = [
-            'success' => true,
-            'data' => $shipment,
-            'message' => 'Invoice retrieved successfully.',
-        ];
-
-        
 
         return response()->json($response, 200);
     }
