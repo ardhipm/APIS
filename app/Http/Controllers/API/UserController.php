@@ -342,7 +342,7 @@ class UserController extends Controller
 
             $dataUser = User::find($id);
 
-            if (count($dataUser) == 0) {
+            if ($dataUser == null) {
                 $response = [
                     'success' => false,
                     'message' => 'User not found.',
