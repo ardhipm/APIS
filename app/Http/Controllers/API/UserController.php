@@ -19,6 +19,12 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+
+    public function viewMemberDetail($id){
+        $user = User::find($id);
+
+        return response(['success' => true,'data'=>$user, 'message' => 'Retrieve detail success'], 201);
+    }
     public function registerUserCustomer(Request $request)
     {
         $user = User::find(Auth::Id());

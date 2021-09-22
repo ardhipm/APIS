@@ -1,6 +1,12 @@
 /node_modules
 /public/hot
 /public/storage
+/public/tmp
+/public/*.zip
+/public/*.jpg
+/public/*.svg
+/public/*.png
+/public/myFiles
 /storage/*.key
 /vendor
 .env

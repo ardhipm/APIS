@@ -52,6 +52,9 @@ Route::middleware('auth:api')->group(function () {
     Route::get('admin/member/view', 'API\UserController@viewMember');
 });
 Route::middleware('auth:api')->group(function () {
+    Route::get('admin/member/detail/{id}', 'API\UserController@viewMemberDetail');
+});
+Route::middleware('auth:api')->group(function () {
     Route::post('admin/member/register', 'API\UserController@createMember');
 });
 
@@ -101,6 +104,9 @@ Route::middleware('auth:api')->group(function () {
 });
 Route::middleware('auth:api')->group(function () {
     Route::post('invoice/delete_multiple', 'API\InvoiceController@deleteMultiple');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::get('invoice/get_photo', 'API\InvoiceController@getInvoicePhoto');
 });
 
 
@@ -186,12 +192,19 @@ Route::middleware('auth:api')->group(function () {
     Route::get('drive/get_album', 'API\DrivePhotoController@getAlbum');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::get('drive/download_file', 'API\DrivePhotoController@downloadFile');
+    Route::post('drive/download_file/{folderName}', 'API\DrivePhotoController@getOriginChildFolder');    
 });
+// Route::middleware('auth:api')->group(function () {
+//     Route::post('drive/get_choice_photo_item/{folderName}', 'API\DrivePhotoController@getChoicePhotoFolder');    
+// });
 
 //selected photo
 Route::middleware('auth:api')->group(function () {
     Route::post('selected_photo', 'API\DrivePhotoController@insertSelected');
+});
+
+Route::middleware('auth:api')->group(function () {
+    Route::post('drive/move_to_choice', 'API\DrivePhotoController@moveOriginToChoice');
 });
 
 
