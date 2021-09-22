@@ -19,6 +19,12 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+
+    public function viewMemberDetail($id){
+        $user = User::find($id);
+
+        return response(['success' => true,'data'=>$user, 'message' => 'Retrieve detail success'], 201);
+    }
     public function registerUserCustomer(Request $request)
     {
         $user = User::find(Auth::Id());
@@ -93,6 +99,13 @@ class UserController extends Controller
                     ->where('filename', '=', "Foto Pilihan")
                     ->first(); // There could be duplicate directory names!
 
+                $dir2 = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', "Foto Akhir")
+                ->first(); // There could be duplicate directory names!
+
+                $dir3 = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', "Foto Mentah")
+                ->first(); // There could be duplicate directory names!
                 // if (!$dir) {$response = [
                 //     'success' => false,
                 //     'data' => 'Directory does not exist',
@@ -109,49 +122,7 @@ class UserController extends Controller
                     SubPackage::create($subPackageList[$x]);
 
                     \Storage::cloud()->makeDirectory($dir['path'] . '/' .$subPackageList[$x]['sub_package_name']);
-                }
-
-                $dir2 = $contents->where('type', '=', 'dir')
-                    ->where('filename', '=', "Foto Akhir")
-                    ->first(); // There could be duplicate directory names!
-
-                // if (!$dir) {$response = [
-                //     'success' => false,
-                //     'data' => 'Directory does not exist',
-                //     'message' => $validator->errors(),
-                // ];
-                //     return response()->json($response, 404);
-                //     return 'Directory does not exist!';
-                // }
-
-                $subPackageList = $bodyJson['sub_package'];
-                for ($x = 0; $x <= count($subPackageList) - 1; $x++) {
-                    $subPackageList[$x]['id_package'] = $package->id;
-
-                    SubPackage::create($subPackageList[$x]);
-
                     \Storage::cloud()->makeDirectory($dir2['path'] . '/' . $subPackageList[$x]['sub_package_name']);
-                }
-
-                $dir3 = $contents->where('type', '=', 'dir')
-                    ->where('filename', '=', "Foto Mentah")
-                    ->first(); // There could be duplicate directory names!
-
-                // if (!$dir) {$response = [
-                //     'success' => false,
-                //     'data' => 'Directory does not exist',
-                //     'message' => $validator->errors(),
-                // ];
-                //     return response()->json($response, 404);
-                //     return 'Directory does not exist!';
-                // }
-
-                $subPackageList = $bodyJson['sub_package'];
-                for ($x = 0; $x <= count($subPackageList) - 1; $x++) {
-                    $subPackageList[$x]['id_package'] = $package->id;
-
-                    SubPackage::create($subPackageList[$x]);
-
                     \Storage::cloud()->makeDirectory($dir3['path'] . '/' . $subPackageList[$x]['sub_package_name']);
                 }
 
@@ -332,7 +303,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             return $validator->errors();
         } else {
-            if (!Auth::attempt(['username' => $bodyJson['username'], 'password' => '123123', 'is_active' => 1])) {
+            if (!Auth::attempt(['username' => $bodyJson['username'], 'password' => $bodyJson['password'], 'is_active' => 1])) {
                 return response(['success' => false, 'message' => 'This User does not exist, check your details'], 400);
             }
             $accessToken = auth()->user()->createToken('authToken')->accessToken;
@@ -426,10 +397,68 @@ class UserController extends Controller
 
         $listDelete = $bodyJson['list_delete'];
         for ($x = 0; $x <= count($listDelete) - 1; $x++) {
-            DB::delete('DELETE from users where id = ' .$listDelete[$x]
+            DB::delete('DELETE from users where id = ' .$listDelete[$x]);
         }
 
         return response(['success' => true, 'message' => 'Deleted Successfully'], 201);
 
+    }
+
+
+    public function viewMember($id = NULL){
+        $user = User::find(Auth::Id());
+
+        if ($user['role_id'] == 2) {
+            $members = DB::table('users')
+                        ->where('role_id', '=', 3)
+                        ->get()->toArray();
+
+            $response = [
+                'success' => true,
+                'data' => $members,
+                'message' => 'Members retrieved successfully.',
+            ];
+
+            return response()->json($response, 200);
+                
+        }else {
+            return response(['success' => false, 'message' => 'No access to do action'], 201);
+        }
+    }
+
+    public function createMember(Request $request){
+        $user = User::find(Auth::Id());
+
+        if ($user['role_id'] == 2) {
+            $body = $request->getContent();
+            $bodyJson = json_decode($body,true);
+
+            $rules = [
+                'username' => 'required|unique:users',
+                'password' => 'required',
+                'email' => 'required|email|unique:users',
+            ];
+
+            $validator = Validator::make($bodyJson, $rules);
+            if ($validator->fails()) { 
+                return response(['success' => false, 'message' => $validator->errors()], 201);
+            } else {
+                $bodyJson['plain_password'] = $bodyJson['password'];
+                $bodyJson['password'] = Hash::make($bodyJson['password']);
+                $bodyJson['role_id'] = '3';
+                $bodyJson['is_active'] = TRUE;
+
+                $user = User::create($bodyJson);
+
+
+                $response = [
+                    'success' => true,
+                    'message' => 'User created successfully.'
+                ];
+                return response()->json($response, 404);
+            }
+        }  else {
+            return response(['success' => false, 'message' => 'No access to do action'], 201);
+        }   
     }
 }
