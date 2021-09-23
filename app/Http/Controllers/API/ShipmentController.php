@@ -156,7 +156,7 @@ class ShipmentController extends Controller
 
         $dataShipment= Shipment::find($id);
 
-        if (count($dataShipment) == 0) {
+        if ($dataShipment == null) {
             $response = [
                 'success' => false,
                 'message' => 'Shipment not found.',

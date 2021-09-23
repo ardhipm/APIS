@@ -38,7 +38,7 @@ class InvoiceController extends Controller
 
         $invoice = DB::table('invoices')
         ->leftJoin('customers', 'invoices.id_customer', 'customers.id')
-        ->select('customers.id as customer_id', 'customers.id_user', 'customers.name as customer_name', 'customers.phone_no', 'customers.partner_name')
+        ->select('customers.id as customer_id','customers.id as customer_id', 'customers.id_user', 'customers.name as customer_name', 'customers.phone_no', 'customers.partner_name')
         ->where('invoices.id', '=', $id)
         ->get()->toArray();
 
@@ -159,7 +159,7 @@ class InvoiceController extends Controller
 
         $dataInvoice= Invoice::find($id);
 
-        if (count($dataInvoice) == 0) {
+        if ($dataInvoice == null) {
             $response = [
                 'success' => false,
                 'message' => 'Invoice not found.',
