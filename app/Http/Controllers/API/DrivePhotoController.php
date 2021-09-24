@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 use App\SelectedPhoto;
 use App\Customer;
+use App\SubPackage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -216,6 +217,9 @@ class DrivePhotoController extends Controller
                 if($sub_package[$j]->sub_package_name == $directory[$i]['name']){
                     $parent['num_edit_photo'] = $sub_package[$i]->num_edit_photo;
                     $parent['num_print_photo'] = $sub_package[$i]->num_print_photo;
+                    $parent['id_subpackage'] = $sub_package[$i]->id;
+                    $parent['is_downloaded'] = $sub_package[$i]->is_downloaded;
+                    $parent['num_selected_edit_photo'] = $sub_package[$i]->num_selected_edit_photo;
                 }else{
                     continue;
                 }
@@ -359,7 +363,7 @@ class DrivePhotoController extends Controller
   
     }
 
-    public function getOriginChildFolder($folderName){
+    public function getOriginChildFolder($type, $folderName, $subId){
 
         $decodeName =  urldecode($folderName);
 
@@ -376,11 +380,26 @@ class DrivePhotoController extends Controller
         $dir = $contents->where('type', '=', 'dir')
                 ->where('filename', '=', $folder)
                 ->first(); // There could be duplicate directory names!
+
+        // die(print_r($type));
+        if($type == 'origin'){
+            $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+            $dir = $contents->where('type', '=', 'dir')
+            ->where('filename', '=', 'Foto Mentah')
+            ->first(); // There could be duplicate directory names!
+        }
+
+        if($type == 'final'){
+            $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+            $dir = $contents->where('type', '=', 'dir')
+            ->where('filename', '=', 'Foto Akhir')
+            ->first(); // There could be duplicate directory names!
+        }
+
+        if($type == null){
+            return ['status'=>'type is null'];
+        }
         
-        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
-        $dir = $contents->where('type', '=', 'dir')
-        ->where('filename', '=', 'Foto Mentah')
-        ->first(); // There could be duplicate directory names!
 
         $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
 
@@ -392,10 +411,8 @@ class DrivePhotoController extends Controller
         ->where('type', '=', 'file');
 
 
-        $tempFileCustomer = $customer[0]->id."-".$customer[0]->name."-".$folderName;
+        $tempFileCustomer = $customer[0]->id."-".$type."-".$customer[0]->name."-".$folderName;
         $tempFolderName = "tmp/".$tempFileCustomer;
-
-
         
         
         // Enter the name of directory
@@ -405,12 +422,8 @@ class DrivePhotoController extends Controller
         $zipcreated = $tempFolderName.".zip";
 
         if(!file_exists($zipcreated)){
-            
 
-            if(!file_exists($tempFolderName)){
-                mkdir($tempFolderName);
-            }
-
+            mkdir($tempFolderName);
 
             // Create new zip class
             $zip = new ZipArchive;
@@ -435,10 +448,19 @@ class DrivePhotoController extends Controller
 
                 $zip->close();
             }
+
+            
+        }
+
+        if(file_exists($tempFolderName)){
+            $this->deleteDir($tempFolderName);
         }
         
 
         // $this->createZipFile($tempFolderName);
+        DB::table('sub_packages')
+              ->where('id', $subId)
+              ->update(['is_downloaded' => 1]);
 
         $headers = [
             'Content-Type: application/zip',
@@ -457,6 +479,38 @@ class DrivePhotoController extends Controller
 
         // return response(['success' => true,'data' => $files 'message' => 'Selected Photo inserted'], 201);
     }
+
+    public static function updateDownloadedSubData($subId){
+        if($subId!=null){
+            $subPackage = SubPackage::find($subId);
+            $subPackage->is_downloaded = 1;
+            $subPackage->save();
+            // die(print_r($subPackage));
+            return response(['success' => true, 'message' => 'Sub Package is download updated'], 201);    
+        }else{
+            return response(['success' => false, 'message' => 'Sub Package id is missing'], 201);
+        }
+        
+    }
+
+    public static function deleteDir($dirPath) {
+        if (! is_dir($dirPath)) {
+            throw new InvalidArgumentException("$dirPath must be a directory");
+        }
+        if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+            $dirPath .= '/';
+        }
+        $files = glob($dirPath . '*', GLOB_MARK);
+        foreach ($files as $file) {
+            if (is_dir($file)) {
+                self::deleteDir($file);
+            } else {
+                unlink($file);
+            }
+        }
+        rmdir($dirPath);
+    }
+    
 
 
     public function moveOriginToChoice(Request $request){
@@ -511,10 +565,20 @@ class DrivePhotoController extends Controller
             if($picture['selected']){
                     \Storage::cloud()->move($filesSubOrigin['path']."/".$picture['img'], $filesSubChoice['path']."/".$picture['name']);
                     // echo "move ".$filesSubOrigin['path'].$picture['img']." to ".$filesSubChoice['path'].$picture['img'];
+                    // die(print_r($customer[0]->id." ".$picture['name']." ".$sub_package[0]->id));
+                    // DB::table('selected_photo')->insert([
+                    //     ['id_customer' => $customer[0]->id, 'basename' => $picture['img'], 'id_subpackage'=>$sub_package[0]->id]
+                    // ]);
                     array_push($data, $picture);
 
             }
         }
+
+        DB::table('sub_packages')
+              ->where('id', $sub_package[0]->id)
+              ->update(['num_selected_edit_photo' => $sub_package[0]->num_selected_edit_photo + count($data)]);
+        // $sub_package[0]->num_selected_edit_photo = $sub_package[0]->num_selected_edit_photo + count($data);
+        // $sub_package[0]->udpate();
 
         return response(['success' => true,'data' => $data, 'message' => 'Selected Photo inserted'], 201);
         //get data from origin photo
@@ -578,7 +642,11 @@ class DrivePhotoController extends Controller
             }
         }
 
-        return response(['success' => true,'data' => $data, 'message' => 'Selected Photo inserted'], 201);
+        DB::table('sub_packages')
+              ->where('id', $sub_package[0]->id)
+              ->update(['num_selected_edit_photo' => $sub_package[0]->num_selected_edit_photo - count($data)]);
+
+        return response(['success' => true,'data' => $data, 'message' => 'Move photo to origin success'], 201);
         //get data from origin photo
 
         //get folder 
