@@ -47,8 +47,8 @@ class ShipmentController extends Controller
                 ->select('customers.id', 'customers.id_user', 'customers.name', 'customers.phone_no', 'customers.partner_name')
                 ->where('shipments.id', '=', $id)
                 ->get()->toArray();
-            $shipments['customer_name'] = $customer[0]->name;
-            $shipments['partner_name'] = $customer[0]->partner_name;
+            $shipment['customer_name'] = $customer[0]->name;
+            $shipment['partner_name'] = $customer[0]->partner_name;
             $folder = $customer[0]->id . ' - ' . $customer[0]->name;
 
             $contents = collect(\Storage::cloud()->listContents('/', false));
