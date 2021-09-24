@@ -63,7 +63,7 @@ class TermController extends Controller
 
             $dataTerm = Term::find($id);
 
-            if (count($dataTerm) == 0) {
+            if ($dataTerm == null) {
                 $response = [
                     'success' => false,
                     'message' => 'Term not found.',
