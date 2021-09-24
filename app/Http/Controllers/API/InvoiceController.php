@@ -35,42 +35,53 @@ class InvoiceController extends Controller
 
     public function viewAdmin($id)
     {
+        $invoice = Invoice::find($id);
 
-        $invoice = DB::table('invoices')
-        ->leftJoin('customers', 'invoices.id_customer', 'customers.id')
-        ->select('customers.id as customer_id','customers.id as customer_id', 'customers.id_user', 'customers.name as customer_name', 'customers.phone_no', 'customers.partner_name')
-        ->where('invoices.id', '=', $id)
-        ->get()->toArray();
-
-        $folder = $invoice[0]->customer_id . ' - ' . $invoice[0]->customer_name;
-
-        $contents = collect(\Storage::cloud()->listContents('/', false));
-        $dir = $contents->where('type', '=', 'dir')
-            ->where('filename', '=', $folder)
-            ->first(); // There could be duplicate directory names!
-
-        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
-        $dir = $contents->where('type', '=', 'dir')
-            ->where('filename', '=', 'Invoice')
-            ->first(); // There could be duplicate directory names!
-
-        $filedirchild = collect(\Storage::cloud()->listContents($dir['path'], false))->where('type', '=', 'file');
-
-        if (count($filedirchild) == 0) {
-            $invoice['invoice_photo_link'] = '';
-
+        if ($invoice== null) {
+            $response = [
+                'success' => false,
+                'message' => 'Invoice not found.',
+            ];
+            return response()->json($response, 404);
         } else {
-            $invoice['invoice_photo_link'] = $filedirchild[0]['basename'];
+            $customer = DB::table('invoices')
+            ->leftJoin('customers', 'invoices.id_customer', 'customers.id')
+            ->select('customers.id', 'customers.id_user', 'customers.name', 'customers.phone_no', 'customers.partner_name')
+            ->where('invoices.id', '=', $id)
+            ->get()->toArray();
+
+            $invoice['customer_name'] = $customer[0]->name;
+            $invoice['partner_name'] = $customer[0]->partner_name;
+
+            $folder = $customer[0]->id . ' - ' . $customer[0]->name;
+
+            $contents = collect(\Storage::cloud()->listContents('/', false));
+            $dir = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', $folder)
+                ->first(); // There could be duplicate directory names!
+
+            $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+            $dir = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', 'Invoice')
+                ->first(); // There could be duplicate directory names!
+
+            $filedirchild = collect(\Storage::cloud()->listContents($dir['path'], false))->where('type', '=', 'file');
+
+            if (count($filedirchild) == 0) {
+                $invoice['invoice_photo_link'] = '';
+
+            } else {
+                $invoice['invoice_photo_link'] = $filedirchild[0]['basename'];
+            }
+
+
+            $response = [
+                'success' => true,
+                'data' => $invoice,
+                'message' => 'Invoice retrieved successfully.',
+            ];
+
         }
-
-
-        $response = [
-            'success' => true,
-            'data' => $invoice,
-            'message' => 'Invoice retrieved successfully.',
-        ];
-
-        
 
         return response()->json($response, 200);
     }

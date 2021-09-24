@@ -58,6 +58,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('admin/member/register', 'API\UserController@createMember');
 });
 
+Route::get('/subpackage/update_downloaded/{id}', 'API\DrivePhotoController@updateDownloadedSubData');
+
 
 
 //customer
@@ -68,7 +70,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('customer/create', 'API\CustomerController@store');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::post('customer/show/{id}', 'API\CustomerController@show');
+    Route::get('customer/show/{id}', 'API\CustomerController@show');
 });
 Route::middleware('auth:api')->group(function ($id) {
     Route::post('customer/update/{id}', 'API\CustomerController@update');
@@ -192,7 +194,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('drive/get_album', 'API\DrivePhotoController@getAlbum');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::post('drive/download_file/{folderName}', 'API\DrivePhotoController@getOriginChildFolder');    
+    Route::post('drive/download_file/{type}/{folderName}/{subId}', 'API\DrivePhotoController@getOriginChildFolder');    
 });
 // Route::middleware('auth:api')->group(function () {
 //     Route::post('drive/get_choice_photo_item/{folderName}', 'API\DrivePhotoController@getChoicePhotoFolder');    
@@ -205,6 +207,9 @@ Route::middleware('auth:api')->group(function () {
 
 Route::middleware('auth:api')->group(function () {
     Route::post('drive/move_to_choice', 'API\DrivePhotoController@moveOriginToChoice');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::post('drive/move_to_origin', 'API\DrivePhotoController@moveChoiceToOrigin');
 });
 
 
