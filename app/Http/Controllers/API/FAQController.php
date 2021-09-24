@@ -65,7 +65,7 @@ class FAQController extends Controller
 
             $dataFAQ = FAQ::find($id);
 
-            if (count($dataFAQ) == 0) {
+            if ($dataFAQ == null) {
                 $response = [
                     'success' => false,
                     'message' => 'FAQ not found.',
