@@ -455,10 +455,10 @@ class UserController extends Controller
                     'success' => true,
                     'message' => 'User created successfully.'
                 ];
-                return response()->json($response,201);
+                return response()->json($response, 201);
             }
         }  else {
-            return response(['success' => false, 'message' => 'No access to do action'], 404);
+            return response(['success' => false, 'message' => 'No access to do action'], 505);
         }   
     }
 }

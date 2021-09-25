@@ -157,8 +157,7 @@ class InvoiceController extends Controller
 
         $rules = [
             'invoice_no' => 'required',
-            'id_payment_status' => 'required',
-            'id_customer' => 'required'
+            'id_payment_status' => 'required'
         ];
 
         $validator = Validator::make($bodyJson, $rules);
@@ -177,7 +176,6 @@ class InvoiceController extends Controller
         } else {
             $dataInvoice->invoice_no = $bodyJson['invoice_no'];
             $dataInvoice->id_payment_status = $bodyJson['id_payment_status'];
-            $dataInvoice->id_customer = $bodyJson['id_customer'];
             $dataInvoice->save();
 
             $response = [
