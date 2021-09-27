@@ -651,4 +651,88 @@ class DrivePhotoController extends Controller
 
         //get folder 
     }
+
+    public function downloadVideo(){
+
+        $customer = DB::table('customers')
+        ->leftJoin('users', 'customers.id_user', 'users.id')
+        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
+        ->where('customers.id_user', '=', Auth::Id())
+        ->get()->toArray();
+
+        
+        $folder = $customer[0]->id .' - ' .$customer[0]->name;
+
+        $contents = collect(\Storage::cloud()->listContents('/', false));
+        $dir = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', $folder)
+                ->first(); // There could be duplicate directory names!
+
+        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+        $dir = $contents->where('type', '=', 'dir')
+        ->where('filename', '=', 'Video')
+        ->first(); // There could be duplicate directory names!
+
+        $files = collect(\Storage::cloud()->listContents($dir['path'], false))
+        ->where('type', '=', 'file');
+
+        $tempFileCustomer = $customer[0]->id."-"."video"."-".$customer[0]->name;
+        $tempFolderName = "tmp/".$tempFileCustomer;
+        
+        
+        // Enter the name of directory
+        $pathdir = $tempFolderName;
+        
+        // Enter the name to creating zipped directory
+        $zipcreated = $tempFolderName.".zip";
+
+        if(!file_exists($zipcreated)){
+
+            mkdir($tempFolderName);
+
+            // Create new zip class
+            $zip = new ZipArchive;
+                    
+                    
+            echo "folder created!";
+
+            if($zip -> open($zipcreated, ZipArchive::CREATE ) === TRUE) {
+                $files->mapWithKeys(function($file) use ($tempFolderName,$zip) {
+                    $filename = $file['filename'].'.'.$file['extension'];
+                    $path = $file['path'];
+                    
+                    // Use the path to download each file via a generated link..
+                    $test = \Storage::cloud()->get($file['path']);
+                    // echo print_r($test);
+                    // die(gettype($test));
+                    file_put_contents($tempFolderName."/".$filename,$test);
+                    $zip -> addFile($tempFolderName."/".$filename, $filename);
+                    
+                    return [$filename => $path];
+                });
+
+                $zip->close();
+            }
+
+            
+        }
+
+        if(file_exists($tempFolderName)){
+            $this->deleteDir($tempFolderName);
+        }
+        
+
+        $headers = [
+            'Content-Type: application/zip',
+            'Content-Length: '. filesize($zipcreated),
+            'Content-Disposition : attachment; filename='.$tempFileCustomer
+         ];
+
+
+         if(file_exists($zipcreated)){
+            return response()->download(public_path($zipcreated),$tempFileCustomer,$headers);
+         }else{
+            return ['status'=>'zip file does not exist'];
+         }
+    }
 }

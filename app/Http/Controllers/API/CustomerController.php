@@ -416,6 +416,12 @@ class CustomerController extends Controller
                             $subPackage->num_edit_photo = $item['num_edit_photo'];
                             $subPackage->num_print_photo = $item['num_print_photo'];
                             $subPackage->save();
+                        }else{
+                            $subPackage->sub_package_name = $item['sub_package_name'];
+                            $subPackage->sub_package_description = $item['sub_package_description'];
+                            $subPackage->num_edit_photo = $item['num_edit_photo'];
+                            $subPackage->num_print_photo = $item['num_print_photo'];
+                            $subPackage->save();
                         }
                     }else{
                         // create
