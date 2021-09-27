@@ -11,6 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::view('/{path?}', 'welcome');
+
+Route::get('/{any}', function () {
+    return view('welcome'); // or wherever your React app is bootstrapped.
+})->where('any', '.*');
