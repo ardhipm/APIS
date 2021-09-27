@@ -196,6 +196,9 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::post('drive/download_file/{type}/{folderName}/{subId}', 'API\DrivePhotoController@getOriginChildFolder');    
 });
+Route::middleware('auth:api')->group(function () {
+    Route::post('drive/download_video', 'API\DrivePhotoController@downloadVideo');    
+});
 // Route::middleware('auth:api')->group(function () {
 //     Route::post('drive/get_choice_photo_item/{folderName}', 'API\DrivePhotoController@getChoicePhotoFolder');    
 // });
