@@ -44,6 +44,9 @@ class InvoiceController extends Controller
             ->where('invoices.id', '=', $id)
             ->get()->toArray();
 
+            $invoice['customer_name'] = $customer[0]->name;
+            $invoice['partner_name'] = $customer[0]->partner_name;
+
             $folder = $customer[0]->id . ' - ' . $customer[0]->name;
 
             $contents = collect(\Storage::cloud()->listContents('/', false));

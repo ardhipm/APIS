@@ -48,6 +48,9 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::post('user/delete_multiple', 'API\UserController@deleteMultiple');
 });
+Route::middleware('auth:api')->group(function () {
+    Route::get('admin/user/view_member_detail/{id}', 'API\UserController@viewMemberDetail');
+});
 
 //customer
 Route::middleware('auth:api')->group(function () {
@@ -145,6 +148,18 @@ Route::middleware('auth:api')->group(function () {
     Route::post('term/create', 'API\TermController@store');
 });
 
+Route::middleware('auth:api')->group(function () {
+    Route::get('notification/view', 'API\NotificationController@indexCustomer');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::get('notification/read', 'API\NotificationController@readNotification');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::get('notification/is_any', 'API\NotificationController@isAnyPhoto');
+});
+
+
+
 
 
 
@@ -174,6 +189,17 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::get('drive/get_album', 'API\DrivePhotoController@getAlbum');
 });
+Route::middleware('auth:api')->group(function () {
+    Route::post('drive/insert_choice_photo', 'API\DrivePhotoController@insertChoicePhoto');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::post('drive/insert_print_photo', 'API\DrivePhotoController@insertPrintPhoto');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::post('drive/insert_album_photo', 'API\DrivePhotoController@insertAlbumPhoto');
+});
+
+
 
 //selected photo
 Route::middleware('auth:api')->group(function () {

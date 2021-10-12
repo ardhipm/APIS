@@ -20,11 +20,6 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
 
-    public function viewMemberDetail($id){
-        $user = User::find($id);
-
-        return response(['success' => true,'data'=>$user, 'message' => 'Retrieve detail success'], 201);
-    }
     public function registerUserCustomer(Request $request)
     {
         $user = User::find(Auth::Id());
@@ -86,9 +81,10 @@ class UserController extends Controller
 
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Mentah');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Pilihan');
-                \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Akhir');
-                \Storage::cloud()->makeDirectory($dir['path'] . '/Video');
-                \Storage::cloud()->makeDirectory($dir['path'] . '/Album');
+                \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Album');
+                \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Cetak');
+                // \Storage::cloud()->makeDirectory($dir['path'] . '/Video');
+                // \Storage::cloud()->makeDirectory($dir['path'] . '/Album');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Invoice');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Shipment');
 
@@ -425,6 +421,28 @@ class UserController extends Controller
             return response(['success' => false, 'message' => 'No access to do action'], 201);
         }
     }
+
+    public function viewMemberDetail($id){
+        $user = User::find(Auth::Id());
+
+        // if ($user['role_id'] == 2) {
+            $members = DB::table('users')
+                        ->where('role_id', '=', 3)
+                        ->get()->toArray();
+
+            $response = [
+                'success' => true,
+                'data' => $members,
+                'message' => 'Members retrieved successfully.',
+            ];
+
+            return response()->json($response, 200);
+                
+        // }else {
+        //     return response(['success' => false, 'message' => 'No access to do action'], 201);
+        // }
+    }
+
 
     public function createMember(Request $request){
         $user = User::find(Auth::Id());
