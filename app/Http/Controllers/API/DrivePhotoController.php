@@ -84,7 +84,7 @@ class DrivePhotoController extends Controller
 
         $contentAlbumPhoto = collect(\Storage::cloud()->listContents($dirs['path'], false));
         $dirContentAlbumPhoto = $contentAlbumPhoto->where('type', '=', 'dir')
-            ->where('filename', '=', 'Album')
+            ->where('filename', '=', 'Foto Album')
             ->first(); // There could be duplicate directory names!
 
         $filedir = collect(\Storage::cloud()->listContents($dir['path'], false));
@@ -893,7 +893,7 @@ class DrivePhotoController extends Controller
 
         $choicePhotoFolder = collect(\Storage::cloud()->listContents($dirMainFolder['path'], false));
         $dirChoicePhotoFolder = $choicePhotoFolder->where('type', '=', 'dir')
-            ->where('filename', '=', 'Album')
+            ->where('filename', '=', 'Foto Album')
             ->first(); // There could be duplicate directory names!
 
 
