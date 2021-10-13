@@ -79,7 +79,7 @@ class UserController extends Controller
                 ->first(); // There could be duplicate directory names!
 
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Pilihan');
-                \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Akhir');
+                \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Cetak');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Video');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Album');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Invoice');
