@@ -735,4 +735,160 @@ class DrivePhotoController extends Controller
             return ['status'=>'zip file does not exist'];
          }
     }
+    
+    public function insertChoicePhoto(Request $request){
+        $body = $request->getContent();
+        $bodyJson = json_decode($body, true);
+        $data = $bodyJson['data'];
+
+        $customer = DB::table('customers')
+        ->leftJoin('users', 'customers.id_user', 'users.id')
+        ->select('customers.id', 'customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
+        ->where('customers.id_user', '=', Auth::Id())
+        ->get()->toArray();
+
+        $folder = $customer[0]->id . ' - ' . $customer[0]->name;
+
+        $mainFolder = collect(\Storage::cloud()->listContents('/', false));
+        $dirMainFolder = $mainFolder->where('type', '=', 'dir')
+            ->where('filename', '=', $folder)
+            ->first(); // There could be duplicate directory names!
+
+        $originPhotoFolder = collect(\Storage::cloud()->listContents($dirMainFolder['path'], false));
+        $dirOriginPhotoFolder = $originPhotoFolder->where('type', '=', 'dir')
+            ->where('filename', '=', 'Foto Mentah')
+            ->first(); // There could be duplicate directory names!
+
+        $choicePhotoFolder = collect(\Storage::cloud()->listContents($dirMainFolder['path'], false));
+        $dirChoicePhotoFolder = $choicePhotoFolder->where('type', '=', 'dir')
+            ->where('filename', '=', 'Foto Pilihan')
+            ->first(); // There could be duplicate directory names!
+
+
+        for($i = 0; $i < count($data); $i++){
+            $childOriginFolder = collect(\Storage::cloud()->listContents($dirOriginPhotoFolder['path'], false));
+            $dirChildOriginFolder = $childOriginFolder->where('type', '=', 'dir')
+                ->where('filename', '=', $data[$i]['folder'])
+                ->first(); // There could be duplicate directory names!
+
+            $childChoiceFolder = collect(\Storage::cloud()->listContents($dirChoicePhotoFolder['path'], false));
+            $dirChildChoiceFolder = $childChoiceFolder->where('type', '=', 'dir')
+                ->where('filename', '=', $data[$i]['folder'])
+                ->first(); // There could be duplicate directory names!
+
+            for($j = 0; $j < count($data[$i]['file']); $j++){
+                $dataFile = collect(\Storage::cloud()->listContents($dirChildOriginFolder['path'], false))->where('type', '=', 'file')
+                ->where('filename', '=', $data[$i]['file'][$j])->first();
+
+                \Storage::cloud()->move($dataFile['path'], $dirChildChoiceFolder['path'] ."/" .$dataFile['name']);
+            }
+        }
+
+        return response(['success' => true, 'message' => 'Selected Photo inserted'], 201);
+
+    }
+
+    public function insertPrintPhoto(Request $request){
+        $body = $request->getContent();
+        $bodyJson = json_decode($body, true);
+        $data = $bodyJson['data'];
+
+        $customer = DB::table('customers')
+        ->leftJoin('users', 'customers.id_user', 'users.id')
+        ->select('customers.id', 'customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
+        ->where('customers.id_user', '=', Auth::Id())
+        ->get()->toArray();
+
+        $folder = $customer[0]->id . ' - ' . $customer[0]->name;
+
+        $mainFolder = collect(\Storage::cloud()->listContents('/', false));
+        $dirMainFolder = $mainFolder->where('type', '=', 'dir')
+            ->where('filename', '=', $folder)
+            ->first(); // There could be duplicate directory names!
+
+        $originPhotoFolder = collect(\Storage::cloud()->listContents($dirMainFolder['path'], false));
+        $dirOriginPhotoFolder = $originPhotoFolder->where('type', '=', 'dir')
+            ->where('filename', '=', 'Foto Pilihan')
+            ->first(); // There could be duplicate directory names!
+
+        $choicePhotoFolder = collect(\Storage::cloud()->listContents($dirMainFolder['path'], false));
+        $dirChoicePhotoFolder = $choicePhotoFolder->where('type', '=', 'dir')
+            ->where('filename', '=', 'Foto Cetak')
+            ->first(); // There could be duplicate directory names!
+
+
+        for($i = 0; $i < count($data); $i++){
+            $childOriginFolder = collect(\Storage::cloud()->listContents($dirOriginPhotoFolder['path'], false));
+            $dirChildOriginFolder = $childOriginFolder->where('type', '=', 'dir')
+                ->where('filename', '=', $data[$i]['folder'])
+                ->first(); // There could be duplicate directory names!
+
+            $childChoiceFolder = collect(\Storage::cloud()->listContents($dirChoicePhotoFolder['path'], false));
+            $dirChildChoiceFolder = $childChoiceFolder->where('type', '=', 'dir')
+                ->where('filename', '=', $data[$i]['folder'])
+                ->first(); // There could be duplicate directory names!
+
+            for($j = 0; $j < count($data[$i]['file']); $j++){
+                $dataFile = collect(\Storage::cloud()->listContents($dirChildOriginFolder['path'], false))->where('type', '=', 'file')
+                ->where('filename', '=', $data[$i]['file'][$j])->first();
+
+                \Storage::cloud()->copy($dataFile['path'], $dirChildChoiceFolder['path'] ."/" .$dataFile['name']);
+            }
+        }
+
+        return response(['success' => true, 'message' => 'Print Photo inserted'], 201);
+
+    }
+
+    public function insertAlbumPhoto(Request $request){
+        $body = $request->getContent();
+        $bodyJson = json_decode($body, true);
+        $data = $bodyJson['data'];
+
+        $customer = DB::table('customers')
+        ->leftJoin('users', 'customers.id_user', 'users.id')
+        ->select('customers.id', 'customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
+        ->where('customers.id_user', '=', Auth::Id())
+        ->get()->toArray();
+
+        $folder = $customer[0]->id . ' - ' . $customer[0]->name;
+
+        $mainFolder = collect(\Storage::cloud()->listContents('/', false));
+        $dirMainFolder = $mainFolder->where('type', '=', 'dir')
+            ->where('filename', '=', $folder)
+            ->first(); // There could be duplicate directory names!
+
+        $originPhotoFolder = collect(\Storage::cloud()->listContents($dirMainFolder['path'], false));
+        $dirOriginPhotoFolder = $originPhotoFolder->where('type', '=', 'dir')
+            ->where('filename', '=', 'Foto Pilihan')
+            ->first(); // There could be duplicate directory names!
+
+        $choicePhotoFolder = collect(\Storage::cloud()->listContents($dirMainFolder['path'], false));
+        $dirChoicePhotoFolder = $choicePhotoFolder->where('type', '=', 'dir')
+            ->where('filename', '=', 'Album')
+            ->first(); // There could be duplicate directory names!
+
+
+        for($i = 0; $i < count($data); $i++){
+            $childOriginFolder = collect(\Storage::cloud()->listContents($dirOriginPhotoFolder['path'], false));
+            $dirChildOriginFolder = $childOriginFolder->where('type', '=', 'dir')
+                ->where('filename', '=', $data[$i]['folder'])
+                ->first(); // There could be duplicate directory names!
+
+            $childChoiceFolder = collect(\Storage::cloud()->listContents($dirChoicePhotoFolder['path'], false));
+            $dirChildChoiceFolder = $childChoiceFolder->where('type', '=', 'dir')
+                ->where('filename', '=', $data[$i]['folder'])
+                ->first(); // There could be duplicate directory names!
+
+            for($j = 0; $j < count($data[$i]['file']); $j++){
+                $dataFile = collect(\Storage::cloud()->listContents($dirChildOriginFolder['path'], false))->where('type', '=', 'file')
+                ->where('filename', '=', $data[$i]['file'][$j])->first();
+
+                \Storage::cloud()->copy($dataFile['path'], $dirChildChoiceFolder['path'] ."/" .$dataFile['name']);
+            }
+        }
+
+        return response(['success' => true, 'message' => 'Album Photo inserted'], 201);
+
+    }
 }
