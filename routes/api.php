@@ -49,41 +49,28 @@ Route::middleware('auth:api')->group(function () {
     Route::post('user/delete_multiple', 'API\UserController@deleteMultiple');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::get('admin/member/view', 'API\UserController@viewMember');
+    Route::get('admin/user/view_member_detail/{id}', 'API\UserController@viewMemberDetail');
 });
-Route::middleware('auth:api')->group(function () {
-    Route::get('admin/member/detail/{id}', 'API\UserController@viewMemberDetail');
-});
-Route::middleware('auth:api')->group(function () {
-    Route::post('admin/member/register', 'API\UserController@createMember');
-});
-
-Route::get('/subpackage/update_downloaded/{id}', 'API\DrivePhotoController@updateDownloadedSubData');
-
-
 
 //customer
 Route::middleware('auth:api')->group(function () {
     Route::resource('customer/view', 'API\CustomerController');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::post('customer/create', 'API\CustomerController@store');
+    Route::post('customer/delete_multiple', 'API\CustomerController@deleteMultiple');
 });
+// Route::middleware('auth:api')->group(function () {
+//     Route::post('customer/create', 'API\CustomerController@store');
+// });
 Route::middleware('auth:api')->group(function () {
-    Route::get('customer/show/{id}', 'API\CustomerController@show');
+    Route::get('customer/show', 'API\CustomerController@show');
 });
-Route::middleware('auth:api')->group(function ($id) {
-    Route::post('customer/update/{id}', 'API\CustomerController@update');
-});
-Route::middleware('auth:api')->group(function ($id) {
-    Route::post('customer/delete/{id}', 'API\CustomerController@destroy');
-});
-Route::middleware('auth:api')->group(function () {
-    Route::post('customer/updateCustomer', 'API\CustomerController@updateCustomer');
-});
-Route::middleware('auth:api')->group(function () {
-    Route::post('customer/sub_package/delete_multiple', 'API\CustomerController@deleteMultipleSubpackage');
-});
+// Route::middleware('auth:api')->group(function ($id) {
+//     Route::post('customer/update/{id}', 'API\CustomerController@update');
+// });
+// Route::middleware('auth:api')->group(function ($id) {
+//     Route::post('customer/delete/{id}', 'API\CustomerController@destroy');
+// });
 
 //invoice
 // Route::middleware('auth:api')->group(function () {
@@ -106,9 +93,6 @@ Route::middleware('auth:api')->group(function () {
 });
 Route::middleware('auth:api')->group(function () {
     Route::post('invoice/delete_multiple', 'API\InvoiceController@deleteMultiple');
-});
-Route::middleware('auth:api')->group(function () {
-    Route::get('invoice/get_photo', 'API\InvoiceController@getInvoicePhoto');
 });
 
 
@@ -164,6 +148,18 @@ Route::middleware('auth:api')->group(function () {
     Route::post('term/create', 'API\TermController@store');
 });
 
+Route::middleware('auth:api')->group(function () {
+    Route::get('notification/view', 'API\NotificationController@indexCustomer');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::get('notification/read', 'API\NotificationController@readNotification');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::get('notification/is_any', 'API\NotificationController@isAnyPhoto');
+});
+
+
+
 
 
 
@@ -194,25 +190,20 @@ Route::middleware('auth:api')->group(function () {
     Route::get('drive/get_album', 'API\DrivePhotoController@getAlbum');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::post('drive/download_file/{type}/{folderName}/{subId}', 'API\DrivePhotoController@getOriginChildFolder');    
+    Route::post('drive/insert_choice_photo', 'API\DrivePhotoController@insertChoicePhoto');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::post('drive/download_video', 'API\DrivePhotoController@downloadVideo');    
+    Route::post('drive/insert_print_photo', 'API\DrivePhotoController@insertPrintPhoto');
 });
-// Route::middleware('auth:api')->group(function () {
-//     Route::post('drive/get_choice_photo_item/{folderName}', 'API\DrivePhotoController@getChoicePhotoFolder');    
-// });
+Route::middleware('auth:api')->group(function () {
+    Route::post('drive/insert_album_photo', 'API\DrivePhotoController@insertAlbumPhoto');
+});
+
+
 
 //selected photo
 Route::middleware('auth:api')->group(function () {
     Route::post('selected_photo', 'API\DrivePhotoController@insertSelected');
-});
-
-Route::middleware('auth:api')->group(function () {
-    Route::post('drive/move_to_choice', 'API\DrivePhotoController@moveOriginToChoice');
-});
-Route::middleware('auth:api')->group(function () {
-    Route::post('drive/move_to_origin', 'API\DrivePhotoController@moveChoiceToOrigin');
 });
 
 
