@@ -56,7 +56,7 @@ class DrivePhotoController extends Controller
 
         return response(['success' => true,'data'=>'$files', 'message' => 'Selected Photo inserted'], 201);
     }
-
+    
     public function getChoicePhoto(){
     
         $customer = DB::table('customers')
@@ -64,29 +64,32 @@ class DrivePhotoController extends Controller
         ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
         ->where('customers.id_user', '=', Auth::Id())
         ->get()->toArray();
-
-        $selectedPhoto = DB::table('selected_photo')
-        ->select('basename')
-        ->where('id_customer', '=', $customer[0]->id)
-        ->get()->toArray();
-
         
         $folder = $customer[0]->id .' - ' .$customer[0]->name;
 
         $contents = collect(\Storage::cloud()->listContents('/', false));
-        $dir = $contents->where('type', '=', 'dir')
+        $dirs = $contents->where('type', '=', 'dir')
                 ->where('filename', '=', $folder)
                 ->first(); // There could be duplicate directory names!
         
-        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+        $contents = collect(\Storage::cloud()->listContents($dirs['path'], false));
         $dir = $contents->where('type', '=', 'dir')
         ->where('filename', '=', 'Foto Pilihan')
         ->first(); // There could be duplicate directory names!
 
+        $contentPrintPhoto = collect(\Storage::cloud()->listContents($dirs['path'], false));
+        $dirContentPrintPhoto = $contentPrintPhoto->where('type', '=', 'dir')
+            ->where('filename', '=', 'Foto Cetak')
+            ->first(); // There could be duplicate directory names!
+
+        $contentAlbumPhoto = collect(\Storage::cloud()->listContents($dirs['path'], false));
+        $dirContentAlbumPhoto = $contentAlbumPhoto->where('type', '=', 'dir')
+            ->where('filename', '=', 'Album')
+            ->first(); // There could be duplicate directory names!
+
         $filedir = collect(\Storage::cloud()->listContents($dir['path'], false));
         $directory = $filedir->where('type', '=', 'dir')->toArray();
         // $file= $filedir->where('type', '=', 'file')->toArray();
-
 
         $data = array();
 
@@ -100,12 +103,37 @@ class DrivePhotoController extends Controller
             $parent['folder'] = $directory[$i]['name'];
             if(count($filedirchild2) > 0){
                 for($j = 0; $j < count($filedirchild2); $j++){
-                    $filedirchild2[$j]['is_selected'] = '0';
-                    for($k = 0; $k < count($selectedPhoto); $k++){
-                        if($filedirchild2[$j]['basename'] == $selectedPhoto[$k]->basename){
-                            $filedirchild2[$j]['is_selected'] = '1';
+                    $filePrintPhoto = collect(\Storage::cloud()->listContents($dirContentPrintPhoto['path'], false));
+                    $dirFilePrintPhoto = $filePrintPhoto->where('type', '=', 'dir')
+                        ->where('filename', '=', $directory[$i]['name'])
+                        ->first(); // There could be duplicate directory names!
+
+                    $fileAlbumPhoto = collect(\Storage::cloud()->listContents($dirContentAlbumPhoto['path'], false));
+                    $dirFileAlbumPhoto = $fileAlbumPhoto->where('type', '=', 'dir')
+                        ->where('filename', '=', $directory[$i]['name'])
+                        ->first(); // There could be duplicate directory names!
+
+                    $filedirchildPrint = collect(\Storage::cloud()->listContents($dirFilePrintPhoto['path'], false))->where('type', '=', 'file');
+                    $filedirchildPrint2 = $filedirchildPrint->toArray();
+
+                    $filedirchildAlbum = collect(\Storage::cloud()->listContents($dirFileAlbumPhoto['path'], false))->where('type', '=', 'file');
+                    $filedirchildAlbum2 = $filedirchildAlbum->toArray();
+
+
+                    $filedirchild2[$j]['is_print'] = '0';
+                    for($k = 0; $k < count($filedirchildPrint2); $k++){
+                        if($filedirchild2[$j]['name'] == $filedirchildPrint2[$k]['name']){
+                            $filedirchild2[$j]['is_print'] = '1';
                         }
                     }
+
+                    $filedirchild2[$j]['is_album'] = '0';
+                    for ($k = 0; $k < count($filedirchildAlbum2); $k++) {
+                        if ($filedirchild2[$j]['name'] == $filedirchildAlbum2[$k]['name']) {
+                            $filedirchild2[$j]['is_album'] = '1';
+                        }
+                    }
+
                 }
             }
             $parent['file'] = $filedirchild2;
