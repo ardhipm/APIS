@@ -87,6 +87,7 @@ class UserController extends Controller
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Mentah');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Pilihan');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Cetak');
+                \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Album');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Video');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Album');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Invoice');
