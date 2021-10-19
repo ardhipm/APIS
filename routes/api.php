@@ -202,6 +202,16 @@ Route::middleware('auth:api')->group(function () {
 // Route::middleware('auth:api')->group(function () {
 //     Route::post('drive/get_choice_photo_item/{folderName}', 'API\DrivePhotoController@getChoicePhotoFolder');    
 // });
+Route::middleware('auth:api')->group(function () {
+    Route::post('drive/insert_choice_photo', 'API\DrivePhotoController@insertChoicePhoto');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::post('drive/insert_print_photo', 'API\DrivePhotoController@insertPrintPhoto');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::post('drive/insert_album_photo', 'API\DrivePhotoController@insertAlbumPhoto');
+});
+
 
 //selected photo
 Route::middleware('auth:api')->group(function () {
