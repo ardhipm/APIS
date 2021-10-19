@@ -169,7 +169,7 @@ function FormulirAdminMember() {
                         helperText={errors.email}
                         onChange={handleChange('email')}
                     />
-                    <InputLabel style={{marginBottom:10,marginTop:10}}><b>Password</b></InputLabel>
+                    <InputLabel style={{marginBottom:10,marginTop:10}}><b>Kata Sandi</b></InputLabel>
                     <TextField
                         id="outlined-size-small"
                         variant="outlined"
@@ -183,7 +183,7 @@ function FormulirAdminMember() {
                         helperText={errors.plain_password}
                         onChange={handleChange('plain_password')}
                     />
-                    <InputLabel style={{marginBottom:10,marginTop:10}}><b>Masukan Kata Sandi</b></InputLabel>
+                    <InputLabel style={{marginBottom:10,marginTop:10}}><b>Ulangi Kata Sandi</b></InputLabel>
                     <TextField
                         style={{
                             width:"100%"

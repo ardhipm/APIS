@@ -76,6 +76,19 @@ export const getCustomers = () => dispatch => {
     
 };
 
+export const getAllCustomers = () => dispatch => {
+    dispatch({
+        type: GET_CUSTOMER_VIEW
+    });
+    const request = api.getAllCustomers();
+
+    return request.then(
+        response => dispatch(getCustomersSuccess(response.data)),        
+        err => dispatch(getCustomersFail(err)),
+    );
+    
+};
+
 export const getCustomersSuccess = ({
     data
 }) => dispatch => {

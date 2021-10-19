@@ -67,6 +67,9 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('customer/view', 'API\CustomerController');
 });
 Route::middleware('auth:api')->group(function () {
+    Route::get('customer/viewAll', 'API\CustomerController@showAllCustomer');
+});
+Route::middleware('auth:api')->group(function () {
     Route::post('customer/create', 'API\CustomerController@store');
 });
 Route::middleware('auth:api')->group(function () {

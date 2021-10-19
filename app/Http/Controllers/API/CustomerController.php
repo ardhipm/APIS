@@ -47,6 +47,30 @@ class CustomerController extends Controller
         return response()->json($response, 200);
     }
 
+
+    /**
+     * show all customer function
+     */
+    public function showAllCustomer(){
+        $customer = DB::table('customers')
+        ->leftJoin('users', 'customers.id_user', 'users.id')
+        ->leftJoin('packages', 'customers.id', 'packages.id_customer')
+        ->select('customers.id', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name', 'users.is_active', 'packages.id as packages_id', 'packages.package_name')
+        ->where('users.role_id', '=', '1')
+        ->get();
+
+        $data = $customer->toArray();
+        
+
+        $response = [
+            'success' => true,
+            'data' => $data,
+            'message' => 'Customers retrieved successfully.',
+        ];
+
+        return response()->json($response, 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

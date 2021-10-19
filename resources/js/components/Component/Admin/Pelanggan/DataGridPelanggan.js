@@ -28,7 +28,7 @@ import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {getData} from '../../../Api/httpRequest'
-import {getCustomers} from '../../../Redux/Admin/action'
+import {getCustomers, getAllCustomers} from '../../../Redux/Admin/action'
 
 
 // function createData(id_pelanggan, nama_pelanggan, nama_pasangan, no_hp, paket,status) {
@@ -171,7 +171,7 @@ const EnhancedTableToolbar = (props) => {
   useEffect(() => {
     async function handleFilterTable() {
       try {
-        const result = await getData("/customer/view");
+        const result = await getData("/customer/viewAll");
         setRows(result.data.data);
       } catch (error) {
       }
@@ -276,7 +276,7 @@ export default function EnhancedTable() {
   const [checkSelected,setCheckSelected] = React.useState([])
   
   useEffect(() => {
-    dispatch(getCustomers())
+    dispatch(getAllCustomers())
   }, []);
   const requestSearch = (searchedVal) => {
     const filteredRows = rows.filter((data) => {

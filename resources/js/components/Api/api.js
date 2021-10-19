@@ -3,6 +3,7 @@ import { BASE_URL } from "../config/config";
 
 export const api = {
     getCustomers,
+    getAllCustomers,
     getInvoice,
     getLogistic,
     getAdminMember,
@@ -41,6 +42,25 @@ async function getCustomers() {
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = '/api/customer/view';
+        const headers = {...defaultHeaders};
+        const response = await axios({
+            method: 'GET',
+            url,
+            headers,
+        });
+        return response;
+    } catch (error) {
+        if(error.response === 401) {
+            clearStoredCreds();
+        }
+        return Promise.reject(error.response);
+    }
+}
+
+async function getAllCustomers() {
+    // const authToken = {'Authorization':'Bearer '+token}
+    try {
+        const url = '/api/customer/viewAll';
         const headers = {...defaultHeaders};
         const response = await axios({
             method: 'GET',
