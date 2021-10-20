@@ -164,7 +164,10 @@ function EditDataLogistik(props) {
                 style={{textTransform:"capitalize",
                 backgroundColor:"#000", 
                 color:"#FFF", 
-                width:"100%"}}>
+                position:"absolute",
+                bottom:"0",
+                marginBottom:"12px",
+                width:"80%"}}>
                 Simpan
             </Button>
             </div>
