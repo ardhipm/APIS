@@ -86,9 +86,9 @@ class UserController extends Controller
 
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Mentah');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Pilihan');
-                \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Cetak');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Album');
-                \Storage::cloud()->makeDirectory($dir['path'] . '/Video');
+                \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Cetak');
+                // \Storage::cloud()->makeDirectory($dir['path'] . '/Video');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Album');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Invoice');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Shipment');
@@ -101,12 +101,18 @@ class UserController extends Controller
                     ->first(); // There could be duplicate directory names!
 
                 $dir2 = $contents->where('type', '=', 'dir')
-                ->where('filename', '=', "Foto Akhir")
+                ->where('filename', '=', "Foto Mentah")
                 ->first(); // There could be duplicate directory names!
 
                 $dir3 = $contents->where('type', '=', 'dir')
-                ->where('filename', '=', "Foto Mentah")
+                ->where('filename', '=', "Foto Cetak")
                 ->first(); // There could be duplicate directory names!
+
+                $dir4 = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', "Foto Album")
+                ->first(); // There could be duplicate directory names!
+
+
                 // if (!$dir) {$response = [
                 //     'success' => false,
                 //     'data' => 'Directory does not exist',
@@ -125,6 +131,8 @@ class UserController extends Controller
                     \Storage::cloud()->makeDirectory($dir['path'] . '/' .$subPackageList[$x]['sub_package_name']);
                     \Storage::cloud()->makeDirectory($dir2['path'] . '/' . $subPackageList[$x]['sub_package_name']);
                     \Storage::cloud()->makeDirectory($dir3['path'] . '/' . $subPackageList[$x]['sub_package_name']);
+                    \Storage::cloud()->makeDirectory($dir4['path'] . '/' . $subPackageList[$x]['sub_package_name']);
+
                 }
 
 
