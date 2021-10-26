@@ -193,7 +193,6 @@ export default function MainPage(props) {
             onChange={handleOnTabChange}>
             <Tab label={<span >Foto Mentah</span>} />
             <Tab label={<span >Foto Pilihan</span>} />
-            <Tab label={<span >Foto Akhir</span>} />
             <Tab label={<span >Video</span>} />
             <Tab label={<span >Album</span>} />
         </Tabs>) : null);
