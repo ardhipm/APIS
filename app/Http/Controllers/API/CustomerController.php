@@ -357,12 +357,17 @@ class CustomerController extends Controller
                     ->first(); // There could be duplicate directory names!
 
                 $dir2 = $contents->where('type', '=', 'dir')
-                ->where('filename', '=', "Foto Akhir")
+                ->where('filename', '=', "Foto Mentah")
                 ->first(); // There could be duplicate directory names!
 
                 $dir3 = $contents->where('type', '=', 'dir')
-                ->where('filename', '=', "Foto Mentah")
+                ->where('filename', '=', "Foto Cetak")
                 ->first(); // There could be duplicate directory names!
+
+                $dir4 = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', "Foto Album")
+                ->first(); // There could be duplicate directory names!
+
 
 
                 $userCustomer = User::find($bodyJson['id_user']);
@@ -407,6 +412,8 @@ class CustomerController extends Controller
                     $contentsSubDir = collect(\Storage::cloud()->listContents($dir['path'], $recursive));
                     $contentsSubDir2 = collect(\Storage::cloud()->listContents($dir2['path'], $recursive));
                     $contentsSubDir3 = collect(\Storage::cloud()->listContents($dir3['path'], $recursive));
+                    $contentsSubDir4 = collect(\Storage::cloud()->listContents($dir4['path'], $recursive));
+
 
                     if($item['id_sub_package'] != null){
                         // update
@@ -429,12 +436,18 @@ class CustomerController extends Controller
                             $subDir3 = $contentsSubDir3->where('type', '=', 'dir')
                             ->where('filename', '=', $subPackage->sub_package_name)
                             ->first(); // There could be duplicate directory names!
+
+                            $subDir4 = $contentsSubDir4->where('type', '=', 'dir')
+                            ->where('filename', '=', $subPackage->sub_package_name)
+                            ->first(); // There could be duplicate directory names!
+
         
     
                             \Storage::cloud()->move($subDir['path'], $subDir['dirname'].'/'.$item['sub_package_name']);
                             \Storage::cloud()->move($subDir2['path'], $subDir2['dirname'].'/'.$item['sub_package_name']);
                             \Storage::cloud()->move($subDir3['path'], $subDir3['dirname'].'/'.$item['sub_package_name']);
-                            
+                            \Storage::cloud()->move($subDir4['path'], $subDir4['dirname'] . '/' .$item['sub_package_name']);
+
         
                             $subPackage->sub_package_name = $item['sub_package_name'];
                             $subPackage->sub_package_description = $item['sub_package_description'];
@@ -464,6 +477,8 @@ class CustomerController extends Controller
                         \Storage::cloud()->makeDirectory($dir['path'] . '/' .$item['sub_package_name']);
                         \Storage::cloud()->makeDirectory($dir2['path'] . '/' . $item['sub_package_name']);
                         \Storage::cloud()->makeDirectory($dir3['path'] . '/' . $item['sub_package_name']);
+                        \Storage::cloud()->makeDirectory($dir4['path'] . '/' . $item['sub_package_name']);
+
                     }
                     
                     
@@ -471,7 +486,7 @@ class CustomerController extends Controller
                 }
 
 
-                return response(['success' => true, 'message' => 'Account register successfully'], 201);
+                return response(['success' => true, 'message' => 'Updated successfully'], 201);
             } 
         } else {
             return response(['success' => false, 'message' => 'No access to do action'], 201);
