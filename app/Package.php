@@ -10,7 +10,7 @@ class Package extends Model
 
     protected $table = 'packages';
     protected $fillable = [
-        'package_name', 'package_description','id_customer'
+        'package_name', 'package_description','id_customer','num_print_photo','num_album_photo','num_selected_print_photo','num_selected_album_photo'
     ];
 
     public function sub_packages(){

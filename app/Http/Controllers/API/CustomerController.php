@@ -166,7 +166,22 @@ class CustomerController extends Controller
         $customer = DB::table('customers')
         ->leftJoin('users', 'customers.id_user', 'users.id')
         ->leftJoin('packages', 'customers.id', 'packages.id_customer')
-        ->select('customers.id as id_customer','users.id as id_user', 'users.email','users.username','users.plain_password', 'customers.name', 'customers.phone_no', 'customers.partner_name', 'users.is_active', 'packages.id as packages_id', 'packages.package_name', 'packages.package_description')
+        ->select('customers.id as id_customer',
+            'users.id as id_user', 
+            'users.email',
+            'users.username',
+            'users.plain_password', 
+            'customers.name', 
+            'customers.phone_no', 
+            'customers.partner_name', 
+            'users.is_active', 
+            'packages.id as packages_id', 
+            'packages.package_name', 
+            'packages.package_description',
+            'packages.num_selected_album_photo',
+            'packages.num_selected_print_photo',
+            'packages.num_album_photo',
+            'packages.num_print_photo')
         ->where('customers.id', '=', $id)
         ->get();
 
@@ -212,7 +227,6 @@ class CustomerController extends Controller
             'sub_package.*.sub_package_name' => 'required',
             'sub_package.*.sub_package_description' => 'required',
             'sub_package.*.num_edit_photo' => 'required',
-            'sub_package.*.num_print_photo' => 'required',
         ];
 
         $validator = Validator::make($input, [
@@ -333,8 +347,7 @@ class CustomerController extends Controller
                 'sub_package.*.id_sub_package' => '',
                 'sub_package.*.sub_package_name' => 'required',
                 'sub_package.*.sub_package_description' => 'required',
-                'sub_package.*.num_edit_photo' => 'required',
-                'sub_package.*.num_print_photo' => 'required',
+                'sub_package.*.num_edit_photo' => 'required'
             ];
 
             $validator = Validator::make($bodyJson, $rules);
@@ -394,8 +407,8 @@ class CustomerController extends Controller
                 $package = Package::find($bodyJson['id_package']);
                 $package->package_name = $bodyJson['package_name'];
                 $package->package_description = $bodyJson['package_description'];
-
-                
+                $package->num_album_photo = $bodyJson['num_album_photo'];
+                $package->num_print_photo = $bodyJson['num_print_photo'];
                 $package->save();
 
                 $subPackageList = $bodyJson['sub_package'];
@@ -452,13 +465,11 @@ class CustomerController extends Controller
                             $subPackage->sub_package_name = $item['sub_package_name'];
                             $subPackage->sub_package_description = $item['sub_package_description'];
                             $subPackage->num_edit_photo = $item['num_edit_photo'];
-                            $subPackage->num_print_photo = $item['num_print_photo'];
                             $subPackage->save();
                         }else{
                             $subPackage->sub_package_name = $item['sub_package_name'];
                             $subPackage->sub_package_description = $item['sub_package_description'];
                             $subPackage->num_edit_photo = $item['num_edit_photo'];
-                            $subPackage->num_print_photo = $item['num_print_photo'];
                             $subPackage->save();
                         }
                     }else{
@@ -469,7 +480,6 @@ class CustomerController extends Controller
                         $newSub->sub_package_name = $item['sub_package_name'];
                         $newSub->sub_package_description = $item['sub_package_description'];
                         $newSub->num_edit_photo = $item['num_edit_photo'];
-                        $newSub->num_print_photo = $item['num_print_photo'];
                         $newSub->id_package = $package->id;
                         $newSub->save();
                         

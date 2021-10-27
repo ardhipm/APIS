@@ -51,15 +51,6 @@ const AddSubPackageDialog = (props) => {
         })
     }
 
-    const handlePrintQty = (e) => {
-        setCurrentSubPackageData(prevState => {
-            return {
-                ...prevState,
-                printPhotoQuantity: e.target.value
-            }
-        })
-    }
-
     return (
         <Dialog open={props.open} onClose={handleClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">Tambah Sub Paket</DialogTitle>
@@ -102,19 +93,6 @@ const AddSubPackageDialog = (props) => {
                             fullWidth
                         />
                     </Grid>
-                    <Grid item xs={6}>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="photoPrintQuantity"
-                            label="Kuantitas Cetak Foto"
-                            value={currentSubPackageData.printPhotoQuantity}
-                            onChange={handlePrintQty}
-                            type="text"
-                            fullWidth
-                        />
-                    </Grid>
-
                 </Grid>
 
             </DialogContent>

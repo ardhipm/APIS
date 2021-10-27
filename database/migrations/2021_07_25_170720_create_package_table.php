@@ -18,6 +18,10 @@ class CreatePackageTable extends Migration
             $table->string('package_name');
             $table->text('package_description');
             $table->integer('id_customer');
+            $table->integer('num_print_photo');
+            $table->integer('num_album_photo');
+            $table->integer('num_selected_print_photo');
+            $table->integer('num_selected_album_photo');
             $table->timestamps();
         });
     }
@@ -29,6 +33,6 @@ class CreatePackageTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('package');
+        Schema::dropIfExists('packages');
     }
 }

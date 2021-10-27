@@ -25,12 +25,32 @@ const useStyles = makeStyles({
     },
     icon:{
         color: '#559DCC'
+    },
+    iconAlbumSelected:{
+        color: '#FB9300'
+    },
+    iconPrintSelected:{
+        color: '#F54748'
     }
 })
 
 const PhotoImage = (props) => {
-    const { picName, name,idx, value,selected,totalSelectedPhoto,totalRestrictionPhoto,   ...other } = props;
+    const { picName, 
+        name,
+        idx, 
+        value,
+        selected,
+        displayDeleteSelected, 
+        displayAlbumSelected, 
+        displayPrintSelected, 
+        totalSelectedPhoto,
+        totalRestrictionPhoto,
+        albumSelected,
+        printSelected,   
+        ...other } = props;
     const[check, setCheck] = React.useState(selected);
+    const[selectAlbum, setSelectAlbum] = React.useState(albumSelected);
+    const[selectPrint, setSelectPrint] = React.useState(printSelected);
     const classes = useStyles();
 
     useEffect(() => {
@@ -62,17 +82,35 @@ const PhotoImage = (props) => {
         }else{
             props.onSelectedImage(idx, picName, !check, e.target.value);
         }
-
-        
-        
     }
-
 
     return (
         <Grid item xs={props.formatGrid === undefined ? 3 : props.formatGrid}>
             <Card className={classes.root} onClick={handleClickOpen} style={{ backgroundImage : !props.value ? `url("/img/foto.png")`:  driveApiLink(props.value)}}>
-                {props.selectedPicture && 
-                <Checkbox  icon={<RadioButtonUncheckedIcon className={classes.icon}/>} checkedIcon={ <CheckCircleIcon className={classes.icon}/>} className={classes.checkLayout} checked={check} name="checkedA" />}
+                {displayAlbumSelected && 
+                    <Checkbox  
+                        icon={<RadioButtonUncheckedIcon className={classes.iconAlbumSelected}/>} 
+                        checkedIcon={ <CheckCircleIcon className={classes.iconAlbumSelected}/>} 
+                        className={classes.checkLayout} checked={selectAlbum} 
+                        name="checkedA" 
+                    />}
+                {displayPrintSelected && 
+                    <Checkbox  
+                        icon={<RadioButtonUncheckedIcon 
+                        className={classes.iconPrintSelected}/>} 
+                        checkedIcon={ <CheckCircleIcon className={classes.iconPrintSelected}/>} 
+                        className={classes.selectPrint} checked={check} name="checkedA" 
+                    />}
+                {displayDeleteSelected && props.selectedPicture && 
+                    <Checkbox  
+                        icon={<RadioButtonUncheckedIcon 
+                        className={classes.icon}/>} 
+                        checkedIcon={ <CheckCircleIcon className={classes.icon}/>} 
+                        className={classes.checkLayout} 
+                        checked={check} 
+                        name="checkedA" 
+                    />}
+                
             </Card>
         </Grid>
     );

@@ -492,7 +492,7 @@ class DrivePhotoController extends Controller
 
         $headers = [
             'Content-Type: application/zip',
-            'Content-Length: '. filesize($zipcreated),
+            'Content-Length: '.filesize($zipcreated),
             'Content-Disposition : attachment; filename='.$tempFileCustomer
          ];
 

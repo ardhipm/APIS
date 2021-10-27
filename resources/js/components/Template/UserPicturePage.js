@@ -10,9 +10,6 @@ import ZipLoadingPopup from '../Component/Popup/ZipLoadingPopup';
 import SuccessDialog from '../Component/Popup/SuccessDialog';
 import ErrorDialog from '../Component/Popup/ErrorDialog';
 
-
-
-
 const useStyles = makeStyles((theme) => ({
     tabLabel: {
         textTransform: 'capitalize',
@@ -44,10 +41,6 @@ const data = () => {
 
 const UserPicturePage = (props) => {
     const classes = useStyles();
-
-
-    let wayae = data;
-
 
     const [value, setValue] = React.useState(0);
     const [pictures, setPictures] = React.useState([]);
@@ -475,6 +468,9 @@ const UserPicturePage = (props) => {
                                         selectedPicture={props.tabValue ==2 ? false: true}
                                         totalSelectedPhoto={totalSelectedPhoto}
                                         totalRestrictionPhoto={totalRestrictionPhoto}
+                                        displayDeleteSelected={true}
+                                        displayAlbumSelected={props.tabValue ==2 ? false: true}
+                                        displayPrintSelected={props.tabValue ==2 ? false: true}
                                         selected={picture.selected}
                                         onSelectedImage={selectImage}
                                         onClickImage={onClickImage} />)
@@ -484,32 +480,6 @@ const UserPicturePage = (props) => {
                     </Box>
 
                 </div>
-            {/* {pictures.map((item, index) => {
-                return (<div key={index} value={value} index={index} className={value !== 0 ? classes.hidden : ''} >
-                    <Box p={3}>
-                        <Grid container spacing={2}>
-                            {
-                                item.pictures.length > 0 ? item.pictures.map((picture, index) => {
-                                    return (<PhotoImage
-                                        key={picture.idx}
-                                        idx={index}
-                                        tab={picture.dir}
-                                        value={picture.img}
-                                        picName={picture.name}
-                                        formatGrid={3}
-                                        selectedPicture={props.tabValue ==2 ? false: true}
-                                        totalSelectedPhoto={totalSelectedPhoto}
-                                        totalRestrictionPhoto={totalRestrictionPhoto}
-                                        selected={picture.selected}
-                                        onSelectedImage={selectImage}
-                                        onClickImage={onClickImage} />)
-                                }) : null
-                            }
-                        </Grid>
-                    </Box>
-
-                </div>) */}
-            {/* })} */}
         </Grid> : <div>tidak terdapat folder</div>)
 
         const originTab = props.tabValue == 0 ? "Silahkan pilih foto yang ingin di edit! "+ totalSelectedPhoto+"/"+totalRestrictionPhoto:null;
