@@ -31,7 +31,19 @@ class CustomerController extends Controller
     $customer = DB::table('customers')
         ->leftJoin('users', 'customers.id_user', 'users.id')
         ->leftJoin('packages', 'customers.id', 'packages.id_customer')
-        ->select('customers.id', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name', 'users.is_active', 'packages.id as packages_id', 'packages.package_name')
+        ->select('customers.id', 
+            'users.email', 
+            'customers.name', 
+            'customers.phone_no', 
+            'customers.partner_name', 
+            'users.is_active', 
+            'packages.id as packages_id', 
+            'packages.package_name',
+            'packages.num_album_photo',
+            'packages.num_print_photo',
+            'packages.num_selected_album_photo',
+            'packages.num_selected_print_photo',
+            )
         ->where('users.id', '=', Auth::id())
         ->get();
 

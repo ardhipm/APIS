@@ -125,6 +125,10 @@ const UserPicturePage = (props) => {
                 let values = res.data.data[0];
                 if (res.data.success == true) {
                     setPackageName(values.package_name);
+                    setNumAlbumPhoto(values.num_album_photo)
+                    setNumPrintPhoto(values.num_print_photo)
+                    setSelectedAlbumPhoto(values.num_selected_album_photo)
+                    setSelectedPrintPhoto(values.num_selected_print_photo)
                 }
 
             })
@@ -160,6 +164,7 @@ const UserPicturePage = (props) => {
                 let values = res.data.data;
                 //console.log('userpicturepage');
                 //console.log(res.data);
+                console.log(values);
                 let subFolders = [];
                 if (res.data.success == true) {
                     values.map(item => {
@@ -206,7 +211,7 @@ const UserPicturePage = (props) => {
                 setSubFolder(subFolders);
                 setCurrentSubFolder(subFolders[0]);
 
-
+                
                 setTotalSelectedPhoto(values[0].num_selected_edit_photo);
                 setTotalRestrictionPhoto(values[0].num_edit_photo);
                 //console.log(pictures);
@@ -300,7 +305,6 @@ const UserPicturePage = (props) => {
     }
 
     const submitPhoto = () => {
-
 
         setOpenWarningPopup(false);
         setLoading(true);

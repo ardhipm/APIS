@@ -244,7 +244,6 @@ class DrivePhotoController extends Controller
             for($j = 0; $j < count($sub_package); $j++){
                 if($sub_package[$j]->sub_package_name == $directory[$i]['name']){
                     $parent['num_edit_photo'] = $sub_package[$i]->num_edit_photo;
-                    $parent['num_print_photo'] = $sub_package[$i]->num_print_photo;
                     $parent['id_subpackage'] = $sub_package[$i]->id;
                     $parent['is_downloaded'] = $sub_package[$i]->is_downloaded;
                     $parent['num_selected_edit_photo'] = $sub_package[$i]->num_selected_edit_photo;
