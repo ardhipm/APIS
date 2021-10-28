@@ -9,6 +9,7 @@ import WarningDialog from '../Component/Popup/WarningDialog';
 import ZipLoadingPopup from '../Component/Popup/ZipLoadingPopup';
 import SuccessDialog from '../Component/Popup/SuccessDialog';
 import ErrorDialog from '../Component/Popup/ErrorDialog';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const useStyles = makeStyles((theme) => ({
     tabLabel: {
@@ -21,6 +22,14 @@ const useStyles = makeStyles((theme) => ({
     },
     hidden: {
         display: 'none'
+    },
+    iconAlbumSelected: {
+        color: '#FB9300',
+        marginRight: '0.3em'
+    },
+    iconPrintSelected: {
+        color: '#F54748',
+        marginRight: '0.3em'
     }
 }));
 
@@ -74,7 +83,13 @@ const UserPicturePage = (props) => {
     const [alertPopup, setAlertPopup] = React.useState(false);
 
     const [tabName, setTabName] = React.useState("origin");
- 
+
+    // number photo
+    const [numAlbumPhoto, setNumAlbumPhoto] = React.useState(0);
+    const [numPrintPhoto, setNumPrintPhoto] = React.useState(0);
+    const [selectedAlbumPhoto, setSelectedAlbumPhoto] = React.useState(0);
+    const [selectedPrintPhoto, setSelectedPrintPhoto] = React.useState(0);
+
     useEffect(() => {
         // //console.log(props.apiLink);
 
@@ -120,17 +135,17 @@ const UserPicturePage = (props) => {
 
     const getData = (apiLink) => {
 
-        if(props.tabValue==0){
+        if (props.tabValue == 0) {
             setDescriptionMessage("Download terlebih dahulu foto pada paket untuk melanjutkan proses pemilihan")
             setHideDownload(false);
             setBtnText("Kirim");
             setWarningText("Foto akan dipindahkan ke foto pilihan, lanjutkan ?")
-        }else if(props.tabValue ==1){
+        } else if (props.tabValue == 1) {
             setDescriptionMessage("Anda dapat menghapus dan mengganti item yang telah terpilih")
             setHideDownload(true);
             setBtnText("Hapus");
             setWarningText("Foto akan dikembalikan ke foto mentah, lanjutkan ?")
-        }else{
+        } else {
 
         }
 
@@ -151,8 +166,6 @@ const UserPicturePage = (props) => {
                         subFolders.push(item);
                     })
                 }
-
-
 
                 let arraysData = [];
                 for (let i = 0; i < subFolders.length; i++) {
@@ -181,7 +194,7 @@ const UserPicturePage = (props) => {
 
                 }
 
-                
+
                 setPictures(arraysData);
 
                 if (values.length > 0) {
@@ -200,7 +213,7 @@ const UserPicturePage = (props) => {
 
                 setIsDownloaded(values[0].is_downloaded > 0 ? true : false);
 
-                if(props.tabValue ==1){
+                if (props.tabValue == 1) {
                     // setDescriptionMessage("Anda dapat menghapus dan mengganti item yang telah terpilih")
                     // setHideDownload(true);
                     // setBtnText("Hapus");
@@ -294,7 +307,7 @@ const UserPicturePage = (props) => {
         let requestData = pictures[value];
         const token = localStorage.getItem('authToken');
 
-        if(props.tabValue == 0){
+        if (props.tabValue == 0) {
             axios.request({
                 data: requestData,
                 method: 'post',
@@ -303,7 +316,7 @@ const UserPicturePage = (props) => {
             })
                 .then(res => {
 
-                    
+
                     if (res.data.success == true) {
                         setIsErrorPopup(false);
                         setTimeout(() => {
@@ -313,18 +326,18 @@ const UserPicturePage = (props) => {
                     } else {
                         setIsErrorPopup(true);
                     }
-    
+
                     setLoading(false);
                     setAlertPopup(true);
-    
+
                 })
                 .catch(error => {
                     setLoading(false);
                     setIsErrorPopup(true);
                     setAlertPopup(true);
-    
+
                 })
-        }else if(props.tabValue==1){
+        } else if (props.tabValue == 1) {
             axios.request({
                 data: requestData,
                 method: 'post',
@@ -337,19 +350,19 @@ const UserPicturePage = (props) => {
                             window.location.reload()
                         }, 1500);
                     } else {
-                        
+
                     }
-    
+
                     setLoading(false);
-    
+
                 })
                 .catch(error => {
                     setLoading(false);
-    
+
                 })
         }
 
-        
+
     }
 
     const handleClosealertPopup = () => {
@@ -400,38 +413,38 @@ const UserPicturePage = (props) => {
         // window.location = "/api/drive/download_file/"+encodeURIComponent(subFolder[value].folder);
 
         let type = null;
-        if(props.tabValue == 0){
+        if (props.tabValue == 0) {
             type = "origin"
-        }else if(props.tabValue ==2){
+        } else if (props.tabValue == 2) {
             type = "final"
         }
         axios.request({
             method: 'post',
-            url: "/api/drive/download_file/" +type+"/"+ encodeURIComponent(subFolder[value].folder) +"/"+subFolder[value].id_subpackage,
+            url: "/api/drive/download_file/" + type + "/" + encodeURIComponent(subFolder[value].folder) + "/" + subFolder[value].id_subpackage,
             headers: { 'Authorization': 'Bearer ' + token },
             responseType: 'blob'
         })
             .then(res => {
 
-                
+
 
                 setTimeout(() => {
                     const url = window.URL.createObjectURL(new Blob([res.data]));
                     const link = document.createElement('a');
                     link.href = url;
-                    link.setAttribute('download', subFolder[value].folder +"-"+type+ '.zip'); //or any other extension
+                    link.setAttribute('download', subFolder[value].folder + "-" + type + '.zip'); //or any other extension
                     document.body.appendChild(link);
                     link.click();
                     setZipLoading(false);
                 }, 1500);
 
                 setTimeout(() => {
-                   
+
                     window.location.reload()
                 }, 3000);
-                
 
-                
+
+
 
             })
             .catch(error => {
@@ -454,45 +467,45 @@ const UserPicturePage = (props) => {
     const ulala = (isAnyFolder ?
         <Grid item xs={12}>
             <div key={value} value={value} index={value} /** className={value !== 0 ? classes.hidden : ''} */ >
-                    <Box p={3}>
-                        <Grid container spacing={2}>
-                            {
-                                pictures[value].pictures.length > 0 ? pictures[value].pictures.map((picture, index) => {
-                                    return (<PhotoImage
-                                        key={picture.idx}
-                                        idx={index}
-                                        tab={picture.dir}
-                                        value={picture.img}
-                                        picName={picture.name}
-                                        formatGrid={3}
-                                        selectedPicture={props.tabValue ==2 ? false: true}
-                                        totalSelectedPhoto={totalSelectedPhoto}
-                                        totalRestrictionPhoto={totalRestrictionPhoto}
-                                        displayDeleteSelected={true}
-                                        displayAlbumSelected={props.tabValue ==2 ? false: true}
-                                        displayPrintSelected={props.tabValue ==2 ? false: true}
-                                        selected={picture.selected}
-                                        onSelectedImage={selectImage}
-                                        onClickImage={onClickImage} />)
-                                }) : <div>tidak terdapat foto</div>
-                            }
-                        </Grid>
-                    </Box>
+                <Box p={3}>
+                    <Grid container spacing={2}>
+                        {
+                            pictures[value].pictures.length > 0 ? pictures[value].pictures.map((picture, index) => {
+                                return (<PhotoImage
+                                    key={picture.idx}
+                                    idx={index}
+                                    tab={picture.dir}
+                                    value={picture.img}
+                                    picName={picture.name}
+                                    formatGrid={3}
+                                    selectedPicture={props.tabValue == 2 ? false : true}
+                                    totalSelectedPhoto={totalSelectedPhoto}
+                                    totalRestrictionPhoto={totalRestrictionPhoto}
+                                    displayDeleteSelected={true}
+                                    displayAlbumSelected={props.tabValue == 2 ? false : true}
+                                    displayPrintSelected={props.tabValue == 2 ? false : true}
+                                    selected={picture.selected}
+                                    onSelectedImage={selectImage}
+                                    onClickImage={onClickImage} />)
+                            }) : <div>tidak terdapat foto</div>
+                        }
+                    </Grid>
+                </Box>
 
-                </div>
+            </div>
         </Grid> : <div>tidak terdapat folder</div>)
 
-        const originTab = props.tabValue == 0 ? "Silahkan pilih foto yang ingin di edit! "+ totalSelectedPhoto+"/"+totalRestrictionPhoto:null;
+    const originTab = props.tabValue == 0 ? "Silahkan pilih foto yang ingin di edit! " + totalSelectedPhoto + "/" + totalRestrictionPhoto : null;
 
-        const showAlertPopup = (isErrorPopup ?
-            <ErrorDialog
-                open={alertPopup}
-                text="Terdapat error ketika pemilihan foto"
-                handleClose={handleClosealertPopup} /> :
-            <SuccessDialog
-                open={alertPopup}
-                text="Pemilihan foto berhasil!"
-                handleClose={handleClosealertPopup} />)
+    const showAlertPopup = (isErrorPopup ?
+        <ErrorDialog
+            open={alertPopup}
+            text="Terdapat error ketika pemilihan foto"
+            handleClose={handleClosealertPopup} /> :
+        <SuccessDialog
+            open={alertPopup}
+            text="Pemilihan foto berhasil!"
+            handleClose={handleClosealertPopup} />)
 
 
     return (
@@ -508,7 +521,27 @@ const UserPicturePage = (props) => {
                             </Grid>
                             <Grid item xs={12}>
                                 <Typography variant="subtitle1" >
-                                    {descriptionMessage}
+                                    <Grid container>
+                                        <Grid item xs={12}>
+
+                                            <div dangerouslySetInnerHTML={{ __html: descriptionMessage }} />
+                                        </Grid>
+                                        {props.tabValue == 1 &&
+                                            <div>
+                                                <Grid container item xs={12}>
+                                                    <CheckCircleIcon className={classes.iconAlbumSelected} />Foto album terpilih {selectedAlbumPhoto}/{numAlbumPhoto}
+                                                </Grid>
+                                                <Grid container item xs={12}>
+
+                                                    <CheckCircleIcon className={classes.iconPrintSelected} />Foto cetak terpilih {selectedPrintPhoto}/{numPrintPhoto}
+                                                </Grid>
+                                            </div>
+
+                                        }
+
+                                    </Grid>
+
+
                                 </Typography>
                                 <Typography variant="subtitle1" >
                                     {originTab}
@@ -519,7 +552,7 @@ const UserPicturePage = (props) => {
                     </Grid>
                     <Grid item xs={6} align="right" >
                         <Container>
-                            <Button variant="contained" color="primary" endIcon={props.tabValue==1?<Delete />:<Send />} disabled={props.tabValue == 1 ? false : !isDownloaded} onClick={onKirim}>
+                            <Button variant="contained" color="primary" endIcon={props.tabValue == 1 ? <Delete /> : <Send />} disabled={props.tabValue == 1 ? false : !isDownloaded} onClick={onKirim}>
                                 {btnText}
                             </Button>
                             {!hideDownload && <Button variant="contained" color="primary" endIcon={<GetApp />} onClick={onDownload}>
@@ -537,7 +570,7 @@ const UserPicturePage = (props) => {
                 {subTabFolders}
             </Grid>
             {ulala}
-            
+
             <PhotoZoom
                 photoSrc={currentPhoto}
                 isZoom={zoom}
@@ -551,13 +584,13 @@ const UserPicturePage = (props) => {
                 open={loading} >
                 <CircularProgress color="inherit" />
             </Backdrop>
-            <WarningDialog 
-                open={openWarningPopup} 
-                handleClose={handleCloseWarningPopup} 
+            <WarningDialog
+                open={openWarningPopup}
+                handleClose={handleCloseWarningPopup}
                 handleConfirm={submitPhoto}
-                text={warningText}/>
-            <ZipLoadingPopup 
-                open={zipLoading} 
+                text={warningText} />
+            <ZipLoadingPopup
+                open={zipLoading}
                 // handleClose={handleCloseWarningPopup} 
                 // handleConfirm={submitPhoto}
                 text="Mohon menunggu sedang membuat zip file..." />

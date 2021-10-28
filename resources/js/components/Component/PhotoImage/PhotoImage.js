@@ -75,13 +75,21 @@ const PhotoImage = (props) => {
 
     const handleSelect = (e) => {
 
-        if(totalSelectedPhoto >= totalRestrictionPhoto){
-            console.log('heretre')
-            setCheck(false);   
-            props.onSelectedImage(idx, picName, false, e.target.value);
-        }else{
-            props.onSelectedImage(idx, picName, !check, e.target.value);
+        if(e.target.id == "selectCheckbox"){
+            if(totalSelectedPhoto >= totalRestrictionPhoto){
+                console.log('heretre')
+                setCheck(false);   
+                props.onSelectedImage(idx, picName, false, e.target.value);
+            }else{
+                props.onSelectedImage(idx, picName, !check, e.target.value);
+            }
+        }else if(e.target.id == "selectAlbum"){
+
+        }else if(e.target.id == "selectPrint"){
+
         }
+
+        
     }
 
     return (
@@ -89,6 +97,7 @@ const PhotoImage = (props) => {
             <Card className={classes.root} onClick={handleClickOpen} style={{ backgroundImage : !props.value ? `url("/img/foto.png")`:  driveApiLink(props.value)}}>
                 {displayAlbumSelected && 
                     <Checkbox  
+                        id="selectAlbum"
                         icon={<RadioButtonUncheckedIcon className={classes.iconAlbumSelected}/>} 
                         checkedIcon={ <CheckCircleIcon className={classes.iconAlbumSelected}/>} 
                         className={classes.checkLayout} checked={selectAlbum} 
@@ -96,13 +105,15 @@ const PhotoImage = (props) => {
                     />}
                 {displayPrintSelected && 
                     <Checkbox  
+                        id="selectPrint"
                         icon={<RadioButtonUncheckedIcon 
                         className={classes.iconPrintSelected}/>} 
                         checkedIcon={ <CheckCircleIcon className={classes.iconPrintSelected}/>} 
-                        className={classes.selectPrint} checked={check} name="checkedA" 
+                        className={classes.selectPrint} checked={selectPrint} name="checkedA" 
                     />}
                 {displayDeleteSelected && props.selectedPicture && 
                     <Checkbox  
+                        id="selectCheckbox"
                         icon={<RadioButtonUncheckedIcon 
                         className={classes.icon}/>} 
                         checkedIcon={ <CheckCircleIcon className={classes.icon}/>} 
