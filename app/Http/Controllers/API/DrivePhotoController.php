@@ -120,17 +120,17 @@ class DrivePhotoController extends Controller
                     $filedirchildAlbum2 = $filedirchildAlbum->toArray();
 
 
-                    $filedirchild2[$j]['is_print'] = '0';
+                    $filedirchild2[$j]['is_print'] = false;
                     for($k = 0; $k < count($filedirchildPrint2); $k++){
                         if($filedirchild2[$j]['name'] == $filedirchildPrint2[$k]['name']){
-                            $filedirchild2[$j]['is_print'] = '1';
+                            $filedirchild2[$j]['is_print'] = true;
                         }
                     }
 
-                    $filedirchild2[$j]['is_album'] = '0';
+                    $filedirchild2[$j]['is_album'] = false;
                     for ($k = 0; $k < count($filedirchildAlbum2); $k++) {
                         if ($filedirchild2[$j]['name'] == $filedirchildAlbum2[$k]['name']) {
-                            $filedirchild2[$j]['is_album'] = '1';
+                            $filedirchild2[$j]['is_album'] = true;
                         }
                     }
 
