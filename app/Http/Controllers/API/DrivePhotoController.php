@@ -855,12 +855,15 @@ class DrivePhotoController extends Controller
                 ->where('filename', '=', $data[$i]['folder'])
                 ->first(); // There could be duplicate directory names!
 
-            for($j = 0; $j < count($data[$i]['file']); $j++){
-                $dataFile = collect(\Storage::cloud()->listContents($dirChildOriginFolder['path'], false))->where('type', '=', 'file')
-                ->where('filename', '=', $data[$i]['file'][$j])->first();
-
-                \Storage::cloud()->copy($dataFile['path'], $dirChildChoiceFolder['path'] ."/" .$dataFile['name']);
+            if(count($data[$i]['file']) > 0){
+                for($j = 0; $j < count($data[$i]['file']); $j++){
+                    $dataFile = collect(\Storage::cloud()->listContents($dirChildOriginFolder['path'], false))->where('type', '=', 'file')
+                    ->where('name', '=', $data[$i]['file'][$j])->first();
+    
+                    \Storage::cloud()->copy($dataFile['path'], $dirChildChoiceFolder['path'] ."/" .$dataFile['name']);
+                }
             }
+            
         }
 
         return response(['success' => true, 'message' => 'Print Photo inserted'], 201);
@@ -871,6 +874,7 @@ class DrivePhotoController extends Controller
         $body = $request->getContent();
         $bodyJson = json_decode($body, true);
         $data = $bodyJson['data'];
+        
 
         $customer = DB::table('customers')
         ->leftJoin('users', 'customers.id_user', 'users.id')
@@ -907,12 +911,14 @@ class DrivePhotoController extends Controller
                 ->where('filename', '=', $data[$i]['folder'])
                 ->first(); // There could be duplicate directory names!
 
-            for($j = 0; $j < count($data[$i]['file']); $j++){
-                $dataFile = collect(\Storage::cloud()->listContents($dirChildOriginFolder['path'], false))->where('type', '=', 'file')
-                ->where('filename', '=', $data[$i]['file'][$j])->first();
-
-                \Storage::cloud()->copy($dataFile['path'], $dirChildChoiceFolder['path'] ."/" .$dataFile['name']);
+            if(count($data[$i]['file']) > 0){
+                for($j = 0; $j < count($data[$i]['file']); $j++){
+                    $dataFile = collect(\Storage::cloud()->listContents($dirChildOriginFolder['path'], false))->where('type', '=', 'file')
+                    ->where('name', '=', $data[$i]['file'][$j])->first();
+                    \Storage::cloud()->copy($dataFile['path'], $dirChildChoiceFolder['path'] ."/" .$dataFile['name']);
+                }
             }
+            
         }
 
         return response(['success' => true, 'message' => 'Album Photo inserted'], 201);

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Backdrop, Box, Button, CardMedia, CircularProgress, Container, Grid, makeStyles, Tab, Tabs, Typography } from '@material-ui/core';
-import { Delete, GetApp, Send } from '@material-ui/icons';
+import { Delete, GetApp, LocalConvenienceStoreOutlined, Send } from '@material-ui/icons';
 import PhotoImage from '../Component/PhotoImage/PhotoImage';
 import { Provider } from 'react-redux';
 import PhotoZoom from '../Component/PhotoImage/PhotoZoom';
@@ -48,6 +48,9 @@ const data = () => {
     return datas;
 }
 
+const DELETE = "DELETE";
+const ALBUM_PRINT = "ALBUM_PRINT";
+
 const UserPicturePage = (props) => {
     const classes = useStyles();
 
@@ -81,14 +84,17 @@ const UserPicturePage = (props) => {
 
     const [isErrorPopup, setIsErrorPopup] = React.useState(false);
     const [alertPopup, setAlertPopup] = React.useState(false);
+    const [lowTotalRestrictionPopup, setLowTotalRestrictionPopup] = React.useState(false);
 
     const [tabName, setTabName] = React.useState("origin");
+    const [warningConfirmBtn, setWarningConfirmBtn] = React.useState(true);
 
     // number photo
     const [numAlbumPhoto, setNumAlbumPhoto] = React.useState(0);
     const [numPrintPhoto, setNumPrintPhoto] = React.useState(0);
     const [selectedAlbumPhoto, setSelectedAlbumPhoto] = React.useState(0);
     const [selectedPrintPhoto, setSelectedPrintPhoto] = React.useState(0);
+    const [typeOfSubmit, setTypeOfSubmit] = React.useState(DELETE);
 
     useEffect(() => {
         // //console.log(props.apiLink);
@@ -108,8 +114,16 @@ const UserPicturePage = (props) => {
             setLoading(false);
         }
 
+        setSelectedAlbumPhoto(getTotalAlbumSelectedPhoto(pictures));
+        setSelectedPrintPhoto(getTotalPrintSelectedPhoto(pictures));
+
 
     }, [pictures, isDownloaded]);
+
+    useEffect(() => {
+    }, [selectedAlbumPhoto, selectedPrintPhoto])
+
+
 
 
 
@@ -129,11 +143,7 @@ const UserPicturePage = (props) => {
                     setPackageName(values.package_name);
                     setNumAlbumPhoto(values.num_album_photo)
                     setNumPrintPhoto(values.num_print_photo)
-                    if (props.tabValue == 1) {
 
-                    }
-                    setSelectedAlbumPhoto(values.num_selected_album_photo)
-                    setSelectedPrintPhoto(values.num_selected_print_photo)
                 }
 
             })
@@ -169,7 +179,7 @@ const UserPicturePage = (props) => {
                 let values = res.data.data;
                 //console.log('userpicturepage');
                 //console.log(res.data);
-                console.log(values);
+                // console.log(values);
                 let subFolders = [];
                 if (res.data.success == true) {
                     values.map(item => {
@@ -206,9 +216,11 @@ const UserPicturePage = (props) => {
 
                 }
 
-
                 setPictures(arraysData);
-
+                console.log('this is picture')
+                console.log(pictures)
+                console.log('this is arrayData')
+                console.log(arraysData);
                 if (values.length > 0) {
                     setIsAnyFolder(true);
                 } else {
@@ -218,9 +230,14 @@ const UserPicturePage = (props) => {
                 setSubFolder(subFolders);
                 setCurrentSubFolder(subFolders[0]);
 
+
+                console.log(getTotalAlbumSelectedPhoto(arraysData));
+
                 setTotalSelectedPhoto(getTotalSelectedPhoto());
-                setTotalRestrictionPhoto(values[0].num_edit_photo);
-                
+                // setTotalRestrictionPhoto(values[0].num_edit_photo);
+                // setSelectedAlbumPhoto(0+getTotalAlbumSelectedPhoto(arraysData))
+                // setSelectedPrintPhoto(2)
+
                 //console.log(pictures);
 
                 setIsDownloaded(values[0].is_downloaded > 0 ? true : false);
@@ -313,8 +330,8 @@ const UserPicturePage = (props) => {
         console.log(wayae)
 
         wayae[value].pictures[idx].albumSelected = isSelected;
-        
-        setSelectedAlbumPhoto(getTotalAlbumSelectedPhoto());
+
+        setSelectedAlbumPhoto(getTotalAlbumSelectedPhoto(pictures));
 
 
     }
@@ -324,16 +341,16 @@ const UserPicturePage = (props) => {
         console.log(wayae)
         wayae[value].pictures[idx].printSelected = isSelected;
         setPictures(wayae);
-        setSelectedPrintPhoto(getTotalPrintSelectedPhoto());
+        setSelectedPrintPhoto(getTotalPrintSelectedPhoto(pictures));
     }
 
     let getTotalSelectedPhoto = () => {
         return pictures[value].pictures.filter(x => x.selected).length;
     }
 
-    let getTotalAlbumSelectedPhoto = () => {
+    let getTotalAlbumSelectedPhoto = (pictureData) => {
         let totalAlbumSelected = 0;
-        pictures.map((picture, index) => {
+        pictureData.map((picture, index) => {
             // console.log(picture)
             totalAlbumSelected = totalAlbumSelected + picture.pictures.filter(x => x.albumSelected).length;
         })
@@ -342,9 +359,9 @@ const UserPicturePage = (props) => {
         // return pictures[value].pictures.filter(x => x.albumSelected).length;
     }
 
-    let getTotalPrintSelectedPhoto = () => {
+    let getTotalPrintSelectedPhoto = (pictureData) => {
         let totalPrintSelected = 0;
-        pictures.map((picture, index) => {
+        pictureData.map((picture, index) => {
             totalPrintSelected = totalPrintSelected + picture.pictures.filter(x => x.printSelected).length;
         })
         return totalPrintSelected;
@@ -352,8 +369,14 @@ const UserPicturePage = (props) => {
     }
 
     const onKirim = () => {
-        setOpenWarningPopup(true);
-
+        if (totalSelectedPhoto < 1) {
+            setWarningText("Pilih minimal 1 foto untuk di hapus dari foto pilihan")
+            setWarningConfirmBtn(false)
+            setOpenWarningPopup(true)
+        } else {
+            setTypeOfSubmit(DELETE);
+            setOpenWarningPopup(true);
+        }
     }
 
     const submitPhoto = () => {
@@ -394,37 +417,125 @@ const UserPicturePage = (props) => {
 
                 })
         } else if (props.tabValue == 1) {
-            console.log(requestData)
-            console.log(getTotalSelectedPhoto())
-            // axios.request({
-            //     data: requestData,
-            //     method: 'post',
-            //     url: '/api/drive/move_to_origin',
-            //     headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
-            // })
-            //     .then(res => {
-            //         if (res.data.success == true) {
-            //             setTimeout(() => {
-            //                 window.location.reload()
-            //             }, 1500);
-            //         } else {
 
-            //         }
+            if (typeOfSubmit == "ALBUM_PRINT") {
 
-            //         setLoading(false);
+                let requestAlbumData = convertedDataAlbumPrint("ALBUM");
+                let requestPrintData = convertedDataAlbumPrint("PRINT");
 
-            //     })
-            //     .catch(error => {
-            //         setLoading(false);
+                axios.request({
+                    data: requestAlbumData,
+                    method: 'post',
+                    url: '/api/drive/insert_album_photo',
+                    headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
+                }).then(res => {
+                    if (res.data.success == true) {
+                        return axios.request({
+                            data: requestPrintData,
+                            method: 'post',
+                            url: '/api/drive/insert_print_photo',
+                            headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
+                        }).then(res => {
+                            if (res.data.success == true) {
+                                setIsErrorPopup(false);
+                                setTimeout(() => {
+                                    window.location.reload()
+                                }, 1500);
+        
+                            } else {
+                                setIsErrorPopup(true);
+                            }
+        
+                            setLoading(false);
+                            setAlertPopup(true);
+    
+                            setLoading(false);
+                        })
+                    } else {
+                        setIsErrorPopup(true);
+                    }
+                    
+                })
 
-            //     })
+            }
+
+            if (typeOfSubmit == "DELETE") {
+                axios.request({
+                    data: requestData,
+                    method: 'post',
+                    url: '/api/drive/move_to_origin',
+                    headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
+                })
+                    .then(res => {
+                        if (res.data.success == true) {
+                            setTimeout(() => {
+                                window.location.reload()
+                            }, 1500);
+                        } else {
+
+                        }
+
+                        setLoading(false);
+
+                    })
+                    .catch(error => {
+                        setLoading(false);
+
+                    })
+            }
+
         }
-
-
     }
 
     const submitAlbumAndPrintPhoto = () => {
         console.log(pictures);
+        setTypeOfSubmit(ALBUM_PRINT);
+        let requestAlbumData = convertedDataAlbumPrint("ALBUM");
+        let requestPrintData = convertedDataAlbumPrint("PRINT");
+
+        if (selectedAlbumPhoto < numAlbumPhoto || selectedPrintPhoto < numPrintPhoto) {
+            setWarningText("Anda harus memilih semua foto album dan foto cetak sampai limit batas yang tersedia")
+            setWarningConfirmBtn(false)
+            setOpenWarningPopup(true)
+        } else {
+            setWarningText("Foto yang telah terpilih sebagai foto album dan foto cetak tidak dapat dipilih ulang, Apakah anda sudah yakin dengan foto yang telah terpilih ?")
+            setOpenWarningPopup(true)
+        }
+
+        console.log(JSON.stringify(requestAlbumData));
+        console.log(JSON.stringify(requestPrintData));
+    }
+
+    let convertedDataAlbumPrint = (type) => {
+        let data = [];
+        pictures.map((picture, idx) => {
+            let folder = picture.folderName;
+            let file = [];
+
+            picture.pictures.map((img, idx) => {
+                if (type == "ALBUM") {
+                    if (img.albumSelected) {
+                        file.push(img.name);
+                    }
+                }
+                if (type == "PRINT") {
+                    if (img.printSelected) {
+                        file.push(img.name);
+                    }
+                }
+            })
+            data.push({
+                "folder": folder,
+                "file": file
+            })
+        })
+
+        let requestData = {
+            "data": data
+        }
+
+        return requestData;
+
     }
 
     const handleClosealertPopup = () => {
@@ -433,6 +544,7 @@ const UserPicturePage = (props) => {
 
     const handleCloseWarningPopup = () => {
         setOpenWarningPopup(false);
+        setWarningConfirmBtn(true);
     }
 
     const handleChange = (event, newValue) => {
@@ -579,7 +691,6 @@ const UserPicturePage = (props) => {
             text="Pemilihan foto berhasil!"
             handleClose={handleClosealertPopup} />)
 
-
     return (
         <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -624,14 +735,14 @@ const UserPicturePage = (props) => {
                     </Grid>
                     <Grid item xs={6} align="right" >
                         <Container>
-                        
-                            <Button variant="contained" color="primary" endIcon={<Send />} 
-                                    onClick={submitAlbumAndPrintPhoto}>
-                                submitAlbumAndPrintPhoto
-                            </Button>
-                            <Button variant="contained" color="primary" endIcon={props.tabValue == 1 ? <Delete /> : <Send />} 
-                                    disabled={((props.tabValue == 1 ? false : !isDownloaded) )} 
-                                    onClick={onKirim}>
+
+                            {props.tabValue == 1 && <Button variant="contained" color="primary" endIcon={<Send />}
+                                onClick={submitAlbumAndPrintPhoto}>
+                                Kirim Foto Album dan Foto Cetak
+                            </Button>}
+                            <Button variant="contained" color="primary" endIcon={props.tabValue == 1 ? <Delete /> : <Send />}
+                                disabled={((props.tabValue == 1 ? false : !isDownloaded))}
+                                onClick={onKirim}>
                                 {btnText}
                             </Button>
                             {!hideDownload && <Button variant="contained" color="primary" endIcon={<GetApp />} onClick={onDownload}>
@@ -667,7 +778,9 @@ const UserPicturePage = (props) => {
                 open={openWarningPopup}
                 handleClose={handleCloseWarningPopup}
                 handleConfirm={submitPhoto}
+                showConfirmButton={warningConfirmBtn}
                 text={warningText} />
+
             <ZipLoadingPopup
                 open={zipLoading}
                 // handleClose={handleCloseWarningPopup} 
