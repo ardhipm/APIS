@@ -239,18 +239,30 @@ function FormulirAdminMember() {
                     </FormControl>
                 </div>
             </div>
+            <div style={{textTransform:"capitalize",
+                // backgroundColor:"#000", 
+                color:"#FFF", 
+                position:"absolute",
+                bottom:"0",
+                marginBottom:"12px",
+                width:"100%"
+                }}>
             <Button 
+                // fullWidth={true}
                 onClick={handleSubmit}
                 disabled={!dirty || !isValid || isSubmitting}
                 style={{textTransform:"capitalize",
                 backgroundColor:"#000", 
                 color:"#FFF", 
-                position:"absolute",
-                bottom:"2",
-                marginBottom:"12px",
-                width:"80%"}}>
+                width:"100%"
+                // position:"absolute",
+                // bottom:"0",
+                // marginBottom:"12px",
+                }}
+                >
                 Simpan
             </Button>
+            </div>
             </div>
         )
         
