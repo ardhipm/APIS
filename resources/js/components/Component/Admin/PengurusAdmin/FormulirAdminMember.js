@@ -4,14 +4,18 @@ import { InputLabel, TextField, Typography,Button,MenuItem,
     Fade,
     Backdrop,
     makeStyles,
-    CircularProgress, } from '@material-ui/core';
-import React,{useRef,useEffect} from 'react';
+    CircularProgress,
+    InputAdornment,
+    IconButton, } from '@material-ui/core';
+import React,{useRef,useEffect, useState} from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import {Formik, validateYupSchema} from 'formik'
 import {patchMemberAdmin, getAdminMemberDetail,addMemberAdmin} from '../../../Redux/Admin/action';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router';
 import { Cancel, CheckCircle } from '@material-ui/icons';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 // import { useMinimalSelectStyles } from '@mui-treasury/styles/select/minimal';
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -38,6 +42,9 @@ function FormulirAdminMember() {
     const detailAdmin = useSelector((state) => state.admin.detailAdmin.data);
     const {adminId} = useParams();
     // console.log({adminId})
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
     const [modalsSuccses, setmodalsSuccses] = React.useState(false);
     const [modalsFail, setmodalsFail] = React.useState(false);
     const [loading,setLoading] = React.useState(false);
@@ -141,7 +148,7 @@ function FormulirAdminMember() {
                 <Typography variant="h4">
                <b>Edit Admin</b> 
             </Typography>
-            <div style={{margin:30}}>
+            <div>
                 <div className="pelanggan">
                 <InputLabel style={{marginBottom:10,marginTop:10}}><b>Username</b></InputLabel>
                     <TextField
@@ -177,11 +184,24 @@ function FormulirAdminMember() {
                             width:"100%"
                         }}
                         size="small"
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         value={values.plain_password}
                         error={errors.plain_password}
                         helperText={errors.plain_password}
                         onChange={handleChange('plain_password')}
+                        InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  aria-label="toggle password visibility"
+                                  onClick={handleClickShowPassword}
+                                  onMouseDown={handleMouseDownPassword}
+                                >
+                                  {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
                     />
                     <InputLabel style={{marginBottom:10,marginTop:10}}><b>Ulangi Kata Sandi</b></InputLabel>
                     <TextField
@@ -225,7 +245,10 @@ function FormulirAdminMember() {
                 style={{textTransform:"capitalize",
                 backgroundColor:"#000", 
                 color:"#FFF", 
-                width:"100%"}}>
+                position:"absolute",
+                bottom:"0",
+                marginBottom:"12px",
+                width:"80%"}}>
                 Simpan
             </Button>
             </div>

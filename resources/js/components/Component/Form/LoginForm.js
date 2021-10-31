@@ -1,7 +1,7 @@
 import React, { useState, setState } from 'react';
 import { makeStyles, withStyles, alpha } from '@material-ui/core/styles';
 import { v4 as uuidv4 } from 'uuid';
-import { Box, Checkbox, FormControlLabel, Grid, InputBase, Link } from '@material-ui/core';
+import { Box, Checkbox, FormControlLabel, Grid, IconButton, InputAdornment, InputBase, Link } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -13,6 +13,8 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { userLogIn } from '../../actions';
 import Splashscreen from '../Splashscreen';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 const useStyles = makeStyles({
     root: {
@@ -165,10 +167,12 @@ const loginSchema = Yup.object().shape({
 const LoginForm = (props) => {
     const [openSplashScreen, setOpenSplashScreen] = React.useState(false)
     const dispatch = useDispatch();
+    const [showPassword, setShowPassword] = React.useState(false);
 
     const classes = useStyles();
     let history = useHistory();
-
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
     const [state, setState] = useState({
         errorMsg: ""
     })
@@ -283,13 +287,32 @@ const LoginForm = (props) => {
                     <InputLabel className={classes.formLabel} shrink htmlFor="password">
                         Kata Sandi
                     </InputLabel>
-                    <BootstrapInput
+                    <TextField
                         id="password"
                         name="password"
-                        type="password"
+                        variant="outlined"
+                        style={{
+                            width:"100%",
+                            backgroundColor:"#FFFF"
+                        }}
+                        size="small"
+                        type={showPassword ? 'text' : 'password'}
                         value={formik.values.password}
                         onChange={formik.handleChange}
                         error={formik.touched.password && Boolean(formik.errors.password)}
+                        InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  aria-label="toggle password visibility"
+                                  onClick={handleClickShowPassword}
+                                  onMouseDown={handleMouseDownPassword}
+                                >
+                                  {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
                     />
                     <span className={classes.errorMsg}>{formik.touched.password && formik.errors.password}</span>
 

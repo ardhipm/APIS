@@ -921,6 +921,11 @@ class DrivePhotoController extends Controller
             
         }
 
+
+        DB::table('customers')
+              ->where('id', $customer[0]->id)
+              ->update(['restrict_album_print' => 1]);
+
         return response(['success' => true, 'message' => 'Album Photo inserted'], 201);
 
     }

@@ -97,6 +97,7 @@ const UserPicturePage = (props) => {
     const [typeOfSubmit, setTypeOfSubmit] = React.useState(DELETE);
     const [restrictDelete, setRestrictDelete] = React.useState(false);
     const [restrictAlbumPrint, setRestrictAlbumPrint] = React.useState(false);
+    const [showAlbumPrintCheck, setShowAlbumPrintCheck] = React.useState(false);
 
     useEffect(() => {
         // //console.log(props.apiLink);
@@ -118,6 +119,7 @@ const UserPicturePage = (props) => {
 
         setSelectedAlbumPhoto(getTotalAlbumSelectedPhoto(pictures));
         setSelectedPrintPhoto(getTotalPrintSelectedPhoto(pictures));
+
 
 
     }, [pictures, isDownloaded]);
@@ -442,20 +444,20 @@ const UserPicturePage = (props) => {
                                 setTimeout(() => {
                                     window.location.reload()
                                 }, 1500);
-        
+
                             } else {
                                 setIsErrorPopup(true);
                             }
-        
+
                             setLoading(false);
                             setAlertPopup(true);
-    
+
                             setLoading(false);
                         })
                     } else {
                         setIsErrorPopup(true);
                     }
-                    
+
                 })
 
             }
@@ -661,8 +663,8 @@ const UserPicturePage = (props) => {
                                     totalRestrictionPrintPhoto={numPrintPhoto}
 
                                     displayDeleteSelected={true}
-                                    displayAlbumSelected={props.tabValue != 1 ? false : true}
-                                    displayPrintSelected={props.tabValue != 1 ? false : true}
+                                    displayAlbumSelected={restrictDelete}
+                                    displayPrintSelected={restrictDelete}
                                     selected={picture.selected}
 
                                     albumSelected={picture.albumSelected}
@@ -671,10 +673,10 @@ const UserPicturePage = (props) => {
                                     onSelectedImage={selectImage}
                                     onClickImage={onClickImage}
                                     onSelectedAlbum={onSelectAlbumImage}
-                                    onSelectedPrint={onSelectPrintImage} 
-                                    
+                                    onSelectedPrint={onSelectPrintImage}
+
                                     restrictDelete={restrictDelete}
-                                    restrictAlbumPrint={restrictAlbumPrint}/>)
+                                    restrictAlbumPrint={restrictAlbumPrint} />)
                             }) : <div>tidak terdapat foto</div>
                         }
                     </Grid>
@@ -709,12 +711,21 @@ const UserPicturePage = (props) => {
                             <Grid item xs={12}>
                                 <Typography variant="subtitle1" >
                                     <Grid container>
-                                        <Grid item xs={12}>
+                                        {!restrictDelete || props.tabValue != 1 && <Grid item xs={12}>
 
-                                            <div dangerouslySetInnerHTML={{ __html: descriptionMessage }} />
-                                        </Grid>
-                                        {props.tabValue == 1 &&
+                                            <div dangerouslySetInnerHTML={{ __html: descriptionMessage }}/>
+                                        </Grid>}
+
+                                        {props.tabValue == 1 && restrictDelete &&
                                             <div>
+                                                {!restrictAlbumPrint && 
+                                                    <Grid container item xs={12}>
+                                                        Silahkan pilih foto untuk album dan foto untuk dicetak.
+                                                    </Grid>}
+                                                {restrictAlbumPrint && 
+                                                    <Grid container item xs={12}>
+                                                        Foto anda sedang di proses untuk di cetak dan di jadikan album. Terima kasih.
+                                                    </Grid>}
                                                 <Grid container item xs={12}>
                                                     <CheckCircleIcon className={classes.iconAlbumSelected} />Foto album terpilih {selectedAlbumPhoto}/{numAlbumPhoto}
                                                 </Grid>
@@ -740,17 +751,17 @@ const UserPicturePage = (props) => {
                     <Grid item xs={6} align="right" >
                         <Container>
 
-                            {props.tabValue == 1 && 
-                            <Button 
-                                style={{marginRight:'0.2em'}} 
-                                variant="contained" 
-                                color="primary"
-                                disabled={restrictAlbumPrint} 
-                                endIcon={<Send />}
-                                onClick={submitAlbumAndPrintPhoto}>
-                                Kirim Foto Album dan Foto Cetak
+                            {props.tabValue == 1 &&
+                                <Button
+                                    style={{ marginRight: '0.2em' }}
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={restrictAlbumPrint}
+                                    endIcon={<Send />}
+                                    onClick={submitAlbumAndPrintPhoto}>
+                                    Kirim Foto Album dan Foto Cetak
                             </Button>}
-                            <Button  variant="contained" color="primary" endIcon={props.tabValue == 1 ? <Delete /> : <Send />}
+                            <Button variant="contained" color="primary" endIcon={props.tabValue == 1 ? <Delete /> : <Send />}
                                 disabled={((props.tabValue == 1 ? false : !isDownloaded) || restrictDelete)}
                                 onClick={onKirim}>
                                 {btnText}

@@ -60,6 +60,16 @@ Route::middleware('auth:api')->group(function () {
 
 Route::get('/subpackage/update_downloaded/{id}', 'API\DrivePhotoController@updateDownloadedSubData');
 
+//notification
+Route::middleware('auth:api')->group(function () {
+    Route::get('notification/view', 'API\NotificationController@indexCustomer');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::post('notification/read', 'API\NotificationController@readNotification');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::get('notification/check_notification', 'API\NotificationController@checkNotification');
+});
 
 
 //customer

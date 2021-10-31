@@ -115,7 +115,7 @@ function EditDataLogistik(props) {
                 <Typography variant="h4">
                <b>Edit Logistik</b> 
             </Typography>
-            <div style={{margin:30}}>
+            <div>
                 <div className="pelanggan">
                     <InputLabel style={{marginBottom:10,marginTop:10}}><b>Nama Pelanggan</b></InputLabel>
                     <TextField
@@ -164,7 +164,10 @@ function EditDataLogistik(props) {
                 style={{textTransform:"capitalize",
                 backgroundColor:"#000", 
                 color:"#FFF", 
-                width:"100%"}}>
+                position:"absolute",
+                bottom:"0",
+                marginBottom:"12px",
+                width:"80%"}}>
                 Simpan
             </Button>
             </div>
