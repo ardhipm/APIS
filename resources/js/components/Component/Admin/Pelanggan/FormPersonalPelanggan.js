@@ -25,6 +25,7 @@ const FormPersonalPelanggan = (props) => {
     const classes = useStyles();
 
     const [isActive, setIsActive] = React.useState(formik.values.isActive);
+    const [isDelete, setIsDelete] = React.useState(formik.values.restrictDelete);
 
     return (
         <FormGroup>
@@ -153,6 +154,19 @@ const FormPersonalPelanggan = (props) => {
                             formik.setFieldValue('isActive', !isActive);
                         }} />} 
                         label={formik.values.isActive ? "Aktif" : "Tidak Aktif"} />
+                </Grid>
+
+                <Grid item xs={12}>
+                    <InputLabel className={classes.formLabel}>
+                        Larang Penghapusan Foto Pilihan
+                    </InputLabel>
+                    <FormControlLabel 
+                        control={<Switch checked={formik.values.restrictDelete} onChange={e => {
+                            setIsDelete(!isDelete);
+
+                            formik.setFieldValue('restrictDelete', !isDelete);
+                        }} />} 
+                        label={formik.values.restrictDelete ? "Aktif" : "Tidak Aktif"} />
                 </Grid>
 
             </Grid>

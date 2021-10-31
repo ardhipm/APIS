@@ -18,7 +18,6 @@ class CreateSubPackageTable extends Migration
             $table->string('sub_package_name');
             $table->text('sub_package_description');
             $table->integer('num_edit_photo');
-            $table->integer('num_print_photo');
             $table->integer('id_package');
             $table->timestamps();
         });
@@ -31,6 +30,6 @@ class CreateSubPackageTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detail_package');
+        Schema::dropIfExists('sub_packages');
     }
 }

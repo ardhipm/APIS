@@ -48,6 +48,8 @@ const customerSchema = Yup.object().shape({
     oldPassword: Yup.string(),
     packageName: Yup.string('Masukkan Nama Paket').required('Nama Paket Dibutuhkan'),
     packageDescription: Yup.string('Masukkan Deskripsi Paket'),
+    albumPhotoQuantity: Yup.number().required('Limit Foto Album dibutuhkan').positive().integer(),
+    printPhotoQuantity: Yup.number().required('Limit Foto Cetak dibutuhkan').positive().integer(),
     subPackage: Yup.array().min(1, 'Minimal memiliki 1 sub paket')
 });
 
@@ -67,8 +69,11 @@ let initValue = {
     confirmPassword: '',
     oldPassword: '',
     isActive: true,
+    restrictDelete:false,
     packageName: '',
     packageDescription: '',
+    albumPhotoQuantity: 0,
+    printPhotoQuantity: 0,
     subPackage: [],
 };
 
@@ -84,6 +89,7 @@ function FormulirTambahPelanggan(props) {
     const [submitLoading, setSubmitLoading] = React.useState(false);
     const [alertPopup, setAlertPopup] = React.useState(false);
     const [isErrorPopup, setIsErrorPopup] = React.useState(false);
+    const [alertText, setAlertText] = React.useState("Tambah pelanggan berhasil")
 
     const handleCreateCustomer = (values) => {
         setSubmitLoading(true);
@@ -95,7 +101,6 @@ function FormulirTambahPelanggan(props) {
                 "sub_package_name": item.subPackageName,
                 "sub_package_description": item.subPackageDetail,
                 "num_edit_photo": item.editPhotoQuantity,
-                "num_print_photo": item.printPhotoQuantity
             })
         })
 
@@ -107,10 +112,13 @@ function FormulirTambahPelanggan(props) {
             "name": values.fullName,
             "phone_no": values.phoneNumber,
             "partner_name": values.partnerName,
+            "restrict_delete": values.restrictDelete,
             "password": values.password,
             "password_confirmation": values.confirmPassword,
             "package_name": values.packageName,
             "package_description": values.packageDescription,
+            "num_album_photo":values.albumPhotoQuantity,
+            "num_print_photo":values.printPhotoQuantity,
             "sub_package": subPackage
         }
 
@@ -159,7 +167,6 @@ function FormulirTambahPelanggan(props) {
                 "sub_package_name": item.subPackageName,
                 "sub_package_description": item.subPackageDetail,
                 "num_edit_photo": item.editPhotoQuantity,
-                "num_print_photo": item.printPhotoQuantity
             })
         })
 
@@ -174,12 +181,15 @@ function FormulirTambahPelanggan(props) {
             "is_active": values.isActive,
             "role_id": "1",
             "name": values.fullName,
+            "restrict_delete": values.restrictDelete,
             "phone_no": values.phoneNumber,
             "partner_name": values.partnerName,
             "password": values.password,
             "password_confirmation": values.confirmPassword,
             "package_name": values.packageName,
             "package_description": values.packageDescription,
+            "num_album_photo":values.albumPhotoQuantity,
+            "num_print_photo":values.printPhotoQuantity,
             "sub_package": subPackage
         }
 
@@ -222,9 +232,11 @@ function FormulirTambahPelanggan(props) {
                 
                 // console.log('update');
                 // console.log(values);
+                setAlertText("Update pelanggan berhasil")
                 handleUpdateCustomer(values);
             } else {
                 //console.log('insert');
+                setAlertText("Tambah pelanggan berhasil")
                 handleCreateCustomer(values);
             }
 
@@ -262,9 +274,12 @@ function FormulirTambahPelanggan(props) {
                         formik.setFieldValue('phoneNumber', values.phone_no);
                         formik.setFieldValue('email', values.email);
                         formik.setFieldValue('userName', values.username);
+                        formik.setFieldValue('restrictDelete', values.restrict_delete > 0 ? true : false);
                         formik.setFieldValue('isActive', values.is_active > 0 ? true : false);
                         formik.setFieldValue('packageName', values.package_name);
                         formik.setFieldValue('packageDescription', values.package_description);
+                        formik.setFieldValue('albumPhotoQuantity', values.num_album_photo);
+                        formik.setFieldValue('printPhotoQuantity', values.num_print_photo);
                         formik.setFieldValue('password', values.plain_password);
                         formik.setFieldValue('confirmPassword', values.plain_password);
                         formik.setFieldValue('oldPassword', values.password);
@@ -345,7 +360,7 @@ function FormulirTambahPelanggan(props) {
             handleClose={handleClosealertPopup} /> :
         <SuccessDialog
             open={alertPopup}
-            text="Tambah pelanggan berhasil!"
+            text={alertText}
             handleClose={handleClosealertPopup} />)
 
     const packageElement = (showPackageForm > 0 ?

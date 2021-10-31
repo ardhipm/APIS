@@ -60,11 +60,24 @@ Route::middleware('auth:api')->group(function () {
 
 Route::get('/subpackage/update_downloaded/{id}', 'API\DrivePhotoController@updateDownloadedSubData');
 
+//notification
+Route::middleware('auth:api')->group(function () {
+    Route::get('notification/view', 'API\NotificationController@indexCustomer');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::post('notification/read', 'API\NotificationController@readNotification');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::get('notification/check_notification', 'API\NotificationController@checkNotification');
+});
 
 
 //customer
 Route::middleware('auth:api')->group(function () {
     Route::resource('customer/view', 'API\CustomerController');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::get('customer/viewAll', 'API\CustomerController@showAllCustomer');
 });
 Route::middleware('auth:api')->group(function () {
     Route::post('customer/create', 'API\CustomerController@store');
@@ -202,6 +215,16 @@ Route::middleware('auth:api')->group(function () {
 // Route::middleware('auth:api')->group(function () {
 //     Route::post('drive/get_choice_photo_item/{folderName}', 'API\DrivePhotoController@getChoicePhotoFolder');    
 // });
+Route::middleware('auth:api')->group(function () {
+    Route::post('drive/insert_choice_photo', 'API\DrivePhotoController@insertChoicePhoto');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::post('drive/insert_print_photo', 'API\DrivePhotoController@insertPrintPhoto');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::post('drive/insert_album_photo', 'API\DrivePhotoController@insertAlbumPhoto');
+});
+
 
 //selected photo
 Route::middleware('auth:api')->group(function () {

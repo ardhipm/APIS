@@ -47,7 +47,6 @@ class UserController extends Controller
                 'sub_package.*.sub_package_name' => 'required',
                 'sub_package.*.sub_package_description' => 'required',
                 'sub_package.*.num_edit_photo' => 'required',
-                'sub_package.*.num_print_photo' => 'required',
             ];
 
             $validator = Validator::make($bodyJson, $rules);
@@ -57,10 +56,11 @@ class UserController extends Controller
                 $bodyJson['plain_password'] = $bodyJson['password'];
                 $bodyJson['password'] = Hash::make($bodyJson['password']);
                 $bodyJson['is_active'] = TRUE;
+                
 
                 $user = User::create($bodyJson);    
                 $bodyJson['id_user'] = $user->id;
-
+                $bodyJson['restrict_delete'] = FALSE;
                 $customer = Customer::create($bodyJson);
                 $bodyJson['id_customer'] = $customer->id;
 
@@ -86,7 +86,8 @@ class UserController extends Controller
 
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Mentah');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Pilihan');
-                \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Akhir');
+                \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Album');
+                \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Cetak');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Video');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Album');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Invoice');
@@ -100,12 +101,18 @@ class UserController extends Controller
                     ->first(); // There could be duplicate directory names!
 
                 $dir2 = $contents->where('type', '=', 'dir')
-                ->where('filename', '=', "Foto Akhir")
+                ->where('filename', '=', "Foto Mentah")
                 ->first(); // There could be duplicate directory names!
 
                 $dir3 = $contents->where('type', '=', 'dir')
-                ->where('filename', '=', "Foto Mentah")
+                ->where('filename', '=', "Foto Cetak")
                 ->first(); // There could be duplicate directory names!
+
+                $dir4 = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', "Foto Album")
+                ->first(); // There could be duplicate directory names!
+
+
                 // if (!$dir) {$response = [
                 //     'success' => false,
                 //     'data' => 'Directory does not exist',
@@ -124,6 +131,8 @@ class UserController extends Controller
                     \Storage::cloud()->makeDirectory($dir['path'] . '/' .$subPackageList[$x]['sub_package_name']);
                     \Storage::cloud()->makeDirectory($dir2['path'] . '/' . $subPackageList[$x]['sub_package_name']);
                     \Storage::cloud()->makeDirectory($dir3['path'] . '/' . $subPackageList[$x]['sub_package_name']);
+                    \Storage::cloud()->makeDirectory($dir4['path'] . '/' . $subPackageList[$x]['sub_package_name']);
+
                 }
 
 

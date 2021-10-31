@@ -12,7 +12,6 @@ const initial = {
     subPackageName: "",
     subPackageDetail: "",
     editPhotoQuantity: 0,
-    printPhotoQuantity: 0,
     isSelected: false
 }
 
@@ -94,7 +93,6 @@ const FormPaketPelanggan = (props) => {
                     subPackageName: item.subPackageName,
                     subPackageDetail: item.subPackageDetail,
                     editPhotoQuantity: item.editPhotoQuantity,
-                    printPhotoQuantity: item.printPhotoQuantity,
                     isSelected: item.isSelected
                 }
             })
@@ -118,7 +116,6 @@ const FormPaketPelanggan = (props) => {
                 subPackageName: "",
                 subPackageDetail: "",
                 editPhotoQuantity: 0,
-                printPhotoQuantity: 0,
                 isSelected: false
             }
         })
@@ -133,7 +130,6 @@ const FormPaketPelanggan = (props) => {
                 currentData.subPackage[index].subPackageName = data.subPackageName;
                 currentData.subPackage[index].subPackageDetail = data.subPackageDetail;
                 currentData.subPackage[index].editPhotoQuantity = data.editPhotoQuantity;
-                currentData.subPackage[index].printPhotoQuantity = data.printPhotoQuantity; 
                 currentData.subPackage[index].isSelected = data.isSelected;
             } else {
                 currentData.subPackage.push(data);
@@ -200,11 +196,44 @@ const FormPaketPelanggan = (props) => {
                                 </Typography>
                             </Grid>
                         </Grid>
-
                     </Grid>
-
                 </Grid>
-
+            </Grid>
+            <Grid item xs={12}>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Grid container spacing={0}>
+                            <Grid item xs={12}>
+                                <Typography variant="h6" style={{ fontWeight: 'bold' }}>
+                                Limit Foto Album
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography variant="subtitle2">
+                                    {dataPackage.albumPhotoQuantity}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid item xs={12}>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Grid container spacing={0}>
+                            <Grid item xs={12}>
+                                <Typography variant="h6" style={{ fontWeight: 'bold' }}>
+                                    Limit Foto Cetak
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography variant="subtitle2">
+                                    {dataPackage.printPhotoQuantity}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
             </Grid>
             <Grid item xs={12}>
                 <Grid container spacing={2}>
@@ -250,7 +279,6 @@ const FormPaketPelanggan = (props) => {
                             title={item.subPackageName}
                             desc={item.subPackageDetail}
                             editQty={item.editPhotoQuantity}
-                            printQty={item.printPhotoQuantity}
                             onDetail={handleOpenSubPackagePopup} />)
                     }) : null}
                 </Grid>

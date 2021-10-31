@@ -52,23 +52,23 @@ const MainRouter = () => (
                     apiLink="/api/drive/get_choice_photo" 
                     showTab={true}
                     tabValue={1}/>
-                <PrivateRoute path="/pelanggan/paket/foto-akhir" exact 
+                {/* <PrivateRoute path="/pelanggan/paket/foto-akhir" exact 
                     component={UserPicturePage} role={[1]}  
                     key="/api/drive/get_final_photo"
                     apiLink="/api/drive/get_final_photo" 
                     showTab={true}
-                    tabValue={2}/>
+                    tabValue={2}/> */}
                 <PrivateRoute path="/pelanggan/paket/video" exact component={UserPictureSimplePage} 
                     role={[1]} key="/api/drive/get_video" 
                     apiLink="/api/drive/get_video" 
                     showTab={true}
-                    tabValue={3}
+                    tabValue={2}
                     name="Video"/>
                 <PrivateRoute path="/pelanggan/paket/album" exact component={UserPictureSimplePage} 
                     role={[1]} key="/api/drive/get_album" 
                     apiLink="/api/drive/get_album" 
                     showTab={true}
-                    tabValue={4}
+                    tabValue={3}
                     name="Album"/>
                 <PrivateRoute path="/pelanggan/pembayaran"  component={UserInvoicePage} role={[1]}/>
                 <PrivateRoute path="/pelanggan/logistik"  component={UserLogisticPage} role={[1]} />

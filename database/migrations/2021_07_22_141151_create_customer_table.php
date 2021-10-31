@@ -19,6 +19,8 @@ class CreateCustomerTable extends Migration
             $table->string('phone_no');
             $table->string('partner_name');
             $table->integer('id_user');
+            $table->integer('restrict_album_print');
+            $table->integer('restrict_delete');
             $table->timestamps();
         });
     }
