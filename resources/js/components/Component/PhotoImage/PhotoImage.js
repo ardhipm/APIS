@@ -51,6 +51,8 @@ const PhotoImage = (props) => {
         totalSelectedPrintPhoto,
         albumSelected,
         printSelected,
+        restrictDelete,
+        restrictAlbumPrint,
 
         ...other } = props;
     const [check, setCheck] = React.useState(selected);
@@ -113,12 +115,13 @@ const PhotoImage = (props) => {
     return (
         <Grid item xs={props.formatGrid === undefined ? 3 : props.formatGrid}>
             <Card className={classes.root} onClick={handleClickOpen} style={{ backgroundImage: !props.value ? `url("/img/foto.png")` : driveApiLink(props.value) }}>
-                {displayAlbumSelected &&
+                {displayAlbumSelected && 
                     <Checkbox
                         id="selectAlbum"
                         icon={<RadioButtonUncheckedIcon className={classes.iconAlbumSelected} />}
                         checkedIcon={<CheckCircleIcon className={classes.iconAlbumSelected} />}
                         checked={albumCheck}
+                        disabled={restrictAlbumPrint}
                         name="checkedA"
                     />}
                 {displayPrintSelected &&
@@ -128,9 +131,10 @@ const PhotoImage = (props) => {
                             className={classes.iconPrintSelected} />}
                         checkedIcon={<CheckCircleIcon className={classes.iconPrintSelected} />}
                         checked={printCheck}
+                        disabled={restrictAlbumPrint}
                         name="checkedB"
                     />}
-                {displayDeleteSelected && props.selectedPicture &&
+                {!restrictDelete && displayDeleteSelected && props.selectedPicture &&
                     <Checkbox
                         id="selectCheckbox"
                         icon={<RadioButtonUncheckedIcon

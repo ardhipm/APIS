@@ -95,6 +95,8 @@ const UserPicturePage = (props) => {
     const [selectedAlbumPhoto, setSelectedAlbumPhoto] = React.useState(0);
     const [selectedPrintPhoto, setSelectedPrintPhoto] = React.useState(0);
     const [typeOfSubmit, setTypeOfSubmit] = React.useState(DELETE);
+    const [restrictDelete, setRestrictDelete] = React.useState(false);
+    const [restrictAlbumPrint, setRestrictAlbumPrint] = React.useState(false);
 
     useEffect(() => {
         // //console.log(props.apiLink);
@@ -124,9 +126,6 @@ const UserPicturePage = (props) => {
     }, [selectedAlbumPhoto, selectedPrintPhoto])
 
 
-
-
-
     const getUserCustomerData = () => {
         const token = localStorage.getItem('authToken');
 
@@ -143,6 +142,8 @@ const UserPicturePage = (props) => {
                     setPackageName(values.package_name);
                     setNumAlbumPhoto(values.num_album_photo)
                     setNumPrintPhoto(values.num_print_photo)
+                    setRestrictDelete(values.restrict_delete > 0 ? true : false)
+                    setRestrictAlbumPrint(values.restrict_album_print > 0 ? true : false)
 
                 }
 
@@ -660,8 +661,8 @@ const UserPicturePage = (props) => {
                                     totalRestrictionPrintPhoto={numPrintPhoto}
 
                                     displayDeleteSelected={true}
-                                    displayAlbumSelected={props.tabValue == 2 ? false : true}
-                                    displayPrintSelected={props.tabValue == 2 ? false : true}
+                                    displayAlbumSelected={props.tabValue != 1 ? false : true}
+                                    displayPrintSelected={props.tabValue != 1 ? false : true}
                                     selected={picture.selected}
 
                                     albumSelected={picture.albumSelected}
@@ -670,7 +671,10 @@ const UserPicturePage = (props) => {
                                     onSelectedImage={selectImage}
                                     onClickImage={onClickImage}
                                     onSelectedAlbum={onSelectAlbumImage}
-                                    onSelectedPrint={onSelectPrintImage} />)
+                                    onSelectedPrint={onSelectPrintImage} 
+                                    
+                                    restrictDelete={restrictDelete}
+                                    restrictAlbumPrint={restrictAlbumPrint}/>)
                             }) : <div>tidak terdapat foto</div>
                         }
                     </Grid>
@@ -736,12 +740,18 @@ const UserPicturePage = (props) => {
                     <Grid item xs={6} align="right" >
                         <Container>
 
-                            {props.tabValue == 1 && <Button variant="contained" color="primary" endIcon={<Send />}
+                            {props.tabValue == 1 && 
+                            <Button 
+                                style={{marginRight:'0.2em'}} 
+                                variant="contained" 
+                                color="primary"
+                                disabled={restrictAlbumPrint} 
+                                endIcon={<Send />}
                                 onClick={submitAlbumAndPrintPhoto}>
                                 Kirim Foto Album dan Foto Cetak
                             </Button>}
-                            <Button variant="contained" color="primary" endIcon={props.tabValue == 1 ? <Delete /> : <Send />}
-                                disabled={((props.tabValue == 1 ? false : !isDownloaded))}
+                            <Button  variant="contained" color="primary" endIcon={props.tabValue == 1 ? <Delete /> : <Send />}
+                                disabled={((props.tabValue == 1 ? false : !isDownloaded) || restrictDelete)}
                                 onClick={onKirim}>
                                 {btnText}
                             </Button>

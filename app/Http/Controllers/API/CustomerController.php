@@ -36,6 +36,8 @@ class CustomerController extends Controller
             'customers.name', 
             'customers.phone_no', 
             'customers.partner_name', 
+            'customers.restrict_delete',
+            'customers.restrict_album_print',
             'users.is_active', 
             'packages.id as packages_id', 
             'packages.package_name',
@@ -186,6 +188,8 @@ class CustomerController extends Controller
             'customers.name', 
             'customers.phone_no', 
             'customers.partner_name', 
+            'customers.restrict_album_print',
+            'customers.restrict_delete',
             'users.is_active', 
             'packages.id as packages_id', 
             'packages.package_name', 
@@ -399,6 +403,7 @@ class CustomerController extends Controller
                 $userCustomer->username = $bodyJson['username'];
                 $userCustomer->email = $bodyJson['email'];
                 $userCustomer->is_active = $bodyJson['is_active'];
+                
 
                 
 
@@ -414,6 +419,7 @@ class CustomerController extends Controller
                 $customer->name = $bodyJson['name'];
                 $customer->phone_no = $bodyJson['phone_no'];
                 $customer->partner_name = $bodyJson['partner_name'];
+                $customer->restrict_delete = $bodyJson['restrict_delete'];
                 $customer->save();
 
                 $package = Package::find($bodyJson['id_package']);

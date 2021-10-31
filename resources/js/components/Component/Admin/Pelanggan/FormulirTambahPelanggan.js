@@ -69,6 +69,7 @@ let initValue = {
     confirmPassword: '',
     oldPassword: '',
     isActive: true,
+    restrictDelete:false,
     packageName: '',
     packageDescription: '',
     albumPhotoQuantity: 0,
@@ -110,6 +111,7 @@ function FormulirTambahPelanggan(props) {
             "name": values.fullName,
             "phone_no": values.phoneNumber,
             "partner_name": values.partnerName,
+            "restrict_delete": values.restrictDelete,
             "password": values.password,
             "password_confirmation": values.confirmPassword,
             "package_name": values.packageName,
@@ -178,6 +180,7 @@ function FormulirTambahPelanggan(props) {
             "is_active": values.isActive,
             "role_id": "1",
             "name": values.fullName,
+            "restrict_delete": values.restrictDelete,
             "phone_no": values.phoneNumber,
             "partner_name": values.partnerName,
             "password": values.password,
@@ -268,6 +271,7 @@ function FormulirTambahPelanggan(props) {
                         formik.setFieldValue('phoneNumber', values.phone_no);
                         formik.setFieldValue('email', values.email);
                         formik.setFieldValue('userName', values.username);
+                        formik.setFieldValue('restrictDelete', values.restrict_delete > 0 ? true : false);
                         formik.setFieldValue('isActive', values.is_active > 0 ? true : false);
                         formik.setFieldValue('packageName', values.package_name);
                         formik.setFieldValue('packageDescription', values.package_description);

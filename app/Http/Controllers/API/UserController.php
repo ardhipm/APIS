@@ -56,10 +56,11 @@ class UserController extends Controller
                 $bodyJson['plain_password'] = $bodyJson['password'];
                 $bodyJson['password'] = Hash::make($bodyJson['password']);
                 $bodyJson['is_active'] = TRUE;
+                
 
                 $user = User::create($bodyJson);    
                 $bodyJson['id_user'] = $user->id;
-
+                $bodyJson['restrict_delete'] = FALSE;
                 $customer = Customer::create($bodyJson);
                 $bodyJson['id_customer'] = $customer->id;
 
