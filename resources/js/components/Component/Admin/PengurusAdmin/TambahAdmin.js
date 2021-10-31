@@ -56,16 +56,16 @@ function TambahAdmin() {
             validate={(values)=>{
                 const errors ={};
                 if(!values.plain_password){
-                    errors.plain_password = 'Mohon Masukan Password';
+                    errors.plain_password = 'Mohon Masukkan Kata Sandi';
                 }
                 if(!values.username){
-                    errors.username = 'Mohon Masukan Username';
+                    errors.username = 'Mohon Masukkan Username';
                 }
                 if(!values.email){
-                    errors.email = 'Mohon Masukan Email';
+                    errors.email = 'Mohon Masukkan Email';
                 }
                 if(values.plain_password !== values.rewrite_password){
-                    errors.rewrite_password = 'Mohon Masukan Password Yang Benar';
+                    errors.rewrite_password = 'Mohon Masukkan Kata Sandi Yang Benar';
                 }
                 //console.log(errors)
                 return errors;
@@ -131,7 +131,7 @@ function TambahAdmin() {
                         helperText={errors.email}
                         onChange={handleChange('email')}
                     />
-                    <InputLabel style={{marginBottom:10,marginTop:10}}><b>Password</b></InputLabel>
+                    <InputLabel style={{marginBottom:10,marginTop:10}}><b>Kata Sandi</b></InputLabel>
                     <TextField
                         id="outlined-size-small"
                         variant="outlined"
@@ -145,7 +145,7 @@ function TambahAdmin() {
                         helperText={errors.plain_password}
                         onChange={handleChange('plain_password')}
                     />
-                    <InputLabel style={{marginBottom:10,marginTop:10}}><b>Masukan Kata Sandi</b></InputLabel>
+                    <InputLabel style={{marginBottom:10,marginTop:10}}><b>Ulangi Kata Sandi</b></InputLabel>
                     <TextField
                         style={{
                             width:"100%"

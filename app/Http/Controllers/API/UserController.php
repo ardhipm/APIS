@@ -47,7 +47,6 @@ class UserController extends Controller
                 'sub_package.*.sub_package_name' => 'required',
                 'sub_package.*.sub_package_description' => 'required',
                 'sub_package.*.num_edit_photo' => 'required',
-                'sub_package.*.num_print_photo' => 'required',
             ];
 
             $validator = Validator::make($bodyJson, $rules);
@@ -57,10 +56,11 @@ class UserController extends Controller
                 $bodyJson['plain_password'] = $bodyJson['password'];
                 $bodyJson['password'] = Hash::make($bodyJson['password']);
                 $bodyJson['is_active'] = TRUE;
+                
 
                 $user = User::create($bodyJson);    
                 $bodyJson['id_user'] = $user->id;
-
+                $bodyJson['restrict_delete'] = FALSE;
                 $customer = Customer::create($bodyJson);
                 $bodyJson['id_customer'] = $customer->id;
 
@@ -88,7 +88,7 @@ class UserController extends Controller
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Pilihan');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Album');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Cetak');
-                // \Storage::cloud()->makeDirectory($dir['path'] . '/Video');
+                \Storage::cloud()->makeDirectory($dir['path'] . '/Video');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Album');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Invoice');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Shipment');

@@ -120,17 +120,17 @@ class DrivePhotoController extends Controller
                     $filedirchildAlbum2 = $filedirchildAlbum->toArray();
 
 
-                    $filedirchild2[$j]['is_print'] = '0';
+                    $filedirchild2[$j]['is_print'] = false;
                     for($k = 0; $k < count($filedirchildPrint2); $k++){
                         if($filedirchild2[$j]['name'] == $filedirchildPrint2[$k]['name']){
-                            $filedirchild2[$j]['is_print'] = '1';
+                            $filedirchild2[$j]['is_print'] = true;
                         }
                     }
 
-                    $filedirchild2[$j]['is_album'] = '0';
+                    $filedirchild2[$j]['is_album'] = false;
                     for ($k = 0; $k < count($filedirchildAlbum2); $k++) {
                         if ($filedirchild2[$j]['name'] == $filedirchildAlbum2[$k]['name']) {
-                            $filedirchild2[$j]['is_album'] = '1';
+                            $filedirchild2[$j]['is_album'] = true;
                         }
                     }
 
@@ -244,7 +244,6 @@ class DrivePhotoController extends Controller
             for($j = 0; $j < count($sub_package); $j++){
                 if($sub_package[$j]->sub_package_name == $directory[$i]['name']){
                     $parent['num_edit_photo'] = $sub_package[$i]->num_edit_photo;
-                    $parent['num_print_photo'] = $sub_package[$i]->num_print_photo;
                     $parent['id_subpackage'] = $sub_package[$i]->id;
                     $parent['is_downloaded'] = $sub_package[$i]->is_downloaded;
                     $parent['num_selected_edit_photo'] = $sub_package[$i]->num_selected_edit_photo;
@@ -492,7 +491,7 @@ class DrivePhotoController extends Controller
 
         $headers = [
             'Content-Type: application/zip',
-            'Content-Length: '. filesize($zipcreated),
+            'Content-Length: '.filesize($zipcreated),
             'Content-Disposition : attachment; filename='.$tempFileCustomer
          ];
 
@@ -856,12 +855,15 @@ class DrivePhotoController extends Controller
                 ->where('filename', '=', $data[$i]['folder'])
                 ->first(); // There could be duplicate directory names!
 
-            for($j = 0; $j < count($data[$i]['file']); $j++){
-                $dataFile = collect(\Storage::cloud()->listContents($dirChildOriginFolder['path'], false))->where('type', '=', 'file')
-                ->where('filename', '=', $data[$i]['file'][$j])->first();
-
-                \Storage::cloud()->copy($dataFile['path'], $dirChildChoiceFolder['path'] ."/" .$dataFile['name']);
+            if(count($data[$i]['file']) > 0){
+                for($j = 0; $j < count($data[$i]['file']); $j++){
+                    $dataFile = collect(\Storage::cloud()->listContents($dirChildOriginFolder['path'], false))->where('type', '=', 'file')
+                    ->where('name', '=', $data[$i]['file'][$j])->first();
+    
+                    \Storage::cloud()->copy($dataFile['path'], $dirChildChoiceFolder['path'] ."/" .$dataFile['name']);
+                }
             }
+            
         }
 
         return response(['success' => true, 'message' => 'Print Photo inserted'], 201);
@@ -872,6 +874,7 @@ class DrivePhotoController extends Controller
         $body = $request->getContent();
         $bodyJson = json_decode($body, true);
         $data = $bodyJson['data'];
+        
 
         $customer = DB::table('customers')
         ->leftJoin('users', 'customers.id_user', 'users.id')
@@ -908,13 +911,20 @@ class DrivePhotoController extends Controller
                 ->where('filename', '=', $data[$i]['folder'])
                 ->first(); // There could be duplicate directory names!
 
-            for($j = 0; $j < count($data[$i]['file']); $j++){
-                $dataFile = collect(\Storage::cloud()->listContents($dirChildOriginFolder['path'], false))->where('type', '=', 'file')
-                ->where('filename', '=', $data[$i]['file'][$j])->first();
-
-                \Storage::cloud()->copy($dataFile['path'], $dirChildChoiceFolder['path'] ."/" .$dataFile['name']);
+            if(count($data[$i]['file']) > 0){
+                for($j = 0; $j < count($data[$i]['file']); $j++){
+                    $dataFile = collect(\Storage::cloud()->listContents($dirChildOriginFolder['path'], false))->where('type', '=', 'file')
+                    ->where('name', '=', $data[$i]['file'][$j])->first();
+                    \Storage::cloud()->copy($dataFile['path'], $dirChildChoiceFolder['path'] ."/" .$dataFile['name']);
+                }
             }
+            
         }
+
+
+        DB::table('customers')
+              ->where('id', $customer[0]->id)
+              ->update(['restrict_album_print' => 1]);
 
         return response(['success' => true, 'message' => 'Album Photo inserted'], 201);
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Backdrop, Box, Button, CardMedia, CircularProgress, Container, Grid, makeStyles, Tab, Tabs, Typography } from '@material-ui/core';
-import { Delete, GetApp, Send } from '@material-ui/icons';
+import { Delete, GetApp, LocalConvenienceStoreOutlined, Send } from '@material-ui/icons';
 import PhotoImage from '../Component/PhotoImage/PhotoImage';
 import { Provider } from 'react-redux';
 import PhotoZoom from '../Component/PhotoImage/PhotoZoom';
@@ -9,9 +9,7 @@ import WarningDialog from '../Component/Popup/WarningDialog';
 import ZipLoadingPopup from '../Component/Popup/ZipLoadingPopup';
 import SuccessDialog from '../Component/Popup/SuccessDialog';
 import ErrorDialog from '../Component/Popup/ErrorDialog';
-
-
-
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const useStyles = makeStyles((theme) => ({
     tabLabel: {
@@ -24,6 +22,14 @@ const useStyles = makeStyles((theme) => ({
     },
     hidden: {
         display: 'none'
+    },
+    iconAlbumSelected: {
+        color: '#FB9300',
+        marginRight: '0.3em'
+    },
+    iconPrintSelected: {
+        color: '#F54748',
+        marginRight: '0.3em'
     }
 }));
 
@@ -42,12 +48,11 @@ const data = () => {
     return datas;
 }
 
+const DELETE = "DELETE";
+const ALBUM_PRINT = "ALBUM_PRINT";
+
 const UserPicturePage = (props) => {
     const classes = useStyles();
-
-
-    let wayae = data;
-
 
     const [value, setValue] = React.useState(0);
     const [pictures, setPictures] = React.useState([]);
@@ -79,9 +84,21 @@ const UserPicturePage = (props) => {
 
     const [isErrorPopup, setIsErrorPopup] = React.useState(false);
     const [alertPopup, setAlertPopup] = React.useState(false);
+    const [lowTotalRestrictionPopup, setLowTotalRestrictionPopup] = React.useState(false);
 
     const [tabName, setTabName] = React.useState("origin");
- 
+    const [warningConfirmBtn, setWarningConfirmBtn] = React.useState(true);
+
+    // number photo
+    const [numAlbumPhoto, setNumAlbumPhoto] = React.useState(0);
+    const [numPrintPhoto, setNumPrintPhoto] = React.useState(0);
+    const [selectedAlbumPhoto, setSelectedAlbumPhoto] = React.useState(0);
+    const [selectedPrintPhoto, setSelectedPrintPhoto] = React.useState(0);
+    const [typeOfSubmit, setTypeOfSubmit] = React.useState(DELETE);
+    const [restrictDelete, setRestrictDelete] = React.useState(false);
+    const [restrictAlbumPrint, setRestrictAlbumPrint] = React.useState(false);
+    const [showAlbumPrintCheck, setShowAlbumPrintCheck] = React.useState(false);
+
     useEffect(() => {
         // //console.log(props.apiLink);
 
@@ -91,16 +108,24 @@ const UserPicturePage = (props) => {
         if (updateSelect) {
 
             getData(props.apiLink)
+
+            getUserCustomerData();
             setUpdateSelect(false);
             // updateTotalSelect(props.apiLink);
+
         } else {
             setLoading(false);
         }
-        getUserCustomerData();
+
+        setSelectedAlbumPhoto(getTotalAlbumSelectedPhoto(pictures));
+        setSelectedPrintPhoto(getTotalPrintSelectedPhoto(pictures));
+
 
 
     }, [pictures, isDownloaded]);
 
+    useEffect(() => {
+    }, [selectedAlbumPhoto, selectedPrintPhoto])
 
 
     const getUserCustomerData = () => {
@@ -117,6 +142,11 @@ const UserPicturePage = (props) => {
                 let values = res.data.data[0];
                 if (res.data.success == true) {
                     setPackageName(values.package_name);
+                    setNumAlbumPhoto(values.num_album_photo)
+                    setNumPrintPhoto(values.num_print_photo)
+                    setRestrictDelete(values.restrict_delete > 0 ? true : false)
+                    setRestrictAlbumPrint(values.restrict_album_print > 0 ? true : false)
+
                 }
 
             })
@@ -127,17 +157,17 @@ const UserPicturePage = (props) => {
 
     const getData = (apiLink) => {
 
-        if(props.tabValue==0){
+        if (props.tabValue == 0) {
             setDescriptionMessage("Download terlebih dahulu foto pada paket untuk melanjutkan proses pemilihan")
             setHideDownload(false);
             setBtnText("Kirim");
             setWarningText("Foto akan dipindahkan ke foto pilihan, lanjutkan ?")
-        }else if(props.tabValue ==1){
+        } else if (props.tabValue == 1) {
             setDescriptionMessage("Anda dapat menghapus dan mengganti item yang telah terpilih")
             setHideDownload(true);
             setBtnText("Hapus");
             setWarningText("Foto akan dikembalikan ke foto mentah, lanjutkan ?")
-        }else{
+        } else {
 
         }
 
@@ -152,14 +182,13 @@ const UserPicturePage = (props) => {
                 let values = res.data.data;
                 //console.log('userpicturepage');
                 //console.log(res.data);
+                // console.log(values);
                 let subFolders = [];
                 if (res.data.success == true) {
                     values.map(item => {
                         subFolders.push(item);
                     })
                 }
-
-
 
                 let arraysData = [];
                 for (let i = 0; i < subFolders.length; i++) {
@@ -172,7 +201,9 @@ const UserPicturePage = (props) => {
                             dir: i,
                             name: pic.name,
                             img: pic.basename,
-                            selected: false
+                            selected: false,
+                            albumSelected: pic.is_album,
+                            printSelected: pic.is_print
                         }
                         arrayPictures.push(arrayElement);
                     }
@@ -188,9 +219,7 @@ const UserPicturePage = (props) => {
 
                 }
 
-                
                 setPictures(arraysData);
-
                 if (values.length > 0) {
                     setIsAnyFolder(true);
                 } else {
@@ -201,13 +230,17 @@ const UserPicturePage = (props) => {
                 setCurrentSubFolder(subFolders[0]);
 
 
-                setTotalSelectedPhoto(values[0].num_selected_edit_photo);
-                setTotalRestrictionPhoto(values[0].num_edit_photo);
+
+                setTotalSelectedPhoto(getTotalSelectedPhoto());
+                // setTotalRestrictionPhoto(values[0].num_edit_photo);
+                // setSelectedAlbumPhoto(0+getTotalAlbumSelectedPhoto(arraysData))
+                // setSelectedPrintPhoto(2)
+
                 //console.log(pictures);
 
                 setIsDownloaded(values[0].is_downloaded > 0 ? true : false);
 
-                if(props.tabValue ==1){
+                if (props.tabValue == 1) {
                     // setDescriptionMessage("Anda dapat menghapus dan mengganti item yang telah terpilih")
                     // setHideDownload(true);
                     // setBtnText("Hapus");
@@ -270,6 +303,7 @@ const UserPicturePage = (props) => {
 
         } else {
             let wayae = [...pictures];
+            console.log(wayae)
 
             wayae[value].pictures[idx].selected = isSelected;
             setPictures(wayae);
@@ -281,27 +315,76 @@ const UserPicturePage = (props) => {
                     picName: pictures[value].pictures[idx].name,
                     basename: pictures[value].pictures[idx].img,
                     idx: idx,
-                    selected: isSelected
+                    selected: isSelected,
 
                 }
             })
 
         }
     }
-    const onKirim = () => {
-        setOpenWarningPopup(true);
+
+    const onSelectAlbumImage = (idx, name, isSelected, e) => {
+        let wayae = [...pictures];
+        console.log(wayae)
+
+        wayae[value].pictures[idx].albumSelected = isSelected;
+
+        setSelectedAlbumPhoto(getTotalAlbumSelectedPhoto(pictures));
+
 
     }
 
-    const submitPhoto = () => {
+    const onSelectPrintImage = (idx, name, isSelected, e) => {
+        let wayae = [...pictures];
+        console.log(wayae)
+        wayae[value].pictures[idx].printSelected = isSelected;
+        setPictures(wayae);
+        setSelectedPrintPhoto(getTotalPrintSelectedPhoto(pictures));
+    }
 
+    let getTotalSelectedPhoto = () => {
+        return pictures[value].pictures.filter(x => x.selected).length;
+    }
+
+    let getTotalAlbumSelectedPhoto = (pictureData) => {
+        let totalAlbumSelected = 0;
+        pictureData.map((picture, index) => {
+            // console.log(picture)
+            totalAlbumSelected = totalAlbumSelected + picture.pictures.filter(x => x.albumSelected).length;
+        })
+        return totalAlbumSelected;
+
+        // return pictures[value].pictures.filter(x => x.albumSelected).length;
+    }
+
+    let getTotalPrintSelectedPhoto = (pictureData) => {
+        let totalPrintSelected = 0;
+        pictureData.map((picture, index) => {
+            totalPrintSelected = totalPrintSelected + picture.pictures.filter(x => x.printSelected).length;
+        })
+        return totalPrintSelected;
+        // return pictures[value].pictures.filter(x => x.printSelected).length;
+    }
+
+    const onKirim = () => {
+        if (totalSelectedPhoto < 1) {
+            setWarningText("Pilih minimal 1 foto untuk di hapus dari foto pilihan")
+            setWarningConfirmBtn(false)
+            setOpenWarningPopup(true)
+        } else {
+            setTypeOfSubmit(DELETE);
+            setOpenWarningPopup(true);
+        }
+    }
+
+    const submitPhoto = () => {
 
         setOpenWarningPopup(false);
         setLoading(true);
         let requestData = pictures[value];
         const token = localStorage.getItem('authToken');
 
-        if(props.tabValue == 0){
+        if (props.tabValue == 0) {
             axios.request({
                 data: requestData,
                 method: 'post',
@@ -310,7 +393,7 @@ const UserPicturePage = (props) => {
             })
                 .then(res => {
 
-                    
+
                     if (res.data.success == true) {
                         setIsErrorPopup(false);
                         setTimeout(() => {
@@ -320,43 +403,137 @@ const UserPicturePage = (props) => {
                     } else {
                         setIsErrorPopup(true);
                     }
-    
+
                     setLoading(false);
                     setAlertPopup(true);
-    
+
                 })
                 .catch(error => {
                     setLoading(false);
                     setIsErrorPopup(true);
                     setAlertPopup(true);
-    
+
                 })
-        }else if(props.tabValue==1){
-            axios.request({
-                data: requestData,
-                method: 'post',
-                url: '/api/drive/move_to_origin',
-                headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
-            })
-                .then(res => {
+        } else if (props.tabValue == 1) {
+
+            if (typeOfSubmit == "ALBUM_PRINT") {
+
+                let requestAlbumData = convertedDataAlbumPrint("ALBUM");
+                let requestPrintData = convertedDataAlbumPrint("PRINT");
+
+                axios.request({
+                    data: requestAlbumData,
+                    method: 'post',
+                    url: '/api/drive/insert_album_photo',
+                    headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
+                }).then(res => {
                     if (res.data.success == true) {
-                        setTimeout(() => {
-                            window.location.reload()
-                        }, 1500);
+                        return axios.request({
+                            data: requestPrintData,
+                            method: 'post',
+                            url: '/api/drive/insert_print_photo',
+                            headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
+                        }).then(res => {
+                            if (res.data.success == true) {
+                                setIsErrorPopup(false);
+                                setTimeout(() => {
+                                    window.location.reload()
+                                }, 1500);
+
+                            } else {
+                                setIsErrorPopup(true);
+                            }
+
+                            setLoading(false);
+                            setAlertPopup(true);
+
+                            setLoading(false);
+                        })
                     } else {
-                        
+                        setIsErrorPopup(true);
                     }
-    
-                    setLoading(false);
-    
+
                 })
-                .catch(error => {
-                    setLoading(false);
-    
+
+            }
+
+            if (typeOfSubmit == "DELETE") {
+                axios.request({
+                    data: requestData,
+                    method: 'post',
+                    url: '/api/drive/move_to_origin',
+                    headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
                 })
+                    .then(res => {
+                        if (res.data.success == true) {
+                            setTimeout(() => {
+                                window.location.reload()
+                            }, 1500);
+                        } else {
+
+                        }
+
+                        setLoading(false);
+
+                    })
+                    .catch(error => {
+                        setLoading(false);
+
+                    })
+            }
+
+        }
+    }
+
+    const submitAlbumAndPrintPhoto = () => {
+        console.log(pictures);
+        setTypeOfSubmit(ALBUM_PRINT);
+        let requestAlbumData = convertedDataAlbumPrint("ALBUM");
+        let requestPrintData = convertedDataAlbumPrint("PRINT");
+
+        if (selectedAlbumPhoto < numAlbumPhoto || selectedPrintPhoto < numPrintPhoto) {
+            setWarningText("Anda harus memilih semua foto album dan foto cetak sampai limit batas yang tersedia")
+            setWarningConfirmBtn(false)
+            setOpenWarningPopup(true)
+        } else {
+            setWarningText("Foto yang telah terpilih sebagai foto album dan foto cetak tidak dapat dipilih ulang, Apakah anda sudah yakin dengan foto yang telah terpilih ?")
+            setOpenWarningPopup(true)
         }
 
-        
+        console.log(JSON.stringify(requestAlbumData));
+        console.log(JSON.stringify(requestPrintData));
+    }
+
+    let convertedDataAlbumPrint = (type) => {
+        let data = [];
+        pictures.map((picture, idx) => {
+            let folder = picture.folderName;
+            let file = [];
+
+            picture.pictures.map((img, idx) => {
+                if (type == "ALBUM") {
+                    if (img.albumSelected) {
+                        file.push(img.name);
+                    }
+                }
+                if (type == "PRINT") {
+                    if (img.printSelected) {
+                        file.push(img.name);
+                    }
+                }
+            })
+            data.push({
+                "folder": folder,
+                "file": file
+            })
+        })
+
+        let requestData = {
+            "data": data
+        }
+
+        return requestData;
+
     }
 
     const handleClosealertPopup = () => {
@@ -365,6 +542,7 @@ const UserPicturePage = (props) => {
 
     const handleCloseWarningPopup = () => {
         setOpenWarningPopup(false);
+        setWarningConfirmBtn(true);
     }
 
     const handleChange = (event, newValue) => {
@@ -407,38 +585,36 @@ const UserPicturePage = (props) => {
         // window.location = "/api/drive/download_file/"+encodeURIComponent(subFolder[value].folder);
 
         let type = null;
-        if(props.tabValue == 0){
+        if (props.tabValue == 0) {
             type = "origin"
-        }else if(props.tabValue ==2){
+        } else if (props.tabValue == 2) {
             type = "final"
         }
         axios.request({
             method: 'post',
-            url: "/api/drive/download_file/" +type+"/"+ encodeURIComponent(subFolder[value].folder) +"/"+subFolder[value].id_subpackage,
+            url: "/api/drive/download_file/" + type + "/" + encodeURIComponent(subFolder[value].folder) + "/" + subFolder[value].id_subpackage,
             headers: { 'Authorization': 'Bearer ' + token },
             responseType: 'blob'
         })
             .then(res => {
 
-                
+
 
                 setTimeout(() => {
                     const url = window.URL.createObjectURL(new Blob([res.data]));
                     const link = document.createElement('a');
                     link.href = url;
-                    link.setAttribute('download', subFolder[value].folder +"-"+type+ '.zip'); //or any other extension
+                    link.setAttribute('download', subFolder[value].folder + "-" + type + '.zip'); //or any other extension
                     document.body.appendChild(link);
                     link.click();
                     setZipLoading(false);
                 }, 1500);
 
                 setTimeout(() => {
-                   
+
                     window.location.reload()
                 }, 3000);
-                
 
-                
 
             })
             .catch(error => {
@@ -461,69 +637,60 @@ const UserPicturePage = (props) => {
     const ulala = (isAnyFolder ?
         <Grid item xs={12}>
             <div key={value} value={value} index={value} /** className={value !== 0 ? classes.hidden : ''} */ >
-                    <Box p={3}>
-                        <Grid container spacing={2}>
-                            {
-                                pictures[value].pictures.length > 0 ? pictures[value].pictures.map((picture, index) => {
-                                    return (<PhotoImage
-                                        key={picture.idx}
-                                        idx={index}
-                                        tab={picture.dir}
-                                        value={picture.img}
-                                        picName={picture.name}
-                                        formatGrid={3}
-                                        selectedPicture={props.tabValue ==2 ? false: true}
-                                        totalSelectedPhoto={totalSelectedPhoto}
-                                        totalRestrictionPhoto={totalRestrictionPhoto}
-                                        selected={picture.selected}
-                                        onSelectedImage={selectImage}
-                                        onClickImage={onClickImage} />)
-                                }) : <div>tidak terdapat foto</div>
-                            }
-                        </Grid>
-                    </Box>
+                <Box p={3}>
+                    <Grid container spacing={2}>
+                        {
+                            pictures[value].pictures.length > 0 ? pictures[value].pictures.map((picture, index) => {
+                                return (<PhotoImage
+                                    key={picture.idx}
+                                    idx={index}
+                                    tab={picture.dir}
+                                    value={picture.img}
+                                    picName={picture.name}
+                                    formatGrid={3}
+                                    selectedPicture={props.tabValue == 2 ? false : true}
+                                    totalSelectedPhoto={totalSelectedPhoto}
+                                    totalRestrictionPhoto={totalRestrictionPhoto}
 
-                </div>
-            {/* {pictures.map((item, index) => {
-                return (<div key={index} value={value} index={index} className={value !== 0 ? classes.hidden : ''} >
-                    <Box p={3}>
-                        <Grid container spacing={2}>
-                            {
-                                item.pictures.length > 0 ? item.pictures.map((picture, index) => {
-                                    return (<PhotoImage
-                                        key={picture.idx}
-                                        idx={index}
-                                        tab={picture.dir}
-                                        value={picture.img}
-                                        picName={picture.name}
-                                        formatGrid={3}
-                                        selectedPicture={props.tabValue ==2 ? false: true}
-                                        totalSelectedPhoto={totalSelectedPhoto}
-                                        totalRestrictionPhoto={totalRestrictionPhoto}
-                                        selected={picture.selected}
-                                        onSelectedImage={selectImage}
-                                        onClickImage={onClickImage} />)
-                                }) : null
-                            }
-                        </Grid>
-                    </Box>
+                                    totalSelectedAlbumPhoto={selectedAlbumPhoto}
+                                    totalRestrictionAlbumPhoto={numAlbumPhoto}
+                                    totalSelectedPrintPhoto={selectedPrintPhoto}
+                                    totalRestrictionPrintPhoto={numPrintPhoto}
 
-                </div>) */}
-            {/* })} */}
+                                    displayDeleteSelected={true}
+                                    displayAlbumSelected={restrictDelete}
+                                    displayPrintSelected={restrictDelete}
+                                    selected={picture.selected}
+
+                                    albumSelected={picture.albumSelected}
+                                    printSelected={picture.printSelected}
+
+                                    onSelectedImage={selectImage}
+                                    onClickImage={onClickImage}
+                                    onSelectedAlbum={onSelectAlbumImage}
+                                    onSelectedPrint={onSelectPrintImage}
+
+                                    restrictDelete={restrictDelete}
+                                    restrictAlbumPrint={restrictAlbumPrint} />)
+                            }) : <div>tidak terdapat foto</div>
+                        }
+                    </Grid>
+                </Box>
+
+            </div>
         </Grid> : <div>tidak terdapat folder</div>)
 
-        const originTab = props.tabValue == 0 ? "Silahkan pilih foto yang ingin di edit! "+ totalSelectedPhoto+"/"+totalRestrictionPhoto:null;
+    const originTab = props.tabValue == 0 ? "Silahkan pilih foto yang ingin di edit! " + totalSelectedPhoto + "/" + totalRestrictionPhoto : null;
 
-        const showAlertPopup = (isErrorPopup ?
-            <ErrorDialog
-                open={alertPopup}
-                text="Terdapat error ketika pemilihan foto"
-                handleClose={handleClosealertPopup} /> :
-            <SuccessDialog
-                open={alertPopup}
-                text="Pemilihan foto berhasil!"
-                handleClose={handleClosealertPopup} />)
-
+    const showAlertPopup = (isErrorPopup ?
+        <ErrorDialog
+            open={alertPopup}
+            text="Terdapat error ketika pemilihan foto"
+            handleClose={handleClosealertPopup} /> :
+        <SuccessDialog
+            open={alertPopup}
+            text="Pemilihan foto berhasil!"
+            handleClose={handleClosealertPopup} />)
 
     return (
         <Grid container spacing={2}>
@@ -538,7 +705,36 @@ const UserPicturePage = (props) => {
                             </Grid>
                             <Grid item xs={12}>
                                 <Typography variant="subtitle1" >
-                                    {descriptionMessage}
+                                    <Grid container>
+                                        {(props.tabValue != 1 || !restrictDelete ) && <Grid item xs={12}>
+                                            <div dangerouslySetInnerHTML={{ __html: descriptionMessage }}/>
+                                        </Grid>}
+                                        
+
+                                        {props.tabValue == 1 && restrictDelete &&
+                                            <div>
+                                                {!restrictAlbumPrint && 
+                                                    <Grid container item xs={12}>
+                                                        Silahkan pilih foto untuk album dan foto untuk dicetak.
+                                                    </Grid>}
+                                                {restrictAlbumPrint && 
+                                                    <Grid container item xs={12}>
+                                                        Foto anda sedang di proses untuk di cetak dan di jadikan album. Terima kasih.
+                                                    </Grid>}
+                                                <Grid container item xs={12}>
+                                                    <CheckCircleIcon className={classes.iconAlbumSelected} />Foto album terpilih {selectedAlbumPhoto}/{numAlbumPhoto}
+                                                </Grid>
+                                                <Grid container item xs={12}>
+
+                                                    <CheckCircleIcon className={classes.iconPrintSelected} />Foto cetak terpilih {selectedPrintPhoto}/{numPrintPhoto}
+                                                </Grid>
+                                            </div>
+
+                                        }
+
+                                    </Grid>
+
+
                                 </Typography>
                                 <Typography variant="subtitle1" >
                                     {originTab}
@@ -549,7 +745,20 @@ const UserPicturePage = (props) => {
                     </Grid>
                     <Grid item xs={6} align="right" >
                         <Container>
-                            <Button variant="contained" color="primary" endIcon={props.tabValue==1?<Delete />:<Send />} disabled={props.tabValue == 1 ? false : !isDownloaded} onClick={onKirim}>
+
+                            {props.tabValue == 1 &&
+                                <Button
+                                    style={{ marginRight: '0.2em' }}
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={restrictDelete}
+                                    endIcon={<Send />}
+                                    onClick={submitAlbumAndPrintPhoto}>
+                                    Kirim Foto Album dan Foto Cetak
+                            </Button>}
+                            <Button variant="contained" color="primary" endIcon={props.tabValue == 1 ? <Delete /> : <Send />}
+                                disabled={((props.tabValue == 1 ? false : !isDownloaded) || restrictDelete)}
+                                onClick={onKirim}>
                                 {btnText}
                             </Button>
                             {!hideDownload && <Button variant="contained" color="primary" endIcon={<GetApp />} onClick={onDownload}>
@@ -567,7 +776,7 @@ const UserPicturePage = (props) => {
                 {subTabFolders}
             </Grid>
             {ulala}
-            
+
             <PhotoZoom
                 photoSrc={currentPhoto}
                 isZoom={zoom}
@@ -581,13 +790,15 @@ const UserPicturePage = (props) => {
                 open={loading} >
                 <CircularProgress color="inherit" />
             </Backdrop>
-            <WarningDialog 
-                open={openWarningPopup} 
-                handleClose={handleCloseWarningPopup} 
+            <WarningDialog
+                open={openWarningPopup}
+                handleClose={handleCloseWarningPopup}
                 handleConfirm={submitPhoto}
-                text={warningText}/>
-            <ZipLoadingPopup 
-                open={zipLoading} 
+                showConfirmButton={warningConfirmBtn}
+                text={warningText} />
+
+            <ZipLoadingPopup
+                open={zipLoading}
                 // handleClose={handleCloseWarningPopup} 
                 // handleConfirm={submitPhoto}
                 text="Mohon menunggu sedang membuat zip file..." />

@@ -148,7 +148,7 @@ function FormulirAdminMember() {
                 <Typography variant="h4">
                <b>Edit Admin</b> 
             </Typography>
-            <div style={{margin:30}}>
+            <div>
                 <div className="pelanggan">
                 <InputLabel style={{marginBottom:10,marginTop:10}}><b>Username</b></InputLabel>
                     <TextField
@@ -176,7 +176,7 @@ function FormulirAdminMember() {
                         helperText={errors.email}
                         onChange={handleChange('email')}
                     />
-                    <InputLabel style={{marginBottom:10,marginTop:10}}><b>Password</b></InputLabel>
+                    <InputLabel style={{marginBottom:10,marginTop:10}}><b>Kata Sandi</b></InputLabel>
                     <TextField
                         id="outlined-size-small"
                         variant="outlined"
@@ -203,7 +203,7 @@ function FormulirAdminMember() {
                             ),
                           }}
                     />
-                    <InputLabel style={{marginBottom:10,marginTop:10}}><b>Masukan Kata Sandi</b></InputLabel>
+                    <InputLabel style={{marginBottom:10,marginTop:10}}><b>Ulangi Kata Sandi</b></InputLabel>
                     <TextField
                         style={{
                             width:"100%"
@@ -246,7 +246,7 @@ function FormulirAdminMember() {
                 backgroundColor:"#000", 
                 color:"#FFF", 
                 position:"absolute",
-                bottom:"2",
+                bottom:"0",
                 marginBottom:"12px",
                 width:"80%"}}>
                 Simpan

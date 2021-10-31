@@ -6,7 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { Typography } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 
 
 const AddPackageDialog = (props) => {
@@ -29,13 +29,13 @@ const AddPackageDialog = (props) => {
     //   }
     // })
     // if(currentPackageData.packageName.length > 0 && currentPackageData.packageDescription.length > 0){
-      props.onSubmitPackage(currentPackageData);
-      props.onClose();
+    props.onSubmitPackage(currentPackageData);
+    props.onClose();
     //   setIsError(false);
     // }else{
     //   setIsError(true);
     // }
-    
+
   }
 
   const handlePackageName = (e) => {
@@ -61,40 +61,70 @@ const AddPackageDialog = (props) => {
     <Dialog open={props.open} onClose={handleClose} aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title">Tambah Paket</DialogTitle>
       <DialogContent>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="packageName"
+              label="Nama Paket"
+              type="text"
+              // value={currentPackageData.packageName}
+              value={formik.values.packageName}
+              // onChange={handlePackageName}
+              onChange={formik.handleChange}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="packageDescription"
+              label="Deskripsi"
+              type="text"
+              multiline
+              // value={currentPackageData.packageDescription}
+              value={formik.values.packageDescription}
+              // onChange={handlePackageDescription}
+              onChange={formik.handleChange}
 
-        <TextField
-          autoFocus
-          margin="dense"
-          id="packageName"
-          label="Nama Paket"
-          type="text"
-          // value={currentPackageData.packageName}
-          value={formik.values.packageName}
-          // onChange={handlePackageName}
-          onChange={formik.handleChange}
-          fullWidth
-        />
-        <TextField
-          autoFocus
-          margin="dense"
-          id="packageDescription"
-          label="Deskripsi"
-          type="text"
-          multiline
-          // value={currentPackageData.packageDescription}
-          value={formik.values.packageDescription}
-          // onChange={handlePackageDescription}
-          onChange={formik.handleChange}
-          
-          rows={4}
-          fullWidth
-        />
+              rows={4}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="albumPhotoQuantity"
+              label="Limit Foto Album"
+              value={formik.values.albumPhotoQuantity}
+              type="text"
+              onChange={formik.handleChange}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="printPhotoQuantity"
+              label="Limit Foto Cetak"
+              value={formik.values.printPhotoQuantity}
+              type="text"
+              onChange={formik.handleChange}
+              fullWidth
+            />
+          </Grid>
+        </Grid>
+
       </DialogContent>
       <DialogActions>
         <Button onClick={handleSubmit} color="primary" >
           Simpan
         </Button>
-        {isError && <Typography style={{color: 'red'}} variant="h6">
+        {isError && <Typography style={{ color: 'red' }} variant="h6">
           Nama package dan deskripsi tidak boleh kosong
         </Typography>}
       </DialogActions>

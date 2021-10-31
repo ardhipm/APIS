@@ -34,11 +34,11 @@ const WarningDialog = (props) => {
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.handleClose} variant="contained" color="primary" fullWidth style={{textTransform : 'capitalize'}}>
-                    Batalkan
+                    Kembali
                 </Button>
-                <Button onClick={props.handleConfirm} variant="contained" color="primary" fullWidth style={{textTransform : 'capitalize'}} >
+                {props.showConfirmButton && <Button onClick={props.handleConfirm} variant="contained" color="primary" fullWidth style={{textTransform : 'capitalize'}} >
                     Ya
-                </Button>
+                </Button>}
             </DialogActions>
         </Dialog>
     );

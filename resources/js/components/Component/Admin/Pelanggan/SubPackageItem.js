@@ -22,7 +22,6 @@ const SubPackageItem = (props) => {
             subPackageName: props.title,
             subPackageDetail: props.desc,
             editPhotoQuantity: props.editQty,
-            printPhotoQuantity: props.printQty,
             isSelected: props.isSelected
         }
         props.onDetail(event, item, false, props.index);
@@ -50,16 +49,6 @@ const SubPackageItem = (props) => {
                         </Grid>
                         <Grid item xs={12}>
                             {props.editQty}
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={2}>
-                    <Grid container>
-                        <Grid item xs={12}>
-                            Cetak
-                    </Grid>
-                        <Grid item xs={12}>
-                            {props.printQty}
                         </Grid>
                     </Grid>
                 </Grid>
