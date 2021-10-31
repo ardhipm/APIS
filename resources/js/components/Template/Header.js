@@ -1,7 +1,8 @@
-import { AppBar, Toolbar, IconButton, Button, Typography, makeStyles, useTheme, CssBaseline } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton, Button, Typography, makeStyles, useTheme, CssBaseline, Badge } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import React from 'react';
 import clsx from 'clsx';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 
 const drawerWidth = 240;
 
@@ -63,8 +64,12 @@ const Header = () => {
                         <MenuIcon />
                     </IconButton>
                 </Toolbar>
+                <IconButton aria-label="show 17 new notifications" color="inherit">
+                    <Badge badgeContent={17} color="secondary">
+                        <NotificationsIcon />
+                    </Badge>
+                    </IconButton>
             </AppBar>
-
         </React.Fragment>
 
     );

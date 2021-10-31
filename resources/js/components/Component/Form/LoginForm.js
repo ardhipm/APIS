@@ -1,7 +1,7 @@
 import React, { useState, setState } from 'react';
 import { makeStyles, withStyles, alpha } from '@material-ui/core/styles';
 import { v4 as uuidv4 } from 'uuid';
-import { Box, Checkbox, FormControlLabel, Grid, InputAdornment, InputBase, Link } from '@material-ui/core';
+import { Box, Checkbox, FormControlLabel, Grid, IconButton, InputAdornment, InputBase, Link } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -170,6 +170,7 @@ const LoginForm = (props) => {
 
     const classes = useStyles();
     let history = useHistory();
+    const [showPassword,setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = () => setShowPassword(!showPassword);
     const [state, setState] = useState({
@@ -279,8 +280,6 @@ const LoginForm = (props) => {
                         error={formik.touched.userName && Boolean(formik.errors.userName)}
                     />
                     <span className={classes.errorMsg}>{formik.touched.userName && formik.errors.userName}</span>
-
-
                 </Grid>
                 <Grid item xs={12}>
                     <InputLabel className={classes.formLabel} shrink htmlFor="password">

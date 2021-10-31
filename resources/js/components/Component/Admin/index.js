@@ -17,9 +17,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-import { Box, CardMedia, Tab, Tabs } from '@material-ui/core';
+import { Badge, Box, CardMedia, Tab, Tabs } from '@material-ui/core';
 import MainMenuItem from '../../Component/MainMenuItem/MainMenuItem';
 import Routes from '../../Routes';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 
 const drawerWidth = 240;
 
@@ -128,9 +129,11 @@ export default function MainPage() {
                             style={{color: 'white'}}>
                             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                         </IconButton>}
-                    {/* <Typography variant="h6" noWrap>
-                        Persistent drawer
-                    </Typography> */}
+                        <IconButton aria-label="show 17 new notifications" color="inherit">
+                    <Badge badgeContent={17} color="secondary">
+                        <NotificationsIcon/>
+                    </Badge>
+                    </IconButton>
                 </Toolbar>
             </AppBar>
             <Drawer

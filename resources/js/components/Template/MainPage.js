@@ -13,13 +13,15 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
-import { Badge, Box, Button, CardMedia, Container, Grid, ListItemIcon, ListItemText, Tab, Tabs } from '@material-ui/core';
+import { Avatar, Badge, Box, Button, CardMedia, Container, Grid, ListItemIcon, ListItemText, Menu, MenuItem, Tab, Tabs } from '@material-ui/core';
 import MainMenuItem from '../Component/MainMenuItem/MainMenuItem';
 import { Icon } from '@iconify/react';
 import { useHistory, useLocation } from "react-router-dom";
 import LogoutDialog from '../Component/Popup/LogoutDialog';
 import TermsDialog from '../Component/Popup/TermsDialog';
 import Splashscreen from '../Component/Splashscreen';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
 const drawerWidth = 280;
 
@@ -127,6 +129,15 @@ export default function MainPage(props) {
     const [openTerms,setOpenTerms] = React.useState(false);
     const [openSplashScreen, setOpenSplashScreen] = React.useState(true)
     const history = useHistory();
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
     const handleCloseTerms =()=>{
         localStorage.setItem('FIRST_TERMS',false)
         setOpenTerms(false)
@@ -226,6 +237,13 @@ export default function MainPage(props) {
                             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                         </IconButton>}
                     {tab}
+                    <IconButton aria-label="show 17 new notifications" color="inherit"  variant="dot" 
+                    onClick={handleClick}
+                    style={{position:"absolute",right:"0",marginRight:"5px"}}>
+                    <Badge color="secondary">
+                        <NotificationsIcon/>
+                    </Badge>
+                    </IconButton>
                     {/* <div className={classes.badge} >
                         <Badge classes={{
                             dot: classes.dot
@@ -237,6 +255,52 @@ export default function MainPage(props) {
                 </Toolbar>
 
             </AppBar>
+            <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                PaperProps={{  
+                    style: {  
+                      width: 250,  
+                    },  
+                 }} 
+            >
+                <div onClick={handleClose} style={{
+                    cursor:"pointer",
+                    margin:"1em"
+                }}>
+                    <div>
+                    <div style={{display:"flex"}}>
+                    <Avatar style={{marginRight:"5px"}}>U</Avatar> User telah memengirim foto pilihanannya didalam paket Lamaran<br/>
+                    </div>
+                    <span><AccessTimeIcon style={{fontSize:"15px",marginRight:"5px"}}/>1 jam</span>
+                    </div>
+                </div>
+                <div onClick={handleClose}  style={{
+                    cursor:"pointer",
+                    margin:"1em"
+                }}>
+                <div>
+                    <div style={{display:"flex"}}>
+                    <Avatar>U</Avatar> User telah memengirim foto pilihanannya didalam paket Lamaran<br/>
+                    </div>
+                    <span><AccessTimeIcon style={{fontSize:"15px"}}/>1 jam</span>
+                    </div>
+                </div>
+                <div onClick={handleClose}  style={{
+                    cursor:"pointer",
+                    margin:"1em"
+                }}>
+                <div>
+                    <div style={{display:"flex"}}>
+                    <Avatar>U</Avatar> User telah memengirim foto pilihanannya didalam paket Lamaran<br/>
+                    </div>
+                    <span><AccessTimeIcon style={{fontSize:"15px"}}/>1 jam</span>
+                    </div>
+                </div>
+            </Menu>
             <Drawer
                 className={classes.drawer}
                 variant="persistent"
