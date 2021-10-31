@@ -397,15 +397,10 @@ class CustomerController extends Controller
                 ->where('filename', '=', "Foto Album")
                 ->first(); // There could be duplicate directory names!
 
-
-
                 $userCustomer = User::find($bodyJson['id_user']);
                 $userCustomer->username = $bodyJson['username'];
                 $userCustomer->email = $bodyJson['email'];
                 $userCustomer->is_active = $bodyJson['is_active'];
-                
-
-                
 
                 if($bodyJson['password'] != NULL){
                     $userCustomer->plain_password = $bodyJson['password'];

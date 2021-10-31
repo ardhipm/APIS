@@ -155,14 +155,10 @@ export default function MainPage(props) {
         }
 
         if (value == 2) {
-            history.push('/pelanggan/paket/foto-akhir')
-        }
-
-        if (value == 3) {
             history.push('/pelanggan/paket/video')
         }
 
-        if (value == 4) {
+        if (value == 3) {
             history.push('/pelanggan/paket/album')
         }
     }
@@ -174,8 +170,6 @@ export default function MainPage(props) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-
-
 
 
     const handleLogout = () => {

@@ -220,10 +220,6 @@ const UserPicturePage = (props) => {
                 }
 
                 setPictures(arraysData);
-                console.log('this is picture')
-                console.log(pictures)
-                console.log('this is arrayData')
-                console.log(arraysData);
                 if (values.length > 0) {
                     setIsAnyFolder(true);
                 } else {
@@ -234,7 +230,6 @@ const UserPicturePage = (props) => {
                 setCurrentSubFolder(subFolders[0]);
 
 
-                console.log(getTotalAlbumSelectedPhoto(arraysData));
 
                 setTotalSelectedPhoto(getTotalSelectedPhoto());
                 // setTotalRestrictionPhoto(values[0].num_edit_photo);
@@ -711,10 +706,10 @@ const UserPicturePage = (props) => {
                             <Grid item xs={12}>
                                 <Typography variant="subtitle1" >
                                     <Grid container>
-                                        {!restrictDelete || props.tabValue != 1 && <Grid item xs={12}>
-
+                                        {(props.tabValue != 1 || !restrictDelete ) && <Grid item xs={12}>
                                             <div dangerouslySetInnerHTML={{ __html: descriptionMessage }}/>
                                         </Grid>}
+                                        
 
                                         {props.tabValue == 1 && restrictDelete &&
                                             <div>
@@ -756,7 +751,7 @@ const UserPicturePage = (props) => {
                                     style={{ marginRight: '0.2em' }}
                                     variant="contained"
                                     color="primary"
-                                    disabled={restrictAlbumPrint}
+                                    disabled={restrictDelete}
                                     endIcon={<Send />}
                                     onClick={submitAlbumAndPrintPhoto}>
                                     Kirim Foto Album dan Foto Cetak

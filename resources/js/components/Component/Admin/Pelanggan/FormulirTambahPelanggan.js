@@ -89,6 +89,7 @@ function FormulirTambahPelanggan(props) {
     const [submitLoading, setSubmitLoading] = React.useState(false);
     const [alertPopup, setAlertPopup] = React.useState(false);
     const [isErrorPopup, setIsErrorPopup] = React.useState(false);
+    const [alertText, setAlertText] = React.useState("Tambah pelanggan berhasil")
 
     const handleCreateCustomer = (values) => {
         setSubmitLoading(true);
@@ -231,9 +232,11 @@ function FormulirTambahPelanggan(props) {
                 
                 // console.log('update');
                 // console.log(values);
+                setAlertText("Update pelanggan berhasil")
                 handleUpdateCustomer(values);
             } else {
                 //console.log('insert');
+                setAlertText("Tambah pelanggan berhasil")
                 handleCreateCustomer(values);
             }
 
@@ -357,7 +360,7 @@ function FormulirTambahPelanggan(props) {
             handleClose={handleClosealertPopup} /> :
         <SuccessDialog
             open={alertPopup}
-            text="Tambah pelanggan berhasil!"
+            text={alertText}
             handleClose={handleClosealertPopup} />)
 
     const packageElement = (showPackageForm > 0 ?
