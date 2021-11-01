@@ -332,10 +332,10 @@ const LoginForm = (props) => {
                         label="Ingat Saya"
                     />
                 </Grid>
-                <Grid item xs={6} style={{ textAlign: 'right' }} >
+                {/* <Grid item xs={6} style={{ textAlign: 'right' }} >
                     <Link className={classes.label} color="textSecondary" style={{ fontSize: 12 + 'px', display: 'inline', lineHeight: 'normal', fontWeight: 'bold' }}>Lupa Kata Sandi?</Link>
 
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12} style={{ paddingTop: 50 + 'px' }}>
                     <Button variant="contained" color="primary" type="submit" className={classes.inputBtn}>
                         Masuk
