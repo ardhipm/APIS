@@ -56,19 +56,22 @@ const useStyles = makeStyles((theme) => ({
     imgLogo: {
         position: 'absolute',
         [theme.breakpoints.down('sm')]: {
-            top: 10 + '%',
+            top: 15 + '%',
         },
         [theme.breakpoints.up('md')]: {
-            top: 10 + '%',
+            top: 15 + '%',
         },
         [theme.breakpoints.up('lg')]: {
-            top: 10 + '%',
+            top: 15 + '%',
         },
-        [theme.breakpoints.up('xl')]: {
-            top: 17 + '%',
+        [theme.breakpoints.up(1281)]: {
+            top: 13 + '%',
         },
-        height: 170 + 'px',
-        width: 170 + 'px',
+        [theme.breakpoints.up(1400)]: {
+            top: 23 + '%',
+        },
+        height: 115 + 'px',
+        width: 115 + 'px',
         zIndex: 5,
         left: 0,
         right: 0,
