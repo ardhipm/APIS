@@ -1,7 +1,7 @@
 import React, { useState, setState } from 'react';
 import { makeStyles, withStyles, alpha } from '@material-ui/core/styles';
 import { v4 as uuidv4 } from 'uuid';
-import { Box, Checkbox, FormControlLabel, Grid, IconButton, InputAdornment, InputBase, Link } from '@material-ui/core';
+import { Backdrop,CircularProgress, Checkbox, FormControlLabel, Grid, IconButton, InputAdornment, InputBase, Link } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -56,8 +56,8 @@ const useStyles = makeStyles({
     },
     imgLogo: {
         position: 'absolute',
-        height: 115 + 'px',
-        width: 115 + 'px',
+        height: 90 + 'px',
+        width: 90 + 'px',
         top: 25 + '%',
         zIndex: 5
     },
@@ -168,6 +168,7 @@ const LoginForm = (props) => {
     const [openSplashScreen, setOpenSplashScreen] = React.useState(false)
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
 
     const classes = useStyles();
     let history = useHistory();
@@ -178,76 +179,92 @@ const LoginForm = (props) => {
     })
 
     const handleSubmit = (values) => {
-        // event.preventDefault();
-        setOpenSplashScreen(true);
-        //console.log(values);
+        setLoading(true);
         const loginForm = {
             username: values.userName,
             password: values.password
-          };
-        setTimeout(()=>{
-            axios.post("/api/login", {
-                username: values.userName,
-                password: values.password
-            })
-            .then(res => {
-                if(res.data.success){
-                    // //console.log(res.data.role_id);
+        };
 
-                    let user = res.data.user;
-                    let userData = {
-                        id:user.id,
-                        username: user.username,
-                        email: user.email,
-                        is_active: user.is_active,
-                        role_id: user.role_id
-                    }
-                    // dispatch(userLogIn(res.data.user));
+        axios.post("/api/login", {
+            username: values.userName,
+            password: values.password
+        }).then(res => {
+            if (res.data.success) {
+                // //console.log(res.data.role_id);
 
-                   
-                    
-                    localStorage.setItem("authToken",res.data.access_token);
-                    localStorage.setItem("SOURCE_TO_CHOICE",false);
-                    localStorage.setItem("user", JSON.stringify(userData));
-                    // setState(prevState => ({
-                    //     ...prevState,
-                    //     errorMsg: ''
-                    // }));
-                    
-                    setTimeout(function() { //Start the timer
-                        //console.log('start') //After 1 second, set render to true
-                        if(res.data.user.role_id == 1){
-                            history.push({pathname: "/pelanggan/paket", state:{role: "pelanggan"}});
-                            const test = React.createContext(history.location.state.role);
-                        }
-                        if(res.data.user.role_id == 2){
-                            history.push({pathname: "/admin/pengguna", state:{role: "superadmin"}});
-                            localStorage.setItem("FIRST_TERMS",false)
-                            window.location.reload();
-                        }
-                        if(res.data.user.role_id == 3){
-                            history.push({pathname: "/admin/pelanggan", state:{role: "admin"}});
-                            localStorage.setItem("FIRST_TERMS",false)
-                            window.location.reload();
-                        }
-                    }.bind(this), 3)
+                let user = res.data.user;
+                let userData = {
+                    id: user.id,
+                    username: user.username,
+                    email: user.email,
+                    is_active: user.is_active,
+                    role_id: user.role_id
+                }
+                // dispatch(userLogIn(res.data.user));
 
-                    React.createContext(history.location.state.role);
-                }else{
-                    setOpenSplashScreen(false)
+
+                if (user.is_active == 1) {
+                    setLoading(false);
+                    setOpenSplashScreen(true);
+                    setTimeout(() => {
+                        localStorage.setItem("authToken", res.data.access_token);
+                        localStorage.setItem("SOURCE_TO_CHOICE", false);
+                        localStorage.setItem("user", JSON.stringify(userData));
+
+                        setTimeout(function () { //Start the timer
+                            //console.log('start') //After 1 second, set render to true
+                            if (res.data.user.role_id == 1) {
+                                history.push({ pathname: "/pelanggan/paket", state: { role: "pelanggan" } });
+                                const test = React.createContext(history.location.state.role);
+                            }
+                            if (res.data.user.role_id == 2) {
+                                history.push({ pathname: "/admin/pengguna", state: { role: "superadmin" } });
+                                localStorage.setItem("FIRST_TERMS", false)
+                                window.location.reload();
+                            }
+                            if (res.data.user.role_id == 3) {
+                                history.push({ pathname: "/admin/pelanggan", state: { role: "admin" } });
+                                localStorage.setItem("FIRST_TERMS", false)
+                                window.location.reload();
+                            }
+                        }.bind(this), 3)
+
+                        React.createContext(history.location.state.role);
+
+                        setOpenSplashScreen(false)
+                    }, 8000)
+                } else {
+                    setLoading(false);
                     setState(prevState => ({
                         ...prevState,
-                        errorMsg: 'Username tidak di temukan.'
+                        errorMsg: 'User tidak Aktif.'
                     }));
+                    return null;
+
                 }
-                
-            })
-            .catch(error => {
-                setOpenSplashScreen(false)
+
+            } else {
+                setLoading(false);
+                setState(prevState => ({
+                    ...prevState,
+                    errorMsg: 'Username tidak di temukan.'
+                }));
+                return null;
+
+            }
+
+        }).catch(error => {
+                setLoading(false);
+                setState(prevState => ({
+                    ...prevState,
+                    errorMsg: 'Username tidak di temukan.'
+                }));
+                return null;
+
                 //console.log(error);
             })
-        },5000)
-        
+
+
     }
 
     const formik = useFormik({
@@ -292,8 +309,8 @@ const LoginForm = (props) => {
                         name="password"
                         variant="outlined"
                         style={{
-                            width:"100%",
-                            backgroundColor:"#FFFF"
+                            width: "100%",
+                            backgroundColor: "#FFFF"
                         }}
                         size="small"
                         type={showPassword ? 'text' : 'password'}
@@ -302,17 +319,17 @@ const LoginForm = (props) => {
                         error={formik.touched.password && Boolean(formik.errors.password)}
                         InputProps={{
                             endAdornment: (
-                              <InputAdornment position="end">
-                                <IconButton
-                                  aria-label="toggle password visibility"
-                                  onClick={handleClickShowPassword}
-                                  onMouseDown={handleMouseDownPassword}
-                                >
-                                  {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                                </IconButton>
-                              </InputAdornment>
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                    >
+                                        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                    </IconButton>
+                                </InputAdornment>
                             ),
-                          }}
+                        }}
                     />
                     <span className={classes.errorMsg}>{formik.touched.password && formik.errors.password}</span>
 
@@ -346,7 +363,11 @@ const LoginForm = (props) => {
                     </Typography>
                 </Grid>
             </Grid>
-            <Splashscreen open = {openSplashScreen}/>
+            <Splashscreen open={openSplashScreen} />
+            <Backdrop style={{ zIndex: 1000, color: '#fff', }}
+                open={loading} >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </form>
 
 

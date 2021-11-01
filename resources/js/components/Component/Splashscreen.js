@@ -35,13 +35,13 @@ export default function Splashscreen(props){
                     root: classes.root
                 }}
                 style={props.open ? {
-                    display:"block", backgroundColor:"#FFFF"
+                    display:"block", backgroundColor:"#000000"
                 }:{display:"none"}}
                 >
                 <img style={{
                     maxHeight:"100%",
                     maxWidth:"100%"
-                }} src="/img/amorphoto_loading.gif"/>
+                }} src="/img/AMORPHOTO-PUTIH.gif"/>
             </div>
         </React.Fragment>
     );
