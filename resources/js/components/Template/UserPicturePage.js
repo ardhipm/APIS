@@ -190,7 +190,7 @@ const UserPicturePage = (props) => {
                     })
                 }
 
-                console.log(subFolders);
+                // console.log(subFolders);
 
 
                 let arraysData = [];
@@ -305,7 +305,7 @@ const UserPicturePage = (props) => {
 
         } else {
             let wayae = [...pictures];
-            console.log(wayae)
+            // console.log(wayae)
 
             wayae[value].pictures[idx].selected = isSelected;
             setPictures(wayae);
@@ -328,7 +328,6 @@ const UserPicturePage = (props) => {
 
     const onSelectAlbumImage = (idx, name, isSelected, e) => {
         let wayae = [...pictures];
-        console.log(wayae)
 
         wayae[value].pictures[idx].albumSelected = isSelected;
 
@@ -339,7 +338,6 @@ const UserPicturePage = (props) => {
 
     const onSelectPrintImage = (idx, name, isSelected, e) => {
         let wayae = [...pictures];
-        console.log(wayae)
         wayae[value].pictures[idx].printSelected = isSelected;
         setPictures(wayae);
         setSelectedPrintPhoto(getTotalPrintSelectedPhoto(pictures));
@@ -401,7 +399,6 @@ const UserPicturePage = (props) => {
         const token = localStorage.getItem('authToken');
 
         if (props.tabValue == 0) {
-            console.log(requestData)
             axios.request({
                 data: requestData,
                 method: 'post',
@@ -475,7 +472,6 @@ const UserPicturePage = (props) => {
             }
 
             if (typeOfSubmit == "DELETE") {
-                console.log(requestData)
                 axios.request({
                     data: requestData,
                     method: 'post',
@@ -504,7 +500,6 @@ const UserPicturePage = (props) => {
     }
 
     const submitAlbumAndPrintPhoto = () => {
-        console.log(pictures);
         setTypeOfSubmit(ALBUM_PRINT);
         let requestAlbumData = convertedDataAlbumPrint("ALBUM");
         let requestPrintData = convertedDataAlbumPrint("PRINT");
@@ -517,9 +512,6 @@ const UserPicturePage = (props) => {
             setWarningText("Foto yang telah terpilih sebagai foto album dan foto cetak tidak dapat dipilih ulang, Apakah anda sudah yakin dengan foto yang telah terpilih ?")
             setOpenWarningPopup(true)
         }
-
-        console.log(JSON.stringify(requestAlbumData));
-        console.log(JSON.stringify(requestPrintData));
     }
 
     let convertedDataAlbumPrint = (type) => {

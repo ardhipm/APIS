@@ -53,7 +53,7 @@ const UserInvoicePage = () => {
             headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
         }).then(res => {
             let values = res.data.data;
-            console.log(values)
+            // console.log(values)
             if(values.invoice_photo_link.length < 1){
                 setDescMessage("Kamu belum memiliki tagihan");
 
