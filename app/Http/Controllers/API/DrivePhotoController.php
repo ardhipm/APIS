@@ -23,40 +23,6 @@ class DrivePhotoController extends Controller
 
     }
 
-    public function getChoicePhotoFolder($folderName){
-        $decodeName =  urldecode($folderName);
-
-        $customer = DB::table('customers')
-        ->leftJoin('users', 'customers.id_user', 'users.id')
-        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
-        ->where('customers.id_user', '=', Auth::Id())
-        ->get()->toArray();
-
-        
-        $folder = $customer[0]->id .' - ' .$customer[0]->name;
-
-        $contents = collect(\Storage::cloud()->listContents('/', false));
-        $dir = $contents->where('type', '=', 'dir')
-                ->where('filename', '=', $folder)
-                ->first(); // There could be duplicate directory names!
-        
-        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
-        $dir = $contents->where('type', '=', 'dir')
-        ->where('filename', '=', 'Foto Mentah')
-        ->first(); // There could be duplicate directory names!
-
-        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
-
-        $dir = $contents->where('type', '=', 'dir')
-        ->where('filename', '=', $decodeName)
-        ->first(); 
-
-        $files = collect(\Storage::cloud()->listContents($dir['path'], false))
-        ->where('type', '=', 'file');
-
-        return response(['success' => true,'data'=>'$files', 'message' => 'Selected Photo inserted'], 201);
-    }
-    
     public function getChoicePhoto(){
     
         $customer = DB::table('customers')
@@ -94,6 +60,13 @@ class DrivePhotoController extends Controller
         $data = array();
 
         for($i = 0; $i < count($directory); $i++){
+            $sub_package = DB::table('sub_packages')
+            ->leftJoin('packages', 'sub_packages.id_package', 'packages.id')
+            ->select('sub_packages.id as id')
+            ->where('packages.id_customer', '=', $customer[0]->id)
+            ->where('sub_packages.sub_package_name', '=', $directory[$i]['name'])
+            ->get()->toArray();
+
             $dataFile = array();
 
             $filedirchild = collect(\Storage::cloud()->listContents($directory[$i]['path'], false))->where('type', '=', 'file');
@@ -101,6 +74,8 @@ class DrivePhotoController extends Controller
 
             $parent = new \ArrayObject();
             $parent['folder'] = $directory[$i]['name'];
+            $parent['id_subpackage_id'] = $sub_package[0]->id;
+
             if(count($filedirchild2) > 0){
                 for($j = 0; $j < count($filedirchild2); $j++){
                     $filePrintPhoto = collect(\Storage::cloud()->listContents($dirContentPrintPhoto['path'], false));
@@ -120,17 +95,17 @@ class DrivePhotoController extends Controller
                     $filedirchildAlbum2 = $filedirchildAlbum->toArray();
 
 
-                    $filedirchild2[$j]['is_print'] = false;
+                    $filedirchild2[$j]['is_print'] = '0';
                     for($k = 0; $k < count($filedirchildPrint2); $k++){
                         if($filedirchild2[$j]['name'] == $filedirchildPrint2[$k]['name']){
-                            $filedirchild2[$j]['is_print'] = true;
-                        }
+                            $filedirchild2[$j]['is_print'] = '1';
+                        }   
                     }
 
-                    $filedirchild2[$j]['is_album'] = false;
+                    $filedirchild2[$j]['is_album'] = '0';
                     for ($k = 0; $k < count($filedirchildAlbum2); $k++) {
                         if ($filedirchild2[$j]['name'] == $filedirchildAlbum2[$k]['name']) {
-                            $filedirchild2[$j]['is_album'] = true;
+                            $filedirchild2[$j]['is_album'] = '1';
                         }
                     }
 
@@ -151,6 +126,57 @@ class DrivePhotoController extends Controller
 
     }
 
+    public function getFinalPhoto(){
+    
+        $customer = DB::table('customers')
+        ->leftJoin('users', 'customers.id_user', 'users.id')
+        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
+        ->where('customers.id_user', '=', Auth::Id())
+        ->get()->toArray();
+
+        
+        $folder = $customer[0]->id .' - ' .$customer[0]->name;
+
+        $contents = collect(\Storage::cloud()->listContents('/', false));
+        $dir = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', $folder)
+                ->first(); // There could be duplicate directory names!
+        
+        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+        $dir = $contents->where('type', '=', 'dir')
+        ->where('filename', '=', 'Foto Akhir')
+        ->first(); // There could be duplicate directory names!
+
+        $filedir = collect(\Storage::cloud()->listContents($dir['path'], false));
+        $directory = $filedir->where('type', '=', 'dir')->toArray();
+        // $file= $filedir->where('type', '=', 'file')->toArray();
+
+
+        $data = array();
+
+        for($i = 0; $i < count($directory); $i++){
+            $dataFile = array();
+
+            $filedirchild = collect(\Storage::cloud()->listContents($directory[$i]['path'], false))->where('type', '=', 'file');
+        
+            $parent = new \ArrayObject();
+            $parent['folder'] = $directory[$i]['name'];
+            $parent['file'] = $filedirchild;
+
+            array_push($data, $parent);
+
+        }
+
+        $response = [
+            'success' => true,
+            'data' => $data,
+            'message' => 'Final Photo retrieved successfully.',   
+        ];
+
+        return $response;
+
+    }
+    
     public function getFinalPhoto(){
     
         $customer = DB::table('customers')
