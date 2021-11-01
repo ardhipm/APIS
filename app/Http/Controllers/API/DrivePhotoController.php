@@ -243,10 +243,10 @@ class DrivePhotoController extends Controller
             $parent['folder'] = $directory[$i]['name'];
             for($j = 0; $j < count($sub_package); $j++){
                 if($sub_package[$j]->sub_package_name == $directory[$i]['name']){
-                    $parent['num_edit_photo'] = $sub_package[$i]->num_edit_photo;
-                    $parent['id_subpackage'] = $sub_package[$i]->id;
-                    $parent['is_downloaded'] = $sub_package[$i]->is_downloaded;
-                    $parent['num_selected_edit_photo'] = $sub_package[$i]->num_selected_edit_photo;
+                    $parent['num_edit_photo'] = $sub_package[$j]->num_edit_photo;
+                    $parent['id_subpackage'] = $sub_package[$j]->id;
+                    $parent['is_downloaded'] = $sub_package[$j]->is_downloaded;
+                    $parent['num_selected_edit_photo'] = $sub_package[$j]->num_selected_edit_photo;
                 }else{
                     continue;
                 }
@@ -551,7 +551,10 @@ class DrivePhotoController extends Controller
         ->where('customers.id_user', '=', Auth::Id())
         ->get()->toArray();
 
-        $sub_package = DB::table('sub_packages')->where('id_package', '=', $customer[0]->package_id)->get()->toArray();
+        $sub_package = DB::table('sub_packages')
+            ->where('id_package', '=', $customer[0]->package_id)
+            ->where('sub_package_name', '=', $bodyJson['folderName'])
+            ->get()->toArray();
         // die(print_r($sub_package));
         
         $folder = $customer[0]->id .' - ' .$customer[0]->name;
@@ -624,7 +627,12 @@ class DrivePhotoController extends Controller
         ->where('customers.id_user', '=', Auth::Id())
         ->get()->toArray();
 
-        $sub_package = DB::table('sub_packages')->where('id_package', '=', $customer[0]->package_id)->get()->toArray();
+        $sub_package = DB::table('sub_packages')
+            ->where('id_package', '=', $customer[0]->package_id)
+            ->where('sub_package_name' ,'=', $bodyJson['folderName'])
+        ->get()->toArray();
+
+        
         // die(print_r($sub_package));
         
         $folder = $customer[0]->id .' - ' .$customer[0]->name;

@@ -125,7 +125,7 @@ const UserPicturePage = (props) => {
     }, [pictures, isDownloaded]);
 
     useEffect(() => {
-    }, [selectedAlbumPhoto, selectedPrintPhoto])
+    }, [selectedAlbumPhoto, selectedPrintPhoto, totalSelectedPhoto, totalRestrictionPhoto])
 
 
     const getUserCustomerData = () => {
@@ -190,6 +190,9 @@ const UserPicturePage = (props) => {
                     })
                 }
 
+                // console.log(subFolders);
+
+
                 let arraysData = [];
                 for (let i = 0; i < subFolders.length; i++) {
                     let arrayPictures = [];
@@ -212,6 +215,7 @@ const UserPicturePage = (props) => {
                         idSubPackage: subFolders[i].id_subpackage,
                         folderName: subFolders[i].folder,
                         choicePhotoLength: subFolders[i].num_selected_edit_photo,
+                        restrictPhotoLength: subFolders[i].num_edit_photo,
                         isDownloaded: subFolders[i].is_downloaded,
                         pictures: arrayPictures
                     }
@@ -232,9 +236,7 @@ const UserPicturePage = (props) => {
 
 
                 setTotalSelectedPhoto(getTotalSelectedPhoto());
-                // setTotalRestrictionPhoto(values[0].num_edit_photo);
-                // setSelectedAlbumPhoto(0+getTotalAlbumSelectedPhoto(arraysData))
-                // setSelectedPrintPhoto(2)
+                setTotalRestrictionPhoto(values[0].num_edit_photo);
 
                 //console.log(pictures);
 
@@ -303,11 +305,12 @@ const UserPicturePage = (props) => {
 
         } else {
             let wayae = [...pictures];
-            console.log(wayae)
+            // console.log(wayae)
 
             wayae[value].pictures[idx].selected = isSelected;
             setPictures(wayae);
             setTotalSelectedPhoto(pictures[value].choicePhotoLength + pictures[value].pictures.filter(x => x.selected).length);
+            setTotalRestrictionPhoto(pictures[value].restrictPhotoLength);
             setUpdateSelect(false);
             setCurrentPhoto(prevState => {
                 return {
@@ -325,7 +328,6 @@ const UserPicturePage = (props) => {
 
     const onSelectAlbumImage = (idx, name, isSelected, e) => {
         let wayae = [...pictures];
-        console.log(wayae)
 
         wayae[value].pictures[idx].albumSelected = isSelected;
 
@@ -336,7 +338,6 @@ const UserPicturePage = (props) => {
 
     const onSelectPrintImage = (idx, name, isSelected, e) => {
         let wayae = [...pictures];
-        console.log(wayae)
         wayae[value].pictures[idx].printSelected = isSelected;
         setPictures(wayae);
         setSelectedPrintPhoto(getTotalPrintSelectedPhoto(pictures));
@@ -367,13 +368,26 @@ const UserPicturePage = (props) => {
     }
 
     const onKirim = () => {
-        if (totalSelectedPhoto < 1) {
-            setWarningText("Pilih minimal 1 foto untuk di hapus dari foto pilihan")
-            setWarningConfirmBtn(false)
-            setOpenWarningPopup(true)
-        } else {
-            setTypeOfSubmit(DELETE);
-            setOpenWarningPopup(true);
+        if (props.tabValue == 0) {
+            if (totalSelectedPhoto < 1) {
+                setWarningText("Pilih minimal 1 foto untuk di pilih")
+                setWarningConfirmBtn(false)
+                setOpenWarningPopup(true)
+            }else{
+                setWarningText("Foto akan di pindahkan ke foto pilihan, lanjutkan ?")
+                setOpenWarningPopup(true)
+            }
+        }
+        if (props.tabValue == 1) {
+            if (totalSelectedPhoto < 1) {
+                setWarningText("Pilih minimal 1 foto untuk di hapus dari foto pilihan")
+                setWarningConfirmBtn(false)
+                setOpenWarningPopup(true)
+            }else{
+                setWarningText("Foto akan di pindahkan kembali ke foto mentah, lanjutkan ?")
+                setTypeOfSubmit(DELETE);
+                setOpenWarningPopup(true);
+            }
         }
     }
 
@@ -415,8 +429,8 @@ const UserPicturePage = (props) => {
 
                 })
         } else if (props.tabValue == 1) {
-
             if (typeOfSubmit == "ALBUM_PRINT") {
+
 
                 let requestAlbumData = convertedDataAlbumPrint("ALBUM");
                 let requestPrintData = convertedDataAlbumPrint("PRINT");
@@ -486,7 +500,6 @@ const UserPicturePage = (props) => {
     }
 
     const submitAlbumAndPrintPhoto = () => {
-        console.log(pictures);
         setTypeOfSubmit(ALBUM_PRINT);
         let requestAlbumData = convertedDataAlbumPrint("ALBUM");
         let requestPrintData = convertedDataAlbumPrint("PRINT");
@@ -499,9 +512,6 @@ const UserPicturePage = (props) => {
             setWarningText("Foto yang telah terpilih sebagai foto album dan foto cetak tidak dapat dipilih ulang, Apakah anda sudah yakin dengan foto yang telah terpilih ?")
             setOpenWarningPopup(true)
         }
-
-        console.log(JSON.stringify(requestAlbumData));
-        console.log(JSON.stringify(requestPrintData));
     }
 
     let convertedDataAlbumPrint = (type) => {
@@ -562,9 +572,6 @@ const UserPicturePage = (props) => {
 
     const onNextPhoto = (event, idx) => {
         onClickImage(event, currentPhoto.idx + 1, pictures[value].pictures[currentPhoto.idx + 1].selected);
-
-
-
     }
 
     const onPrevPhoto = (event, idx) => {
@@ -658,8 +665,8 @@ const UserPicturePage = (props) => {
                                     totalRestrictionPrintPhoto={numPrintPhoto}
 
                                     displayDeleteSelected={true}
-                                    displayAlbumSelected={restrictDelete}
-                                    displayPrintSelected={restrictDelete}
+                                    displayAlbumSelected={props.tabValue == 1 && restrictDelete}
+                                    displayPrintSelected={props.tabValue == 1 && restrictDelete}
                                     selected={picture.selected}
 
                                     albumSelected={picture.albumSelected}
@@ -670,7 +677,7 @@ const UserPicturePage = (props) => {
                                     onSelectedAlbum={onSelectAlbumImage}
                                     onSelectedPrint={onSelectPrintImage}
 
-                                    restrictDelete={restrictDelete}
+                                    restrictDelete={props.tabValue == 1 && restrictDelete}
                                     restrictAlbumPrint={restrictAlbumPrint} />)
                             }) : <div>tidak terdapat foto</div>
                         }
@@ -706,18 +713,18 @@ const UserPicturePage = (props) => {
                             <Grid item xs={12}>
                                 <Typography variant="subtitle1" >
                                     <Grid container>
-                                        {(props.tabValue != 1 || !restrictDelete ) && <Grid item xs={12}>
-                                            <div dangerouslySetInnerHTML={{ __html: descriptionMessage }}/>
+                                        {(props.tabValue != 1 || !restrictDelete) && <Grid item xs={12}>
+                                            <div dangerouslySetInnerHTML={{ __html: descriptionMessage }} />
                                         </Grid>}
-                                        
+
 
                                         {props.tabValue == 1 && restrictDelete &&
                                             <div>
-                                                {!restrictAlbumPrint && 
+                                                {!restrictAlbumPrint &&
                                                     <Grid container item xs={12}>
                                                         Silahkan pilih foto untuk album dan foto untuk dicetak.
                                                     </Grid>}
-                                                {restrictAlbumPrint && 
+                                                {restrictAlbumPrint &&
                                                     <Grid container item xs={12}>
                                                         Foto anda sedang di proses untuk di cetak dan di jadikan album. Terima kasih.
                                                     </Grid>}
@@ -751,7 +758,7 @@ const UserPicturePage = (props) => {
                                     style={{ marginRight: '0.2em' }}
                                     variant="contained"
                                     color="primary"
-                                    disabled={restrictDelete}
+                                    disabled={restrictAlbumPrint || !restrictDelete}
                                     endIcon={<Send />}
                                     onClick={submitAlbumAndPrintPhoto}>
                                     Kirim Foto Album dan Foto Cetak

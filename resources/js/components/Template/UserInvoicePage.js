@@ -30,6 +30,7 @@ const UserInvoicePage = () => {
     const classes = useStyles();
     const [descMessage, setDescMessage] = React.useState("");
     const [invoicePic, setInvoicePic] =React.useState("");
+    const [isPaid, setIsPaid] = React.useState(false);
 
     useEffect(() => {
         getInvoicePhoto()
@@ -48,23 +49,27 @@ const UserInvoicePage = () => {
         const token = localStorage.getItem('authToken');
         axios.request({
             method: "get",
-            url: "/api/invoice/get_photo",
+            url: "/api/invoice/view",
             headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
         }).then(res => {
             let values = res.data.data;
-            if(values.length < 1){
+            // console.log(values)
+            if(values.invoice_photo_link.length < 1){
                 setDescMessage("Kamu belum memiliki tagihan");
 
             }else{
                 setDescMessage("Silahkan selesaikan pembayaranmu ya!");
                 //console.log(values)
-                setInvoicePic(values[0].basename);
+                setInvoicePic(values.invoice_photo_link);
+                setIsPaid(values.id_payment_status);
             }
         }).catch(error => {
             //console.log(error);
             //console.log('error here');
         })
     }
+
+    const statusBayar = isPaid?"Sudah Bayar": "Belum Bayar";
 
     
 
@@ -82,6 +87,11 @@ const UserInvoicePage = () => {
                             <Grid item xs={12}>
                                 <Typography variant="subtitle1" >
                                     {descMessage}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography variant="subtitle1" >
+                                    Status Pembayaran : {statusBayar}
                                 </Typography>
                             </Grid>
                         </Grid>
