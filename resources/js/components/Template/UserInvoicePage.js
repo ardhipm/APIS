@@ -38,7 +38,9 @@ const UserInvoicePage = () => {
     },[]);
 
     const driveApiLink = (value) => {
-        return 'https://drive.google.com/uc?export=view&id=' + value;
+        // return 'drive.google.com/thumbnail?export=view&sz=w600&id=' + value;
+        // return 'lh3.google.com/u/6/d/'+value+'=w600'
+        return 'https://lh3.googleusercontent.com/d/'+value+'=w600?authuser=0'
     }
 
     

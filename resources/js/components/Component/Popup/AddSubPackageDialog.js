@@ -70,7 +70,6 @@ const AddSubPackageDialog = (props) => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            autoFocus
                             margin="dense"
                             id="subPackageDescription"
                             label="Deskripsi"
@@ -83,7 +82,6 @@ const AddSubPackageDialog = (props) => {
                     </Grid>
                     <Grid item xs={6}>
                         <TextField
-                            autoFocus
                             margin="dense"
                             id="photoEditQuantity"
                             label="Kuantitas Edit Foto"
