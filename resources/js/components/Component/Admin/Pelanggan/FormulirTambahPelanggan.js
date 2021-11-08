@@ -134,17 +134,21 @@ function FormulirTambahPelanggan(props) {
             .then(res => {
                 if (res.data.success == true) {
                     setIsErrorPopup(false);
+                    
                 } else {
                     setIsErrorPopup(true);
                 }
 
                 setSubmitLoading(false);
                 setAlertPopup(true);
+                
 
-                setTimeout(() => {
-                    window.location.href = "/admin/pelanggan";
-                }, 2000);
-
+                if (res.data.success == true) {
+                    setTimeout(() => {
+                        window.location.href = "/admin/pelanggan";
+                    }, 2000);
+                }
+              
             })
             .catch(error => {
                 // //console.log(error);
