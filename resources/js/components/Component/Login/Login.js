@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         backgroundColor: '#171717',
-        backgroundImage: `url("img/background-crop.jpg")`,
+        backgroundImage: `url("img/background-crop-1.jpg")`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover'
     },
