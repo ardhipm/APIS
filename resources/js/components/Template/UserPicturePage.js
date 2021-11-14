@@ -571,14 +571,19 @@ const UserPicturePage = (props) => {
     }
 
     const onNextPhoto = (event, idx) => {
+        // console.log('upp')
+        // console.log(currentPhoto)
         onClickImage(event, currentPhoto.idx + 1, pictures[value].pictures[currentPhoto.idx + 1].selected);
     }
 
     const onPrevPhoto = (event, idx) => {
+        // console.log('upp')
+        // console.log(currentPhoto)
         onClickImage(event, currentPhoto.idx - 1, pictures[value].pictures[currentPhoto.idx - 1].selected);
 
 
     }
+    
 
     const onDownload = () => {
         setZipLoading(true);
@@ -764,7 +769,7 @@ const UserPicturePage = (props) => {
                                     Kirim Foto Album dan Foto Cetak
                             </Button>}
                             <Button variant="contained" color="primary" endIcon={props.tabValue == 1 ? <Delete /> : <Send />}
-                                disabled={((props.tabValue == 1 ? false : !isDownloaded) || restrictDelete)}
+                                disabled={((props.tabValue == 1 ? false : !isDownloaded) || (props.tabValue == 1 && restrictDelete))}
                                 onClick={onKirim}>
                                 {btnText}
                             </Button>
@@ -784,15 +789,14 @@ const UserPicturePage = (props) => {
             </Grid>
             {ulala}
 
-            <PhotoZoom
+            {zoom && <PhotoZoom
                 photoSrc={currentPhoto}
-                isZoom={zoom}
                 onClose={handleZoomOut}
                 onNextPhoto={onNextPhoto}
                 onPrevPhoto={onPrevPhoto}
                 disableNext={disableNext}
                 disablePrev={disablePrev}
-                onSelectImage={selectImage} />
+                onSelectImage={selectImage} />}
             <Backdrop style={{ zIndex: 1000, color: '#fff', }}
                 open={loading} >
                 <CircularProgress color="inherit" />

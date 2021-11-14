@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: '100%',
         zIndex: theme.zIndex.drawer + 1,
         backgroundColor: 'rgba(0,0,0,0.7)',
-        position: 'absolute',
+        position: 'fixed',
         top: 0,
         bottom: 0,
         left: 0,
@@ -81,17 +81,40 @@ const PhotoZoom = (props) => {
     useEffect(() => {
         // setPhotoName(props.photoSrc.basename);
         setCheck(props.photoSrc.selected)
-    }, [ props.photoSrc.selected])
+        document.addEventListener('keydown', handleKeyNext)
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyNext)
+        }
+    }, [props.photoSrc.selected])
+
+    const handleKeyNext = (e) => {
+        if (e.keyCode == 39) {
+            // console.log('kanan')
+            // handleNext(e)
+            let btnNext = document.getElementById("zoom-next")
+            btnNext.click();
+        }
+        if (e.keyCode == 37) {
+            // console.log('kiri')
+            // handlePrev(e)
+            let btnNPrev = document.getElementById("zoom-prev")
+            btnNPrev.click();
+        }
+    }
 
     const handlePrev = (event) => {
+        // console.log(event);
         if (!props.disablePrev) {
             props.onPrevPhoto(event, props.photoSrc.idx);
+            console.log(props.photoSrc.idx)
         }
     }
 
     const handleNext = (event) => {
         if (!props.disableNext) {
             props.onNextPhoto(event, props.photoSrc.idx);
+            console.log(props.photoSrc.idx)
         }
 
     }
@@ -117,14 +140,14 @@ const PhotoZoom = (props) => {
     }
 
 
-
     return (
         <div id="photo-zoom-layout"
             className={classes.outterLayout}
-            style={props.isZoom ? { display: 'flex', alignItems: 'center', justifyContent: 'center' } : { display: 'none' }}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             onClick={(event) => handleClose(event)}>
-            <Card id="photo-zoom-container" className={classes.cardLayout} onClick={handleSelect}>
+            <Card id="photo-zoom-container" className={classes.cardLayout} onClick={handleSelect}  >
                 <Button
+                    id="zoom-prev"
                     onClick={handlePrev}
                     style={{ position: 'absolute', left: 0, cursor: 'pointer' }}
                     className={classes.btnNav}
@@ -142,6 +165,7 @@ const PhotoZoom = (props) => {
 
                 </CardMedia>
                 <Button
+                    id="zoom-next"
                     onClick={handleNext}
                     style={{ position: 'absolute', right: 0, cursor: 'pointer' }}
                     className={classes.btnNav}
