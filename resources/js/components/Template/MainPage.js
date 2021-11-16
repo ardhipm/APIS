@@ -68,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
     },
     content: {
         flexGrow: 1,
+        height:'100vh',
         padding: theme.spacing(3),
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.sharp,
@@ -83,10 +84,10 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 0,
     },
     imgLogo: {
-        paddingTop: 16 + 'px',
-        paddingLeft: 16 + 'px',
-        paddingRight: 16 + 'px',
-        paddingBottom: 32 + 'px'
+        paddingTop: 36 + 'px',
+        paddingLeft: 36 + 'px',
+        paddingRight: 36 + 'px',
+        paddingBottom: 36 + 'px'
     },
     indicator: {
         backgroundColor: '#7DB9E0'

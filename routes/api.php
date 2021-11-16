@@ -224,6 +224,8 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::post('drive/insert_album_photo', 'API\DrivePhotoController@insertAlbumPhoto');
 });
+Route::get('drive/download_zip_file/param', 'API\DrivePhotoController@downloadZip');
+
 
 
 //selected photo
