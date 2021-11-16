@@ -40,23 +40,24 @@ const useStyles = makeStyles((theme) => ({
         bottom: 0,
         left: 0,
         right: 0,
+        padding: '3em',
     },
     btnNav: {
         height: '80px',
         zIndex: theme.zIndex.drawer + 2,
     },
     cardLayout: {
-        display: 'flex',
-        maxWidth: '80%',
-        maxHeight: '90%',
+        display: 'contents',
         backgroundColor: 'rgba(0,0,0,0.0)',
         boxShadow: 'none',
         alignItems: 'center',
         zIndex: theme.zIndex.drawer + 2,
     },
     checkLayout: {
-        position: 'absolute',
-        top: '48px'
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        padding: '16px'
     },
     icon: {
         fontSize: '60px',
@@ -158,10 +159,8 @@ const PhotoZoom = (props) => {
                 <CardMedia
                     style={{ height: 'auto', maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
                     component="img"
-                    alt="Contemplative Reptile"
                     height="100%"
-                    image={driveApiLink(props.photoSrc.basename)}
-                    title="Contemplative Reptile">
+                    image={driveApiLink(props.photoSrc.basename)}>
 
                 </CardMedia>
                 <Button

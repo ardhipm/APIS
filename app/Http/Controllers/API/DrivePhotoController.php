@@ -101,6 +101,7 @@ class DrivePhotoController extends Controller
 
             $parent = new \ArrayObject();
             $parent['folder'] = $directory[$i]['name'];
+            $parent['folder_basename'] = $directory[$i]['basename'];
             if(count($filedirchild2) > 0){
                 for($j = 0; $j < count($filedirchild2); $j++){
                     $filePrintPhoto = collect(\Storage::cloud()->listContents($dirContentPrintPhoto['path'], false));
@@ -230,7 +231,6 @@ class DrivePhotoController extends Controller
         $directory = $filedir->where('type', '=', 'dir')->toArray();
         // $file= $filedir->where('type', '=', 'file')->toArray();
 
-
         $data = array();
 
         for($i = 0; $i < count($directory); $i++){
@@ -241,6 +241,7 @@ class DrivePhotoController extends Controller
         
             $parent = new \ArrayObject();
             $parent['folder'] = $directory[$i]['name'];
+            $parent['folder_basename'] = $directory[$i]['basename'];
             for($j = 0; $j < count($sub_package); $j++){
                 if($sub_package[$j]->sub_package_name == $directory[$i]['name']){
                     $parent['num_edit_photo'] = $sub_package[$j]->num_edit_photo;
@@ -293,6 +294,7 @@ class DrivePhotoController extends Controller
 
         $response = [
             'success' => true,
+            'folder_basename'=>$dir['basename'],
             'data' => $filedirchild,
             'message' => 'Video retrieved successfully.',   
         ];
@@ -936,5 +938,20 @@ class DrivePhotoController extends Controller
 
         return response(['success' => true, 'message' => 'Album Photo inserted'], 201);
 
+    }
+
+    public function downloadZip(Request $request){
+
+        // $sub = isset($request->$subId) ? $request->$subId:-1;
+        $client = new Client();
+        $drivezipapi = env('GOOGLE_SCRIPT_ZIP');
+        $res = $client->request('GET', $drivezipapi.'/exec?IdFolder='.$request->IdFolder.'&Type='.$request->type);
+        if(isset($request->subId) != false){
+            DB::table('sub_packages')
+            ->where('id', $request->subId)
+            ->update(['is_downloaded' => 1]);
+        }
+        
+        return response($res->getBody(), 201);
     }
 }

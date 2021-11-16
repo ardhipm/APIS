@@ -57,8 +57,15 @@ const UserPictureSimplePage = (props) => {
     const [pictures, setPictures] = React.useState([]);
     const [size, setSize] = React.useState(0);
     const [zoom, setZoom] = React.useState(false);
+    
+    const [hideDownload, setHideDownload] = React.useState(true);
     const [loadingData, setLoadingData] = React.useState(false);
     const [zipLoading, setZipLoading] = React.useState(false);
+    const [basename, setBasename] = React.useState("");
+
+    const [currentPhoto, setCurrentPhoto] = React.useState({ basename: '', idx: 0, selected: false });
+    const [disableNext, setDisableNext] = React.useState(true);
+    const [disablePrev, setDisablePrev] = React.useState(true);
 
     useEffect(() => {
         setLoadingData(true);
@@ -75,18 +82,23 @@ const UserPictureSimplePage = (props) => {
         })
             .then(res => {
                 // //console.log(JSON.stringify(res.data.data));
+                console.log(res.data)
                 let arraysData = [];
                 for (let i = 0; i < res.data.data.length; i++) {
                     let pic = res.data.data[i];
                     let arrayElement = {
-                        idx: pic.timestamp,
+                        idx: i,
                         img: pic.basename,
                         selected: false
                     }
                     arraysData.push(arrayElement);
 
                 }
+                if(res.data.data.length > 0){
+                    setHideDownload(false);
+                }
                 //console.log(arraysData);
+                setBasename(res.data.folder_basename)
                 setPictures(arraysData);
 
                 setLoadingData(false);
@@ -98,44 +110,34 @@ const UserPictureSimplePage = (props) => {
             })
     }
 
-    const onClickImage = (event) => {
-        event.preventDefault();
-        if (event.target.type != "checkbox") {
-            setZoom(true);
-        }
+    // const onClickImage = (event) => {
+    //     event.preventDefault();
+    //     if (event.target.type != "checkbox") {
+    //         setZoom(true);
+    //     }
 
-    }
+    // }
 
     const onDownload = () => {
         setZipLoading(true);
+        // console.log(pictures);
+        // console.log(basename);
 
         const token = localStorage.getItem('authToken');
 
-
-        let type = null;
-        if(props.tabValue == 0){
-            type = "origin"
-        }else if(props.tabValue ==2){
-            type = "final"
-        }
         axios.request({
-            method: 'post',
-            url: "/api/drive/download_video/",
+            method: 'get',
+            url: "/api/drive/download_zip_file/param?IdFolder="+ basename+"&type=video",
             headers: { 'Authorization': 'Bearer ' + token },
-            responseType: 'blob'
         })
             .then(res => {
-
-                setTimeout(() => {
-                    const url = window.URL.createObjectURL(new Blob([res.data]));
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.setAttribute('download','video.zip'); //or any other extension
-                    document.body.appendChild(link);
-                    link.click();
+                // console.log(res);
+                if(res.data.success == "true"){
+                    // console.log('here');
                     setZipLoading(false);
-                }, 2000);
-
+                    window.location.href = res.data.url
+                }
+                setZipLoading(false);
 
             })
             .catch(error => {
@@ -144,21 +146,56 @@ const UserPictureSimplePage = (props) => {
             })
     }
 
-    const selectImage = (idx, name, value, isSelected, e) => {
-        // let wayae = pictures;
-        pictures[idx].selected = isSelected;
-        setPictures(wayae);
-    }
-    const onKirim = () => {
-        // //console.log(pictures);
-    }
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
 
     const handleZoomOut = () => {
         setZoom(false);
+    }
+
+    const onClickImage = (event, idx) => {
+        event.preventDefault();
+        // //console.log(pictures);
+        // //console.log(" index onlick img " + idx);
+        // //console.log('cekdong '+check);
+        // console.log(pictures)
+        // console.log(idx);
+        setCurrentPhoto(prevState => {
+            return {
+                ...prevState,
+                basename: pictures[idx].img,
+                idx: idx,
+                
+
+            }
+        })
+        if (idx >= pictures.length - 1) {
+            setDisableNext(true);
+
+        } else {
+            setDisableNext(false);
+        }
+
+        if (idx <= 0) {
+            setDisablePrev(true);
+        } else {
+            setDisablePrev(false);
+        }
+
+        setZoom(true);
+
+    }
+
+    const onNextPhoto = (event, idx) => {
+        // console.log('upp')
+        // console.log(currentPhoto)
+        onClickImage(event, currentPhoto.idx + 1);
+    }
+
+    const onPrevPhoto = (event, idx) => {
+        // console.log('upp')
+        // console.log(currentPhoto)
+        onClickImage(event, currentPhoto.idx - 1);
+
+
     }
 
     return (
@@ -186,7 +223,11 @@ const UserPictureSimplePage = (props) => {
                     <Grid item xs={6} align="right" >
                         <Container>
                             {props.pageName.toLowerCase() === "video" && 
-                            <Button variant="contained" color="primary" endIcon={<GetApp />} onClick={onDownload}>
+                            <Button 
+                                variant="contained" 
+                                color="primary" 
+                                disabled={hideDownload}
+                                endIcon={<GetApp />} onClick={onDownload}>
                                 Unduh
                             </Button>}
                         </Container>
@@ -213,7 +254,7 @@ const UserPictureSimplePage = (props) => {
                                         formatGrid={4}
                                         selectedPicture={false}
                                         selected={picture.selected}
-                                        onSelectedImage={selectImage}
+                                        onSelectedImage={null}
                                         onClickImage={onClickImage} />
                                 )}
                         </Grid>
@@ -221,7 +262,16 @@ const UserPictureSimplePage = (props) => {
 
                 </div>
             </Grid>
-            {props.pageName.toLowerCase() !== "video"?<PhotoZoom photoSrc={"ulala"}  isZoom={zoom} onClose={handleZoomOut} /> : null}
+            {props.pageName.toLowerCase() !== "video" && zoom?
+                <PhotoZoom 
+                    photoSrc={currentPhoto}
+                    onClose={handleZoomOut}
+                    onNextPhoto={onNextPhoto}
+                    onPrevPhoto={onPrevPhoto}
+                    disableNext={disableNext}
+                    disablePrev={disablePrev}
+                    onSelectImage={null}  /> 
+                    : null}
             <Backdrop style={{ zIndex: 1000, color: '#fff', }}
                 open={loadingData} >
                 <CircularProgress color="inherit" />
