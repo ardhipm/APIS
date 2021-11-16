@@ -77,7 +77,7 @@ const UserPicturePage = (props) => {
     const [openWarningPopup, setOpenWarningPopup] = React.useState(false);
 
     const [descriptionMessage, setDescriptionMessage] = React.useState("");
-    const [hideDownload, setHideDownload] = React.useState(false);
+    const [hideDownload, setHideDownload] = React.useState();
     const [btnText, setBtnText] = React.useState("");
     const [warningText, setWarningText] = React.useState("");
     const [zipLoading, setZipLoading] = React.useState(false);
@@ -111,6 +111,7 @@ const UserPicturePage = (props) => {
 
             getUserCustomerData();
             setUpdateSelect(false);
+
             // updateTotalSelect(props.apiLink);
 
         } else {
@@ -119,13 +120,36 @@ const UserPicturePage = (props) => {
 
         setSelectedAlbumPhoto(getTotalAlbumSelectedPhoto(pictures));
         setSelectedPrintPhoto(getTotalPrintSelectedPhoto(pictures));
+        if(pictures[value] != undefined){
+            setTotalRestrictionPhoto(pictures[value].restrictPhotoLength);
+
+            if(pictures[value].pictures.length > 0){
+                setHideDownload(false);
+            }else{
+                setHideDownload(true);
+            }
+
+            setIsDownloaded(pictures[value].isDownloaded > 0?true:false)
+
+            // console.log(((props.tabValue == 1 ? false : !(pictures[value].isDownload > 0?true:false)) || (props.tabValue == 1 && restrictDelete) || !(pictures[value].pictures.length > 0)))
+            // console.log(pictures[value].isDownloaded > 0?true:false)
+            // console.log((props.tabValue == 1 ? false : !(pictures[value].isDownload > 0?true:false)))
+            // console.log((props.tabValue == 1 && restrictDelete))
+            // console.log(!(pictures[value].pictures.length > 0))
+        }
+        
+        // console.log('update picture');
 
 
+    }, [pictures,  value]);
 
-    }, [pictures, isDownloaded]);
+    // useEffect(() => {
+    //     console.log('hide download');
+    // }, [hideDownload]);
 
     useEffect(() => {
-    }, [selectedAlbumPhoto, selectedPrintPhoto, totalSelectedPhoto, totalRestrictionPhoto])
+        // console.log('hide download');
+    }, [selectedAlbumPhoto, selectedPrintPhoto, totalSelectedPhoto, totalRestrictionPhoto, isDownloaded, hideDownload])
 
 
     const getUserCustomerData = () => {
@@ -159,12 +183,10 @@ const UserPicturePage = (props) => {
 
         if (props.tabValue == 0) {
             setDescriptionMessage("Download terlebih dahulu foto pada paket untuk melanjutkan proses pemilihan")
-            setHideDownload(false);
             setBtnText("Kirim");
             setWarningText("Foto akan dipindahkan ke foto pilihan, lanjutkan ?")
         } else if (props.tabValue == 1) {
             setDescriptionMessage("Anda dapat menghapus dan mengganti item yang telah terpilih")
-            setHideDownload(true);
             setBtnText("Hapus");
             setWarningText("Foto akan dikembalikan ke foto mentah, lanjutkan ?")
         } else {
@@ -182,7 +204,8 @@ const UserPicturePage = (props) => {
                 let values = res.data.data;
                 //console.log('userpicturepage');
                 //console.log(res.data);
-                // console.log(values);
+                console.log(values);
+                
                 let subFolders = [];
                 if (res.data.success == true) {
                     values.map(item => {
@@ -214,6 +237,7 @@ const UserPicturePage = (props) => {
                     let folder = {
                         idSubPackage: subFolders[i].id_subpackage,
                         folderName: subFolders[i].folder,
+                        folderBaseName: subFolders[i].folder_basename,
                         choicePhotoLength: subFolders[i].num_selected_edit_photo,
                         restrictPhotoLength: subFolders[i].num_edit_photo,
                         isDownloaded: subFolders[i].is_downloaded,
@@ -253,6 +277,12 @@ const UserPicturePage = (props) => {
 
                 setLoading(false);
                 setUpdateSelect(false);
+                setValue(0)
+                if(values[0].file.length < 1){
+                    setHideDownload(true);
+                }else{
+                    setHideDownload(false);
+                }
             })
             .catch(error => {
                 setLoading(false);
@@ -557,6 +587,11 @@ const UserPicturePage = (props) => {
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+        if(subFolder[newValue].file < 1){
+            setHideDownload(true);
+        }else{
+            setHideDownload(false);
+        }
         setCurrentSubFolder(subFolder[newValue])
         setTotalSelectedPhoto(pictures[newValue].choicePhotoLength + pictures[newValue].pictures.filter(x => x.selected).length);
         setTotalRestrictionPhoto(subFolder[newValue].num_edit_photo);
@@ -571,14 +606,19 @@ const UserPicturePage = (props) => {
     }
 
     const onNextPhoto = (event, idx) => {
+        // console.log('upp')
+        // console.log(currentPhoto)
         onClickImage(event, currentPhoto.idx + 1, pictures[value].pictures[currentPhoto.idx + 1].selected);
     }
 
     const onPrevPhoto = (event, idx) => {
+        // console.log('upp')
+        // console.log(currentPhoto)
         onClickImage(event, currentPhoto.idx - 1, pictures[value].pictures[currentPhoto.idx - 1].selected);
 
 
     }
+    
 
     const onDownload = () => {
         setZipLoading(true);
@@ -591,6 +631,7 @@ const UserPicturePage = (props) => {
         // let xhr = new XMLHttpRequest(),  self = this;
         // window.location = "/api/drive/download_file/"+encodeURIComponent(subFolder[value].folder);
 
+        console.log(subFolder[value])
         let type = null;
         if (props.tabValue == 0) {
             type = "origin"
@@ -598,30 +639,18 @@ const UserPicturePage = (props) => {
             type = "final"
         }
         axios.request({
-            method: 'post',
-            url: "/api/drive/download_file/" + type + "/" + encodeURIComponent(subFolder[value].folder) + "/" + subFolder[value].id_subpackage,
+            method: 'get',
+            url: "/api/drive/download_zip_file/param?IdFolder="+ subFolder[value].folder_basename+"&subId="+subFolder[value].id_subpackage+"&type=photo",
             headers: { 'Authorization': 'Bearer ' + token },
-            responseType: 'blob'
         })
             .then(res => {
-
-
-
-                setTimeout(() => {
-                    const url = window.URL.createObjectURL(new Blob([res.data]));
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.setAttribute('download', subFolder[value].folder + "-" + type + '.zip'); //or any other extension
-                    document.body.appendChild(link);
-                    link.click();
+                // console.log(res);
+                if(res.data.success == "true"){
+                    // console.log('here');
                     setZipLoading(false);
-                }, 1500);
-
-                setTimeout(() => {
-
-                    window.location.reload()
-                }, 3000);
-
+                    window.location.href = res.data.url
+                }
+                setZipLoading(false);
 
             })
             .catch(error => {
@@ -764,13 +793,18 @@ const UserPicturePage = (props) => {
                                     Kirim Foto Album dan Foto Cetak
                             </Button>}
                             <Button variant="contained" color="primary" endIcon={props.tabValue == 1 ? <Delete /> : <Send />}
-                                disabled={((props.tabValue == 1 ? false : !isDownloaded) || restrictDelete)}
+                                disabled={((props.tabValue == 1 ? false : !isDownloaded) || (props.tabValue == 1 && restrictDelete) || hideDownload)}
                                 onClick={onKirim}>
                                 {btnText}
-                            </Button>
-                            {!hideDownload && <Button variant="contained" color="primary" endIcon={<GetApp />} onClick={onDownload}>
+                            </Button >
+                           <Button 
+                                variant="contained" 
+                                color="primary"  
+                                style={{ marginLeft: '0.2em' }}
+                                disabled={hideDownload}
+                                endIcon={<GetApp />} onClick={onDownload}>
                                 Unduh
-                            </Button>}
+                            </Button>
                         </Container>
 
                     </Grid>
@@ -784,15 +818,14 @@ const UserPicturePage = (props) => {
             </Grid>
             {ulala}
 
-            <PhotoZoom
+            {zoom && <PhotoZoom
                 photoSrc={currentPhoto}
-                isZoom={zoom}
                 onClose={handleZoomOut}
                 onNextPhoto={onNextPhoto}
                 onPrevPhoto={onPrevPhoto}
                 disableNext={disableNext}
                 disablePrev={disablePrev}
-                onSelectImage={selectImage} />
+                onSelectImage={selectImage} />}
             <Backdrop style={{ zIndex: 1000, color: '#fff', }}
                 open={loading} >
                 <CircularProgress color="inherit" />
