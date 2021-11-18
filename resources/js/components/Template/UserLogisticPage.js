@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             backgroundColor: 'none'
         }
+    },
+    imgLayout: {
+        maxWidth: 900+'px'
+        
     }
 }));
 
@@ -118,7 +122,7 @@ const UserLogisticPage = () => {
         return 'https://drive.google.com/uc?export=view&id=' + value;
     }
 
-    const renderPhoto = data.basename == null? "Foto bukti belum tersedia": <img src={driveApiLink(data.basename)} />;
+    const renderPhoto = data.basename == null? "Foto bukti belum tersedia": <img className={classes.imgLayout} src={driveApiLink(data.basename)} />;
 
     return (
         <Grid container spacing={4}>
