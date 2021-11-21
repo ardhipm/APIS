@@ -10,6 +10,7 @@ import ZipLoadingPopup from '../Component/Popup/ZipLoadingPopup';
 import SuccessDialog from '../Component/Popup/SuccessDialog';
 import ErrorDialog from '../Component/Popup/ErrorDialog';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import LinkToDrivePopup from '../Component/Popup/LinkToDrivePopup';
 
 const useStyles = makeStyles((theme) => ({
     tabLabel: {
@@ -99,6 +100,16 @@ const UserPicturePage = (props) => {
     const [restrictAlbumPrint, setRestrictAlbumPrint] = React.useState(false);
     const [showAlbumPrintCheck, setShowAlbumPrintCheck] = React.useState(false);
 
+    const [showDownloadLink, setShowDownloadLink] = React.useState(false);
+
+    const [downloadLink, setDownloadLink] = React.useState("");
+    
+
+    useEffect(() => {
+        getUserDownloadLink();
+        console.log(downloadLink);
+    }, []);
+
     useEffect(() => {
         // //console.log(props.apiLink);
 
@@ -108,7 +119,7 @@ const UserPicturePage = (props) => {
         if (updateSelect) {
 
             getData(props.apiLink)
-
+            
             getUserCustomerData();
             setUpdateSelect(false);
 
@@ -151,6 +162,22 @@ const UserPicturePage = (props) => {
         // console.log('hide download');
     }, [selectedAlbumPhoto, selectedPrintPhoto, totalSelectedPhoto, totalRestrictionPhoto, isDownloaded, hideDownload])
 
+    const getUserDownloadLink = () => {
+        const token = localStorage.getItem('authToken');
+        axios.request({
+            method: 'get',
+            url: "/api/drive/get_link_download_photo",
+            headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
+        }).then( res => {
+            let values = res.data;
+            if(values.success == true){
+                setDownloadLink(values.data);
+            }
+
+        }).catch( error => {
+            console.log(error);
+        })
+    }
 
     const getUserCustomerData = () => {
         const token = localStorage.getItem('authToken');
@@ -204,7 +231,7 @@ const UserPicturePage = (props) => {
                 let values = res.data.data;
                 //console.log('userpicturepage');
                 //console.log(res.data);
-                console.log(values);
+                // console.log(values);
                 
                 let subFolders = [];
                 if (res.data.success == true) {
@@ -580,6 +607,10 @@ const UserPicturePage = (props) => {
         setAlertPopup(false);
     }
 
+    const handleCloseLinkDownloadPopup = () => {
+        setShowDownloadLink(false);
+    }
+
     const handleCloseWarningPopup = () => {
         setOpenWarningPopup(false);
         setWarningConfirmBtn(true);
@@ -621,42 +652,9 @@ const UserPicturePage = (props) => {
     
 
     const onDownload = () => {
-        setZipLoading(true);
 
-        //console.log("hore");
-        //console.log(subFolder[value]);
+        setShowDownloadLink(true)
 
-        const token = localStorage.getItem('authToken');
-
-        // let xhr = new XMLHttpRequest(),  self = this;
-        // window.location = "/api/drive/download_file/"+encodeURIComponent(subFolder[value].folder);
-
-        console.log(subFolder[value])
-        let type = null;
-        if (props.tabValue == 0) {
-            type = "origin"
-        } else if (props.tabValue == 2) {
-            type = "final"
-        }
-        axios.request({
-            method: 'get',
-            url: "/api/drive/download_zip_file/param?IdFolder="+ subFolder[value].folder_basename+"&subId="+subFolder[value].id_subpackage+"&type=photo",
-            headers: { 'Authorization': 'Bearer ' + token },
-        })
-            .then(res => {
-                // console.log(res);
-                if(res.data.success == "true"){
-                    // console.log('here');
-                    setZipLoading(false);
-                    window.location.href = res.data.url
-                }
-                setZipLoading(false);
-
-            })
-            .catch(error => {
-                console.log(error);
-                setZipLoading(false);
-            })
     }
 
     // const totalSelected = pictures[value].choicePhotoLength?pictures[value].choicePhotoLength:totalSelectedPhoto;
@@ -843,6 +841,12 @@ const UserPicturePage = (props) => {
                 // handleConfirm={submitPhoto}
                 text="Mohon menunggu sedang membuat zip file..." />
             {alertPopup ? showAlertPopup : null}
+
+            <LinkToDrivePopup
+                open={showDownloadLink}
+                data={downloadLink}
+                handleClose={handleCloseLinkDownloadPopup}
+                />
         </Grid>
     );
 }
