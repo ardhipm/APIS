@@ -119,36 +119,49 @@ const UserPictureSimplePage = (props) => {
     // }
 
     const onDownload = () => {
-        setZipLoading(true);
-        // console.log(pictures);
-        // console.log(basename);
+        let videoUrl = 'https://drive.google.com/file/d/'+basename+'/view?usp=sharing';
+        const newWindow = window.open(videoUrl, '_blank', 'noopener,noreferrer')
+        if (newWindow) newWindow.opener = null
+        // setZipLoading(true);
+        // // console.log(pictures);
+        // // console.log(basename);
 
-        const token = localStorage.getItem('authToken');
+        // const token = localStorage.getItem('authToken');
 
-        axios.request({
-            method: 'get',
-            url: "/api/drive/download_zip_file/param?IdFolder="+ basename+"&type=video",
-            headers: { 'Authorization': 'Bearer ' + token },
-        })
-            .then(res => {
-                // console.log(res);
-                if(res.data.success == "true"){
-                    // console.log('here');
-                    setZipLoading(false);
-                    window.location.href = res.data.url
-                }
-                setZipLoading(false);
+        // axios.request({
+        //     method: 'get',
+        //     url: "/api/drive/download_zip_file/param?IdFolder="+ basename+"&type=video",
+        //     headers: { 'Authorization': 'Bearer ' + token },
+        // })
+        //     .then(res => {
+        //         // console.log(res);
+        //         if(res.data.success == "true"){
+        //             // console.log('here');
+        //             setZipLoading(false);
+        //             window.location.href = res.data.url
+        //         }
+        //         setZipLoading(false);
 
-            })
-            .catch(error => {
-                console.log(error);
-                setZipLoading(false);
-            })
+        //     })
+        //     .catch(error => {
+        //         console.log(error);
+        //         setZipLoading(false);
+        //     })
     }
 
 
     const handleZoomOut = () => {
         setZoom(false);
+    }
+
+    const onClickVideo = (event, idx) => {
+        let videoUrl = null
+        if(pictures[idx] != null){
+            videoUrl = 'https://drive.google.com/file/d/'+pictures[idx].img+'/view?usp=sharing';
+        }
+        // let videoUrl = 'https://drive.google.com/file/d/'+pictures[idx].img+'/view?usp=sharing';
+        const newWindow = window.open(videoUrl, '_blank', 'noopener,noreferrer')
+        if (newWindow) newWindow.opener = null
     }
 
     const onClickImage = (event, idx) => {
@@ -255,7 +268,7 @@ const UserPictureSimplePage = (props) => {
                                         selectedPicture={false}
                                         selected={picture.selected}
                                         onSelectedImage={null}
-                                        onClickImage={onClickImage} />
+                                        onClickImage={ props.pageName.toLowerCase() !== "video" ? onClickImage: onClickVideo} />
                                 )}
                         </Grid>
                     </Box>

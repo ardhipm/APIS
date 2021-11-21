@@ -29,6 +29,7 @@ const LogoutDialog = (props) => {
             headers: {'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token}})
         .then(res => {
                 //console.log(res);
+                localStorage.setItem('FIRST_TERMS', true)
                 if (res.data.success == true) {
                     //console.log('keluar');
                     localStorage.removeItem('authToken');
