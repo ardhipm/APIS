@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\DrivePhotoController;
+use App\Http\Controllers\API\DriveActivityController;
 use App\Http\Controllers\API\PhotoSelectedController;
 use App\Http\Controllers\API\InvoiceController;
 use Illuminate\Support\Facades\Auth;
@@ -223,6 +224,9 @@ Route::middleware('auth:api')->group(function () {
 });
 Route::middleware('auth:api')->group(function () {
     Route::post('drive/insert_album_photo', 'API\DrivePhotoController@insertAlbumPhoto');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::get('drive/get_link_download_photo', 'API\DrivePhotoController@getParentSubLink');
 });
 Route::get('drive/download_zip_file/param', 'API\DrivePhotoController@downloadZip');
 
