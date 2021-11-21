@@ -151,6 +151,16 @@ const UserPictureSimplePage = (props) => {
         setZoom(false);
     }
 
+    const onClickVideo = (event, idx) => {
+        let videoUrl = null
+        if(pictures[idx] != null){
+            videoUrl = 'https://drive.google.com/file/d/'+pictures[idx].img+'/view?usp=sharing';
+        }
+        // let videoUrl = 'https://drive.google.com/file/d/'+pictures[idx].img+'/view?usp=sharing';
+        const newWindow = window.open(videoUrl, '_blank', 'noopener,noreferrer')
+        if (newWindow) newWindow.opener = null
+    }
+
     const onClickImage = (event, idx) => {
         event.preventDefault();
         // //console.log(pictures);
@@ -255,7 +265,7 @@ const UserPictureSimplePage = (props) => {
                                         selectedPicture={false}
                                         selected={picture.selected}
                                         onSelectedImage={null}
-                                        onClickImage={onClickImage} />
+                                        onClickImage={ props.pageName.toLowerCase() !== "video" ? onClickImage: onClickVideo} />
                                 )}
                         </Grid>
                     </Box>

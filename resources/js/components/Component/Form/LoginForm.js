@@ -215,7 +215,7 @@ const LoginForm = (props) => {
                             //console.log('start') //After 1 second, set render to true
                             if (res.data.user.role_id == 1) {
                                 history.push({ pathname: "/pelanggan/paket", state: { role: "pelanggan" } });
-                                const test = React.createContext(history.location.state.role);
+                                // const test = React.createContext(history.location.state.role);
                             }
                             if (res.data.user.role_id == 2) {
                                 history.push({ pathname: "/admin/pengguna", state: { role: "superadmin" } });
@@ -229,7 +229,6 @@ const LoginForm = (props) => {
                             }
                         }.bind(this), 3)
 
-                        React.createContext(history.location.state.role);
 
                         setOpenSplashScreen(false)
                     }, 8000)

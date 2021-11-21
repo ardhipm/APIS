@@ -161,31 +161,32 @@ const PhotoZoom = (props) => {
                     component="img"
                     height="100%"
                     image={driveApiLink(props.photoSrc.basename)}>
+                    
 
                 </CardMedia>
-                <Button
-                    id="zoom-next"
-                    onClick={handleNext}
-                    style={{ position: 'absolute', right: 0, cursor: 'pointer' }}
-                    className={classes.btnNav}
-                    disableRipple={props.disableNext}
-                    startIcon={<Icon icon="grommet-icons:next" style={{ color: 'white', fontSize: '60px' }} />}
-                ></Button>
-                <Button
-                    id="btnClose"
-                    onClick={handleCloseButton}
-                    style={{ position: 'absolute', right: 0, top: 0, padding: '16px', cursor: 'pointer' }}
-                    className={classes.btnNav}
-                // startIcon={<Icon icon="bx:bx-x-circle" style={{ color: 'white', fontSize: '60px' }} />}
-                ><Icon icon="bx:bx-x-circle" style={{ color: 'white', fontSize: '60px' }} /></Button>
+                    <Button
+                        id="zoom-next"
+                        onClick={handleNext}
+                        style={{ position: 'absolute', right: 0, cursor: 'pointer' }}
+                        className={classes.btnNav}
+                        disableRipple={props.disableNext}
+                        startIcon={<Icon icon="grommet-icons:next" style={{ color: 'white', fontSize: '60px' }} />}
+                    ></Button>
+                    <Button
+                        id="btnClose"
+                        onClick={handleCloseButton}
+                        style={{ position: 'absolute', right: 0, top: 0, padding: '16px', cursor: 'pointer' }}
+                        className={classes.btnNav}
+                    // startIcon={<Icon icon="bx:bx-x-circle" style={{ color: 'white', fontSize: '60px' }} />}
+                    ><Icon icon="bx:bx-x-circle" style={{ color: 'white', fontSize: '60px' }} /></Button>
 
-                <Checkbox
-                    icon={<RadioButtonUncheckedIcon className={classes.icon} />}
-                    checkedIcon={<CheckCircleIcon className={classes.icon} />}
-                    className={classes.checkLayout}
-                    checked={check} name="checkedA" />
+                    <Checkbox
+                        icon={<RadioButtonUncheckedIcon className={classes.icon} />}
+                        checkedIcon={<CheckCircleIcon className={classes.icon} />}
+                        className={classes.checkLayout}
+                        checked={check} name="checkedA" />
             </Card>
-            {/* <Dialog fullWidth={true}
+                {/* <Dialog fullWidth={true}
                 maxWidth='lg'
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"
