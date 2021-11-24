@@ -119,7 +119,8 @@ const UserPictureSimplePage = (props) => {
     // }
 
     const onDownload = () => {
-        let videoUrl = 'https://drive.google.com/file/d/'+basename+'/view?usp=sharing';
+        
+        let videoUrl = "https://drive.google.com/drive/folders/"+basename+"?usp=sharing"
         const newWindow = window.open(videoUrl, '_blank', 'noopener,noreferrer')
         if (newWindow) newWindow.opener = null
         // setZipLoading(true);

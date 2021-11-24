@@ -107,7 +107,6 @@ const UserPicturePage = (props) => {
 
     useEffect(() => {
         getUserDownloadLink();
-        console.log(downloadLink);
     }, []);
 
     useEffect(() => {
@@ -607,8 +606,43 @@ const UserPicturePage = (props) => {
         setAlertPopup(false);
     }
 
-    const handleCloseLinkDownloadPopup = () => {
+    const handleCloseLinkDownloadPopup = (e) => {
+        e.preventDefault()
+        // console.log(e.target.href)
+        // console.log(e.target.getAttribute("data-sub-name"))
+        // console.log('heredude')
+        // console.log(pictures);
+        let videoUrl = e.target.href
+        const newWindow = window.open(videoUrl, '_blank', 'noopener,noreferrer')
+        if (newWindow) newWindow.opener = null
+        updateIsDownload(e);
         setShowDownloadLink(false);
+    }
+
+    const updateIsDownload = (e) => {
+        
+        const token = localStorage.getItem('authToken');
+        axios.request({
+            method: 'get',
+            url: "/api/drive/update_download/param?subName="+e.target.getAttribute("data-sub-name"),
+            headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
+        }).then( res => {
+            let values = res.data;
+            if(values.success == true){
+                
+                let wayae = [...pictures];
+                // let index = e.target.getAttribute("data-idx")+1;
+                wayae[e.target.getAttribute("data-idx")].isDownloaded = 1;
+                setPictures(wayae);
+                setIsDownloaded(pictures[value].isDownloaded > 0?true:false)
+            }
+            
+            
+
+        }).catch( error => {
+            console.log(error);
+        })
+        
     }
 
     const handleCloseWarningPopup = () => {

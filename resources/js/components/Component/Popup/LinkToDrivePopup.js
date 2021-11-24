@@ -18,7 +18,6 @@ const LinkToDrivePopup = (props) => {
 
     
     useEffect(() => {
-        console.log(data)
         setData(props.data);
     },[props.data])
 
@@ -43,7 +42,7 @@ const LinkToDrivePopup = (props) => {
                             {data.child != undefined && data.child.map((element, idx) => {
                                 let link = "https://drive.google.com/drive/folders/"+element.basename+"?usp=sharing";
                                 let foldername = element.name;
-                                return <a key={idx} href={link} target="_blank" onClick={props.handleClose}>{foldername}</a>
+                                return <a key={idx} href={link} target="_blank" data-sub-name={element.name} data-idx={idx} onClick={props.handleClose}>{foldername}</a>
                             })}
                             
                             {/* <a href="https://www.google.com" target="_blank">Sub Folder 2</a> */}
