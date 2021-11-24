@@ -108,14 +108,12 @@ const PhotoZoom = (props) => {
         // console.log(event);
         if (!props.disablePrev) {
             props.onPrevPhoto(event, props.photoSrc.idx);
-            console.log(props.photoSrc.idx)
         }
     }
 
     const handleNext = (event) => {
         if (!props.disableNext) {
             props.onNextPhoto(event, props.photoSrc.idx);
-            console.log(props.photoSrc.idx)
         }
 
     }

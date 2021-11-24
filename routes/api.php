@@ -229,6 +229,9 @@ Route::middleware('auth:api')->group(function () {
     Route::get('drive/get_link_download_photo', 'API\DrivePhotoController@getParentSubLink');
 });
 Route::get('drive/download_zip_file/param', 'API\DrivePhotoController@downloadZip');
+Route::middleware('auth:api')->group(function () {
+    Route::get('drive/update_download/param', 'API\DrivePhotoController@updateDownload');
+});
 
 
 
