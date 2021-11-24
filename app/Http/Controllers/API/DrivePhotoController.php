@@ -1004,4 +1004,26 @@ class DrivePhotoController extends Controller
         
         return response($res->getBody(), 201);
     }
+
+    public function updateDownload(Request $request){
+
+        $sub_package = DB::table('sub_packages')
+            ->select('sub_packages.id')
+            ->leftJoin('packages','sub_packages.id_package', 'packages.id')
+            ->leftJoin('customers','packages.id_customer', 'customers.id')
+            ->where('customers.id_user', '=', Auth::Id())
+            ->where('sub_package_name' ,'=',$request->subName)
+        ->get()->toArray();
+
+        if(count($sub_package) > 0){
+
+            DB::table('sub_packages')
+              ->where('id', $sub_package[0]->id)
+              ->update(['is_downloaded' => 1]);
+
+            return response(['success' => true, 'message' => 'Update subpackage success'], 200);
+        }else{
+            return response(['success' => false, 'message' => 'Sub Package not found'], 404);
+        }
+    }
 }
