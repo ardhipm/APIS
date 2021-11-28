@@ -46,9 +46,9 @@ const TermsDialog = (props) => {
                     justifyContent="center">
                    
                     <Grid item xs={12}>
-                        <Typography style={{ marginTop: '40px', marginBottom: '40px'}}>
+                        <span style={{ marginTop: '40px', marginBottom: '40px'}}>
                             <div dangerouslySetInnerHTML={{ __html: description }}/>
-                        </Typography>
+                        </span>
                     </Grid>
                 </Grid>
             </DialogContent>
