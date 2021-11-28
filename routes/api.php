@@ -71,6 +71,9 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::get('notification/check_notification', 'API\NotificationController@checkNotification');
 });
+Route::middleware('auth:api')->group(function () {
+    Route::get('notification/fetch_notification', 'API\NotificationController@fetchNotifFromGScript');
+});
 
 
 //customer

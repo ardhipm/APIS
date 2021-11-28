@@ -133,6 +133,7 @@ const UserPicturePage = (props) => {
         if(pictures[value] != undefined){
             setTotalRestrictionPhoto(pictures[value].restrictPhotoLength);
 
+            setTotalSelectedPhoto(pictures[value].choicePhotoLength + pictures[value].pictures.filter(x => x.selected).length);
             if(pictures[value].pictures.length > 0){
                 setHideDownload(false);
             }else{

@@ -20,6 +20,8 @@ import { useHistory, useLocation } from "react-router-dom";
 import LogoutDialog from '../Component/Popup/LogoutDialog';
 import TermsDialog from '../Component/Popup/TermsDialog';
 import Splashscreen from '../Component/Splashscreen';
+import { NotificationImportant } from '@material-ui/icons';
+import NotificationPopup from '../Component/Popup/NotificationPopup';
 
 const drawerWidth = 280;
 
@@ -127,6 +129,8 @@ export default function MainPage(props) {
     const [tabValue, setTabValue] = React.useState(props.tabValue);
     const [openTerms,setOpenTerms] = React.useState(false);
     const [openSplashScreen, setOpenSplashScreen] = React.useState(true)
+    const [openNotif, setOpenNotif] = React.useState(false);
+
     const history = useHistory();
     const handleCloseTerms =()=>{
         localStorage.setItem('FIRST_TERMS',false)
@@ -181,6 +185,10 @@ export default function MainPage(props) {
         setOpenLogoutPopup(false);
     }
 
+    const handleOpenNotif = () => {
+        setOpenNotif(!openNotif)
+    }
+
     let tab = (props.showTab ?
         (<Tabs
             style={{ flexGrow: 1 }}
@@ -192,6 +200,17 @@ export default function MainPage(props) {
             <Tab label={<span >Album</span>} />
         </Tabs>) : null);
 
+    let notif = (role == 1 ? (
+        <div className={classes.badge} >
+                        <Badge classes={{
+                            dot: classes.dot
+                        }}
+                            onClick={handleOpenNotif}>
+                            <Icon icon="bx:bx-bell" style={{ fontSize: '24px', color: 'white', cursor: 'pointer' }} />
+                        </Badge>
+                    </div>
+    ): null);
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -201,7 +220,7 @@ export default function MainPage(props) {
                 className={clsx(classes.appBar, {
                     [classes.appBarShift]: open,
                 })}>
-                <Toolbar disableGutters={true} variant="dense">
+                <Toolbar disableGutters={true} variant="dense" style={props.showTab != true ? {justifyContent: 'space-between'}:{}}>
                     <IconButton
 
                         color="inherit"
@@ -220,13 +239,7 @@ export default function MainPage(props) {
                             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                         </IconButton>}
                     {tab}
-                    {/* <div className={classes.badge} >
-                        <Badge classes={{
-                            dot: classes.dot
-                        }} variant="dot">
-                            <Icon icon="bx:bx-bell" style={{ fontSize: '24px', color: 'white' }} />
-                        </Badge>
-                    </div> */}
+                    {notif}
 
                 </Toolbar>
 
@@ -267,6 +280,7 @@ export default function MainPage(props) {
             </main>
             <LogoutDialog closePopup={handleClosePopup} open={openLogoutPopup} />
             <TermsDialog open = {openTerms} handleClose={handleCloseTerms}/>
+            <NotificationPopup open={openNotif} onClose={handleOpenNotif}/>
         </div>
     );
 }
