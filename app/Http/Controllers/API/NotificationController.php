@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Notification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use GuzzleHttp\Client;
 use Validator;
 
 
@@ -124,6 +125,27 @@ class NotificationController extends Controller
 
         }
         return $response;
+    }
+
+    public function fetchNotifFromGScript(Request $request){
+        $customer = DB::table('customers')
+        ->leftJoin('users', 'customers.id_user', 'users.id')
+        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
+        ->where('customers.id_user', '=', Auth::Id())
+        ->get()->toArray();
+        
+        $folder = $customer[0]->id .' - ' .$customer[0]->name;
+
+        $contents = collect(\Storage::cloud()->listContents('/', false));
+        $dir = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', $folder)
+                ->first(); // There could be duplicate directory names!
+
+        $client = new Client();
+        $drivezipapi = env('GOOGLE_SCRIPT_NOTIFICATION_STATUS');
+        $res = $client->request('GET', $drivezipapi.'/exec?IdFolder='.$dir['basename']);
+        
+        return response($res->getBody(), 201);
     }
 
     
