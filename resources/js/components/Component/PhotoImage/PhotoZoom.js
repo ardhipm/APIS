@@ -179,6 +179,7 @@ const PhotoZoom = (props) => {
                     ><Icon icon="bx:bx-x-circle" style={{ color: 'white', fontSize: '60px' }} /></Button>
 
                     <Checkbox
+                        style={props.showCheckbox ? {}:{display:'none'}}
                         icon={<RadioButtonUncheckedIcon className={classes.icon} />}
                         checkedIcon={<CheckCircleIcon className={classes.icon} />}
                         className={classes.checkLayout}

@@ -278,6 +278,7 @@ const UserPictureSimplePage = (props) => {
             </Grid>
             {props.pageName.toLowerCase() !== "video" && zoom?
                 <PhotoZoom 
+                    showCheckbox={false}
                     photoSrc={currentPhoto}
                     onClose={handleZoomOut}
                     onNextPhoto={onNextPhoto}

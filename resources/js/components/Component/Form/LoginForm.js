@@ -307,6 +307,7 @@ const LoginForm = (props) => {
                         id="password"
                         name="password"
                         variant="outlined"
+                        placeholder="**********"
                         style={{
                             width: "100%",
                             backgroundColor: "#FFFF"
