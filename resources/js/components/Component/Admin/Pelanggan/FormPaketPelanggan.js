@@ -1,5 +1,5 @@
 import { Backdrop, Button, Checkbox, CircularProgress, Container, Grid, Typography } from '@material-ui/core';
-import { Send } from '@material-ui/icons';
+
 import React, { useEffect } from 'react';
 import AddSubPackageDialog from '../../Popup/AddSubPackageDialog';
 import SubPackageItem from './SubPackageItem';
@@ -288,6 +288,7 @@ const FormPaketPelanggan = (props) => {
             <WarningDialog 
                 open={popupDeleteSub}
                 text="Anda ingin menghapus sub package ?"
+                showConfirmButton={true}
                 handleClose={() =>{
                     setPopupDeleteSub(false);
                 }}

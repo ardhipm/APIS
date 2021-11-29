@@ -83,7 +83,12 @@ const NotificationPopup = (props) => {
 
     useEffect(() => {
         // console.log("update popup cukk")
-        setNotifData(JSON.parse(localStorage.getItem("notification")))
+        if(localStorage.getItem("notification") == null){
+            setNotifData([{"description": "Belum ada pemberitahuan"}])
+        }else{
+            setNotifData(JSON.parse(localStorage.getItem("notification")))
+        }
+        
     }, [localStorage.getItem("notification")])
 
     

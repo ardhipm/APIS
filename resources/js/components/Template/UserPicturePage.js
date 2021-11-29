@@ -852,6 +852,7 @@ const UserPicturePage = (props) => {
             {ulala}
 
             {zoom && <PhotoZoom
+                showCheckbox={true}
                 photoSrc={currentPhoto}
                 onClose={handleZoomOut}
                 onNextPhoto={onNextPhoto}
