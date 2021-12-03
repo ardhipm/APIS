@@ -194,25 +194,38 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('role/view', 'API\RoleController');
 });
 
-//drive
+// drive
+// Route::middleware('auth:api')->group(function () {
+//     Route::get('drive/get_origin_photo', 'API\DrivePhotoController@getOriginPhoto');
+// });
 Route::middleware('auth:api')->group(function () {
-    Route::get('drive/get_origin_photo', 'API\DrivePhotoController@getOriginPhoto');
+    Route::get('drive/get_origin_photo', 'API\DrivePhotoController@getOriginCachePhoto');
 });
+
+// Route::middleware('auth:api')->group(function () {
+//     Route::get('drive/get_choice_photo', 'API\DrivePhotoController@getChoicePhoto');
+// });
+
 Route::middleware('auth:api')->group(function () {
-    Route::get('drive/get_choice_photo', 'API\DrivePhotoController@getChoicePhoto');
+    Route::get('drive/get_choice_photo', 'API\DrivePhotoController@getChoiceCachePhoto');
 });
+//inactive
 Route::middleware('auth:api')->group(function () {
     Route::get('drive/get_final_photo', 'API\DrivePhotoController@getFinalPhoto');
 });
+
 Route::middleware('auth:api')->group(function () {
-    Route::get('drive/get_video', 'API\DrivePhotoController@getVideo');
+    Route::get('drive/get_video', 'API\DrivePhotoController@getVideoCache');
 });
+
 Route::middleware('auth:api')->group(function () {
-    Route::get('drive/get_album', 'API\DrivePhotoController@getAlbum');
+    Route::get('drive/get_album', 'API\DrivePhotoController@getAlbumCache');
 });
+
 Route::middleware('auth:api')->group(function () {
     Route::post('drive/download_file/{type}/{folderName}/{subId}', 'API\DrivePhotoController@getOriginChildFolder');    
 });
+
 Route::middleware('auth:api')->group(function () {
     Route::post('drive/download_video', 'API\DrivePhotoController@downloadVideo');    
 });
