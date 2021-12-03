@@ -148,6 +148,8 @@ class DrivePhotoController extends Controller
             'message' => 'Choice Photo retrieved successfully.',   
         ];
 
+        \Cache::put('choice_photo_user_'.Auth::Id(), $response, 600);
+
         return $response;
 
     }
@@ -253,6 +255,51 @@ class DrivePhotoController extends Controller
         
     }
 
+    public function getOriginCachePhoto(){
+        
+        if (\Cache::has('origin_photo_user_'.Auth::Id())) {
+            $response = \Cache::get('origin_photo_user_'.Auth::Id());
+            return $response;
+            
+        } else {
+            $response = $this->getOriginPhoto();
+            return $response;
+        }
+    }
+
+    public function getChoiceCachePhoto(){
+        if (\Cache::has('choice_photo_user_'.Auth::Id())) {
+            $response = \Cache::get('choice_photo_user_'.Auth::Id());
+            return $response;
+            
+        } else {
+            $response = $this->getChoicePhoto();
+            return $response;
+        }
+    }
+
+    public function getVideoCache(){
+        if (\Cache::has('video_user_'.Auth::Id())) {
+            $response = \Cache::get('video_user_'.Auth::Id());
+            return $response;
+            
+        } else {
+            $response = $this->getVideo();
+            return $response;
+        }
+    }
+
+    public function getAlbumCache(){
+        if (\Cache::has('album_user_'.Auth::Id())) {
+            $response = \Cache::get('album_user_'.Auth::Id());
+            return $response;
+            
+        } else {
+            $response = $this->getAlbum();
+            return $response;
+        }
+    }
+
     public function getOriginPhoto(){
     
         $customer = DB::table('customers')
@@ -315,6 +362,8 @@ class DrivePhotoController extends Controller
             'message' => 'Origin Photo retrieved successfully.',   
         ];
 
+        \Cache::put('origin_photo_user_'.Auth::Id(), $response, 600);
+
         return $response;
 
     }
@@ -349,6 +398,8 @@ class DrivePhotoController extends Controller
             'message' => 'Video retrieved successfully.',   
         ];
 
+        \Cache::put('video_user_'.Auth::Id(), $response, 600);
+
         return $response;
     }
 
@@ -380,6 +431,8 @@ class DrivePhotoController extends Controller
             'data' => $filedirchild,
             'message' => 'Album retrieved successfully.',   
         ];
+
+        \Cache::put('album_user_'.Auth::Id(), $response, 600);
 
         return $response;
     }
