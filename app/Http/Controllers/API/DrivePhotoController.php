@@ -715,6 +715,8 @@ class DrivePhotoController extends Controller
         // $sub_package[0]->num_selected_edit_photo = $sub_package[0]->num_selected_edit_photo + count($data);
         // $sub_package[0]->udpate();
 
+        \Cache::flush();
+
         return response(['success' => true,'data' => $data, 'message' => 'Selected Photo inserted'], 201);
         //get data from origin photo
 
@@ -785,6 +787,8 @@ class DrivePhotoController extends Controller
         DB::table('sub_packages')
               ->where('id', $sub_package[0]->id)
               ->update(['num_selected_edit_photo' => $sub_package[0]->num_selected_edit_photo - count($data)]);
+
+        \Cache::flush();
 
         return response(['success' => true,'data' => $data, 'message' => 'Move photo to origin success'], 201);
         //get data from origin photo
