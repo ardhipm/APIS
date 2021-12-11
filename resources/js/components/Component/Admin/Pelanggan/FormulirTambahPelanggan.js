@@ -48,8 +48,8 @@ const customerSchema = Yup.object().shape({
     oldPassword: Yup.string(),
     packageName: Yup.string('Masukkan Nama Paket').required('Nama Paket Dibutuhkan'),
     packageDescription: Yup.string('Masukkan Deskripsi Paket'),
-    albumPhotoQuantity: Yup.number().required('Limit Foto Album dibutuhkan').positive().integer(),
-    printPhotoQuantity: Yup.number().required('Limit Foto Cetak dibutuhkan').positive().integer(),
+    albumPhotoQuantity: Yup.number().min(0).integer().required('Limit Foto Album dibutuhkan'),
+    printPhotoQuantity: Yup.number().min(0).integer().required('Limit Foto Cetak dibutuhkan'),
     subPackage: Yup.array().min(1, 'Minimal memiliki 1 sub paket')
 });
 
