@@ -73,7 +73,7 @@ const UserPicturePage = (props) => {
     const [loading, setLoading] = React.useState(false);
     const [totalSelectedPhoto, setTotalSelectedPhoto] = React.useState(0);
     const [totalRestrictionPhoto, setTotalRestrictionPhoto] = React.useState(0);
-    const [isMaxSelectedPhoto, setIsMaxSelectedPhoto] = React.useState(false);
+    // const [isMaxSelectedPhoto, setIsMaxSelectedPhoto] = React.useState(false);
     const [isDownloaded, setIsDownloaded] = React.useState(false);
     const [openWarningPopup, setOpenWarningPopup] = React.useState(false);
 
@@ -319,7 +319,7 @@ const UserPicturePage = (props) => {
     }
 
 
-    const onClickImage = (event, idx, check) => {
+    const onClickImage = (event, idx, check, albumCheck, printCheck) => {
         event.preventDefault();
         // //console.log(pictures);
         // //console.log(" index onlick img " + idx);
@@ -329,7 +329,9 @@ const UserPicturePage = (props) => {
                 ...prevState,
                 basename: pictures[value].pictures[idx].img,
                 idx: idx,
-                selected: check
+                selected: check,
+                albumSelected: albumCheck,
+                printSelected: printCheck
 
             }
         })
@@ -402,6 +404,10 @@ const UserPicturePage = (props) => {
 
     let getTotalSelectedPhoto = () => {
         return pictures[value].pictures.filter(x => x.selected).length;
+    }
+
+    let isMaxSelectedPhoto = () => {
+        return totalSelectedPhoto >= totalRestrictionPhoto;
     }
 
     let getTotalAlbumSelectedPhoto = (pictureData) => {
@@ -674,13 +680,17 @@ const UserPicturePage = (props) => {
     const onNextPhoto = (event, idx) => {
         // console.log('upp')
         // console.log(currentPhoto)
-        onClickImage(event, currentPhoto.idx + 1, pictures[value].pictures[currentPhoto.idx + 1].selected);
+        let nextPicture = pictures[value].pictures[currentPhoto.idx + 1];
+        // console.log(nextPicture)
+        onClickImage(event, currentPhoto.idx + 1, nextPicture.selected, nextPicture.albumSelected ,nextPicture.printSelected );
     }
 
     const onPrevPhoto = (event, idx) => {
         // console.log('upp')
         // console.log(currentPhoto)
-        onClickImage(event, currentPhoto.idx - 1, pictures[value].pictures[currentPhoto.idx - 1].selected);
+        let prevPicture = pictures[value].pictures[currentPhoto.idx - 1];
+        // console.log(prevPicture);
+        onClickImage(event, currentPhoto.idx - 1, prevPicture.selected, prevPicture.albumSelected, prevPicture.printSelected);
 
 
     }
@@ -852,14 +862,26 @@ const UserPicturePage = (props) => {
             {ulala}
 
             {zoom && <PhotoZoom
-                showCheckbox={true}
+                showCheckbox={props.tabValue == 1 && !restrictDelete}
+                showPrintAlbumCheckbox={props.tabValue == 1 && restrictDelete}
                 photoSrc={currentPhoto}
+                maxSelectedPhoto={isMaxSelectedPhoto()}
+
+                totalSelectedAlbumPhoto={selectedAlbumPhoto}
+                totalRestrictionAlbumPhoto={numAlbumPhoto}
+                totalSelectedPrintPhoto={selectedPrintPhoto}
+                totalRestrictionPrintPhoto={numPrintPhoto}
+                // albumSelected={picture.albumSelected}
+                // printSelected={picture.printSelected}
+
                 onClose={handleZoomOut}
                 onNextPhoto={onNextPhoto}
                 onPrevPhoto={onPrevPhoto}
                 disableNext={disableNext}
                 disablePrev={disablePrev}
-                onSelectImage={selectImage} />}
+                onSelectImage={selectImage}
+                onSelectedAlbum={onSelectAlbumImage}
+                onSelectedPrint={onSelectPrintImage} />}
             <Backdrop style={{ zIndex: 1000, color: '#fff', }}
                 open={loading} >
                 <CircularProgress color="inherit" />

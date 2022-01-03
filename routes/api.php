@@ -262,7 +262,9 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::post('drive/move_to_origin', 'API\DrivePhotoController@moveChoiceToOrigin');
 });
-
+Route::middleware('auth:api')->group(function () {
+    Route::post('admin/drive/refresh_photo/param', 'API\DrivePhotoController@refreshPhoto');
+});
 
 
 

@@ -62,14 +62,32 @@ const useStyles = makeStyles((theme) => ({
     icon: {
         fontSize: '60px',
         color: '#559DCC'
+    },
+    iconAlbumSelected: {
+        fontSize: '60px',
+        color: '#FB9300'
+    },
+    iconPrintSelected: {
+        fontSize: '60px',
+        color: '#F54748'
     }
 }));
 
 const PhotoZoom = (props) => {
 
+    const { 
+        totalRestrictionAlbumPhoto,
+        totalRestrictionPrintPhoto,
+        totalSelectedAlbumPhoto,
+        totalSelectedPrintPhoto,
+        ...other } = props;
+
     const classes = useStyles();
 
     const [check, setCheck] = React.useState(false);
+    const [albumCheck, setAlbumCheck] = React.useState(false);
+    const [printCheck, setPrintCheck] = React.useState(false);
+    // const [isMaxSelectedPhoto, setIsMaxSelectedPhoto] = React.useState(props.maxSelectedPhoto);
 
     // const [photoName, setPhotoName] = React.useState(driveApiLink(props.photoSrc.basename));
 
@@ -81,13 +99,17 @@ const PhotoZoom = (props) => {
 
     useEffect(() => {
         // setPhotoName(props.photoSrc.basename);
+        console.log('currentPhoto')
+        console.log(props.photoSrc)
         setCheck(props.photoSrc.selected)
+        setAlbumCheck(props.photoSrc.albumSelected)
+        setPrintCheck(props.photoSrc.printSelected)
         document.addEventListener('keydown', handleKeyNext)
 
         return () => {
             document.removeEventListener('keydown', handleKeyNext)
         }
-    }, [props.photoSrc.selected])
+    }, [props.photoSrc])
 
     const handleKeyNext = (e) => {
         if (e.keyCode == 39) {
@@ -120,48 +142,76 @@ const PhotoZoom = (props) => {
 
     const handleSelect = (e) => {
         if (e.target.type === 'checkbox') {
-            setCheck(!check);
-            props.onSelectImage(props.photoSrc.idx, props.photoSrc.basename, !check, e.target.value);
-        }
+            console.log(e.target);
+            console.log(props.maxSelectedPhoto);
+            if (e.target.id == "checkzoom-album") {
+                if (totalSelectedAlbumPhoto >= totalRestrictionAlbumPhoto) {
+                    setAlbumCheck(false)
+                    props.onSelectedAlbum(props.photoSrc.idx, props.photoSrc.basename, false, e.target.value);
+                } else {
+                    setAlbumCheck(!albumCheck)
+                    props.onSelectedAlbum(props.photoSrc.idx, props.photoSrc.basename, !albumCheck, e.target.value);
+                }
 
+            }
+            if (e.target.id == "checkzoom-print") {
+                if (totalSelectedPrintPhoto >= totalRestrictionPrintPhoto) {
+                    setPrintCheck(false)
+                    props.onSelectedPrint(props.photoSrc.idx, props.photoSrc.basename, false, e.target.value);
+                } else {
+                    setPrintCheck(!printCheck)
+                    props.onSelectedPrint(props.photoSrc.idx, props.photoSrc.basename, !printCheck, e.target.value);
+                }
+                
+            }
+            if (e.target.id == "checkzoom-check"){
+                if (!props.maxSelectedPhoto) {
+                    setCheck(!check);
+                    props.onSelectImage(props.photoSrc.idx, props.photoSrc.basename, !check, e.target.value);
+                } else {
+                    setCheck(false);
+                }
+            }
+
+        }
     }
 
 
-    const handleClose = (event) => {
-        if (event.target.id === "photo-zoom-layout") {
+        const handleClose = (event) => {
+            if (event.target.id === "photo-zoom-layout") {
+                props.onClose();
+            }
+
+        };
+
+        const handleCloseButton = () => {
             props.onClose();
         }
 
-    };
 
-    const handleCloseButton = () => {
-        props.onClose();
-    }
+        return (
+            <div id="photo-zoom-layout"
+                className={classes.outterLayout}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                onClick={(event) => handleClose(event)}>
+                <Card id="photo-zoom-container" className={classes.cardLayout} onClick={handleSelect}  >
+                    <Button
+                        id="zoom-prev"
+                        onClick={handlePrev}
+                        style={{ position: 'absolute', left: 0, cursor: 'pointer' }}
+                        className={classes.btnNav}
+                        disableRipple={props.disablePrev}
+                        endIcon={<Icon icon="grommet-icons:previous" style={{ color: 'white', fontSize: '60px' }} />}
+                    />
+
+                    <CardMedia
+                        style={{ height: 'auto', maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
+                        component="img"
+                        height="100%"
+                        image={driveApiLink(props.photoSrc.basename)}>
 
 
-    return (
-        <div id="photo-zoom-layout"
-            className={classes.outterLayout}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            onClick={(event) => handleClose(event)}>
-            <Card id="photo-zoom-container" className={classes.cardLayout} onClick={handleSelect}  >
-                <Button
-                    id="zoom-prev"
-                    onClick={handlePrev}
-                    style={{ position: 'absolute', left: 0, cursor: 'pointer' }}
-                    className={classes.btnNav}
-                    disableRipple={props.disablePrev}
-                    endIcon={<Icon icon="grommet-icons:previous" style={{ color: 'white', fontSize: '60px' }} />}
-                />
-
-                <CardMedia
-                    style={{ height: 'auto', maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
-                    component="img"
-                    height="100%"
-                    image={driveApiLink(props.photoSrc.basename)}>
-                    
-
-                </CardMedia>
+                    </CardMedia>
                     <Button
                         id="zoom-next"
                         onClick={handleNext}
@@ -179,12 +229,27 @@ const PhotoZoom = (props) => {
                     ><Icon icon="bx:bx-x-circle" style={{ color: 'white', fontSize: '60px' }} /></Button>
 
                     <Checkbox
-                        style={props.showCheckbox ? {}:{display:'none'}}
+                        id="checkzoom-check"
+                        style={props.showCheckbox ? {} : { display: 'none' }}
                         icon={<RadioButtonUncheckedIcon className={classes.icon} />}
                         checkedIcon={<CheckCircleIcon className={classes.icon} />}
                         className={classes.checkLayout}
                         checked={check} name="checkedA" />
-            </Card>
+                    <Checkbox
+                        id="checkzoom-album"
+                        style={props.showPrintAlbumCheckbox ? {} : { display: 'none' }}
+                        icon={<RadioButtonUncheckedIcon className={classes.iconAlbumSelected} />}
+                        checkedIcon={<CheckCircleIcon className={classes.iconAlbumSelected} />}
+                        className={classes.checkLayout}
+                        checked={albumCheck} name="checkedB" />
+                    <Checkbox
+                        id="checkzoom-print"
+                        style={props.showPrintAlbumCheckbox ? { left: '75px' } : { display: 'none' }}
+                        icon={<RadioButtonUncheckedIcon className={classes.iconPrintSelected} />}
+                        checkedIcon={<CheckCircleIcon className={classes.iconPrintSelected} />}
+                        className={classes.checkLayout}
+                        checked={printCheck} name="checkedC" />
+                </Card>
                 {/* <Dialog fullWidth={true}
                 maxWidth='lg'
                 onClose={handleClose}
@@ -194,8 +259,8 @@ const PhotoZoom = (props) => {
                     <img className={classes.imgLayout} src={driveApiLink(props.photoSrc.basename)} />
                 </DialogContent>
             </Dialog> */}
-        </div>
-    );
-}
+            </div>
+        );
+    }
 
-export default PhotoZoom;
+    export default PhotoZoom;
