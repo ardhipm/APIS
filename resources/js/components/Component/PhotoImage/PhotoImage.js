@@ -70,7 +70,7 @@ const PhotoImage = (props) => {
 
     const handleClickOpen = (event) => {
         if (event.target.nodeName === "DIV") {
-            props.onClickImage(event, idx, check);
+            props.onClickImage(event, idx, check, albumCheck, printCheck);
         } else {
             handleSelect(event);
         }
