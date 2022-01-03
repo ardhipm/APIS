@@ -1,4 +1,4 @@
-import { InputLabel, TextField, Typography, Button, FormControlLabel, Grid, withStyles, InputBase, alpha, makeStyles, Backdrop, CircularProgress } from '@material-ui/core';
+import { InputLabel, TextField, Typography, Button, FormControlLabel, Grid, withStyles, InputBase, alpha, makeStyles, Backdrop, CircularProgress, setRef } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import * as Yup from 'yup';
@@ -11,6 +11,8 @@ import FormPersonalPelanggan from './FormPersonalPelanggan';
 import axios from 'axios';
 import SuccessDialog from '../../Popup/SuccessDialog';
 import ErrorDialog from '../../Popup/ErrorDialog';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import IconButton from '@material-ui/core/IconButton';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -69,7 +71,7 @@ let initValue = {
     confirmPassword: '',
     oldPassword: '',
     isActive: true,
-    restrictDelete:false,
+    restrictDelete: false,
     packageName: '',
     packageDescription: '',
     albumPhotoQuantity: 0,
@@ -90,6 +92,7 @@ function FormulirTambahPelanggan(props) {
     const [alertPopup, setAlertPopup] = React.useState(false);
     const [isErrorPopup, setIsErrorPopup] = React.useState(false);
     const [alertText, setAlertText] = React.useState("Tambah pelanggan berhasil")
+    const [refreshPopup, setRefreshPopup] = React.useState(false);
 
     const handleCreateCustomer = (values) => {
         setSubmitLoading(true);
@@ -117,8 +120,8 @@ function FormulirTambahPelanggan(props) {
             "password_confirmation": values.confirmPassword,
             "package_name": values.packageName,
             "package_description": values.packageDescription,
-            "num_album_photo":values.albumPhotoQuantity,
-            "num_print_photo":values.printPhotoQuantity,
+            "num_album_photo": values.albumPhotoQuantity,
+            "num_print_photo": values.printPhotoQuantity,
             "sub_package": subPackage
         }
 
@@ -134,21 +137,21 @@ function FormulirTambahPelanggan(props) {
             .then(res => {
                 if (res.data.success == true) {
                     setIsErrorPopup(false);
-                    
+
                 } else {
                     setIsErrorPopup(true);
                 }
 
                 setSubmitLoading(false);
                 setAlertPopup(true);
-                
+
 
                 if (res.data.success == true) {
                     setTimeout(() => {
                         window.location.href = "/admin/pelanggan";
                     }, 2000);
                 }
-              
+
             })
             .catch(error => {
                 // //console.log(error);
@@ -192,8 +195,8 @@ function FormulirTambahPelanggan(props) {
             "password_confirmation": values.confirmPassword,
             "package_name": values.packageName,
             "package_description": values.packageDescription,
-            "num_album_photo":values.albumPhotoQuantity,
-            "num_print_photo":values.printPhotoQuantity,
+            "num_album_photo": values.albumPhotoQuantity,
+            "num_print_photo": values.printPhotoQuantity,
             "sub_package": subPackage
         }
 
@@ -233,7 +236,7 @@ function FormulirTambahPelanggan(props) {
         validationSchema: customerSchema,
         onSubmit: (values) => {
             if (customerId) {
-                
+
                 // console.log('update');
                 // console.log(values);
                 setAlertText("Update pelanggan berhasil")
@@ -325,8 +328,13 @@ function FormulirTambahPelanggan(props) {
         }
     }, [])
 
+
     const handleClosealertPopup = () => {
         setAlertPopup(false);
+    }
+
+    const handleCloseRefreshPopup = () => {
+        setRefreshPopup(false)
     }
 
     const submitPackagePopup = (packageData) => {
@@ -352,7 +360,7 @@ function FormulirTambahPelanggan(props) {
                 packageDescription: packageData.packageDescription
             }
         });
-        
+
 
         // //console.log('handlePackageDtaa ' + dataPackage);
     }
@@ -377,10 +385,39 @@ function FormulirTambahPelanggan(props) {
         </Grid>)
 
 
+    const refreshPhotoUser = () => {
+        console.log('here')
+        setSubmitLoading(true)
+        const token = localStorage.getItem('authToken');
+        axios.request({
+            method: 'post',
+            url: '/api/admin/drive/refresh_photo/param?customerId='+customerId,
+            headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
+        }).then( res => {
+            console.log('kesini')
+            setSubmitLoading(false)
+            console.log(res)
+            if (res.data.success == true) {
+                console.log('berhasil')
+                setRefreshPopup(true);
+            } else {
+                setIsErrorPopup(true);
+            }
+        }).catch(err => {
+            console.log(err)
+            setSubmitLoading(false)
+            setIsErrorPopup(true);
+        })
+    }
+
+
     return (
         <div>
             <Typography variant="h4" style={{ marginBottom: '24px' }}>
-                <b>Tambah Pelanggan</b>
+                <b>Tambah Pelanggan</b> 
+                <IconButton onClick={refreshPhotoUser}>
+                    <RefreshIcon />
+                </IconButton>
             </Typography>
             <form onSubmit={formik.handleSubmit}>
                 <Grid container>
@@ -425,6 +462,10 @@ function FormulirTambahPelanggan(props) {
                 </Backdrop>
 
             </form>
+            <SuccessDialog
+                open={refreshPopup}
+                text={"Sinkronisasi berhasil"}
+                handleClose={handleCloseRefreshPopup} />)
         </div >
     );
 }

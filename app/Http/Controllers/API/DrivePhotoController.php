@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 use App\SelectedPhoto;
 use App\Customer;
 use App\SubPackage;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -1082,5 +1083,35 @@ class DrivePhotoController extends Controller
         }else{
             return response(['success' => false, 'message' => 'Sub Package not found'], 404);
         }
+    }
+
+    public function refreshPhoto(Request $request){
+        $user = User::find(Auth::Id());
+
+        $customer = DB::table('customers')
+        ->leftJoin('users', 'customers.id_user', 'users.id')
+        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
+        ->where('customers.id', '=', $request->customerId)
+        ->get()->toArray();
+
+        $isSuccess = false;
+        $userId = $customer[0]->id_user;
+        if ($user['role_id'] == 2) {
+            if(\Cache::has('origin_photo_user_'.$userId)){
+                \Cache::forget('origin_photo_user_'.$userId);
+                \Cache::forget('choice_photo_user_'.$userId);
+                $isSuccess = true;
+            }
+        }else{
+            return response(['success' => false, 'message' => 'Unauthorization'], 401);    
+        }
+
+        if($isSuccess){
+            return response(['success' => true, 'message' => 'Cache refresh success for user '.$userId], 200);
+        }else{
+            return response(['success' => false, 'message' => 'No cache for user '.$userId], 200);
+        }
+        
+        
     }
 }
