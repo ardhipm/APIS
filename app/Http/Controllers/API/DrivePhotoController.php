@@ -1044,6 +1044,8 @@ class DrivePhotoController extends Controller
               ->where('id', $customer[0]->id)
               ->update(['restrict_album_print' => 1]);
 
+        \Cache::flush();
+
         return response(['success' => true, 'message' => 'Album Photo inserted'], 201);
 
     }
