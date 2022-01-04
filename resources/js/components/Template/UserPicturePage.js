@@ -73,7 +73,6 @@ const UserPicturePage = (props) => {
     const [loading, setLoading] = React.useState(false);
     const [totalSelectedPhoto, setTotalSelectedPhoto] = React.useState(0);
     const [totalRestrictionPhoto, setTotalRestrictionPhoto] = React.useState(0);
-    // const [isMaxSelectedPhoto, setIsMaxSelectedPhoto] = React.useState(false);
     const [isDownloaded, setIsDownloaded] = React.useState(false);
     const [openWarningPopup, setOpenWarningPopup] = React.useState(false);
 
@@ -862,7 +861,7 @@ const UserPicturePage = (props) => {
             {ulala}
 
             {zoom && <PhotoZoom
-                showCheckbox={props.tabValue == 1 && !restrictDelete}
+                showCheckbox={props.tabValue == 1 && !restrictDelete || props.tabValue == 0 && !restrictDelete}
                 showPrintAlbumCheckbox={props.tabValue == 1 && restrictDelete}
                 photoSrc={currentPhoto}
                 maxSelectedPhoto={isMaxSelectedPhoto()}
