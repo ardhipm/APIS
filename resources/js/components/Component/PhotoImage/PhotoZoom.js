@@ -170,6 +170,7 @@ const PhotoZoom = (props) => {
                     props.onSelectImage(props.photoSrc.idx, props.photoSrc.basename, !check, e.target.value);
                 } else {
                     setCheck(false);
+                    props.onSelectImage(props.photoSrc.idx, props.photoSrc.basename, false, e.target.value);
                 }
             }
 
