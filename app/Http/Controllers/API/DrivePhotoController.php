@@ -206,7 +206,8 @@ class DrivePhotoController extends Controller
 
     }
 
-    public function getParentSubLink(){
+    public function getParentSubLink(Request $request){
+        $tabValue = $request->tabValue;
         $customer = DB::table('customers')
         ->leftJoin('users', 'customers.id_user', 'users.id')
         ->leftJoin('packages', 'customers.id', 'packages.id_customer')
@@ -222,9 +223,18 @@ class DrivePhotoController extends Controller
                 ->first(); // There could be duplicate directory names!
         
         $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
-        $dir = $contents->where('type', '=', 'dir')
-        ->where('filename', '=', 'Foto Mentah')
-        ->first(); // There could be duplicate directory names!
+        if($tabValue == 0){
+            $dir = $contents->where('type', '=', 'dir')
+            ->where('filename', '=', 'Foto Mentah')
+            ->first(); // There could be duplicate directory names!
+        }
+
+        if($tabValue == 1){
+            $dir = $contents->where('type', '=', 'dir')
+            ->where('filename', '=', 'Foto Pilihan')
+            ->first(); // There could be duplicate directory names!
+            }
+        
 
         $filedir = collect(\Storage::cloud()->listContents($dir['path'], false));
         $directory = $filedir->where('type', '=', 'dir')->toArray();

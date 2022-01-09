@@ -165,7 +165,7 @@ const UserPicturePage = (props) => {
         const token = localStorage.getItem('authToken');
         axios.request({
             method: 'get',
-            url: "/api/drive/get_link_download_photo",
+            url: "/api/drive/get_link_download_photo/param?tabValue="+props.tabValue,
             headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
         }).then( res => {
             let values = res.data;
@@ -618,9 +618,9 @@ const UserPicturePage = (props) => {
         // console.log(e.target.getAttribute("data-sub-name"))
         // console.log('heredude')
         // console.log(pictures);
-        let videoUrl = e.target.href
-        const newWindow = window.open(videoUrl, '_blank', 'noopener,noreferrer')
-        if (newWindow) newWindow.opener = null
+        // let videoUrl = e.target.href
+        // const newWindow = window.open(videoUrl, '_blank', 'noopener,noreferrer')
+        // if (newWindow) newWindow.opener = null
         updateIsDownload(e);
         setShowDownloadLink(false);
     }
