@@ -861,7 +861,7 @@ const UserPicturePage = (props) => {
             {ulala}
 
             {zoom && <PhotoZoom
-                showCheckbox={props.tabValue == 1 && !restrictDelete || props.tabValue == 0 && !restrictDelete}
+                showCheckbox={props.tabValue == 0 || (props.tabValue == 1 && !restrictDelete)}
                 showPrintAlbumCheckbox={props.tabValue == 1 && restrictDelete}
                 photoSrc={currentPhoto}
                 maxSelectedPhoto={isMaxSelectedPhoto()}
