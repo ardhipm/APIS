@@ -104,25 +104,90 @@ class InvoiceController extends Controller
         $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
         $dir = $contents->where('type', '=', 'dir')
             ->where('filename', '=', 'Invoice')
-            ->first(); // There could be duplicate directory names!
+            ->first(); // There could be duplicate sdirectory names!
+        
+        $checkDirInvoice = collect(\Storage::cloud()->listContents($dir['path'], false))->where('type', '=', 'dir')->
+        where('filename', '=', 'InvoiceMerged')->first();
+
+        if(count($checkDirInvoice) > 0){
+            \Storage::cloud()->deleteDirectory($checkDirInvoice['path']);
+        }
 
         $filedirchild = collect(\Storage::cloud()->listContents($dir['path'], false))->where('type', '=', 'file');
 
-        if (count($filedirchild) == 0) {
-            $invoice['invoice_photo_link'] = '';
+        if(count($filedirchild) > 0){
+
+            \Storage::disk('local')->deleteDirectory('pdf/' .$customer[0]->id . ' - ' . $customer[0]->name);
+
+            $pdf = \PDFMerger::init();
+
+            for($k = 0; $k < count($filedirchild); $k++){
+                $rawData = \Storage::cloud()->get($filedirchild[$k]['path']);
+                \Storage::disk('local')->put('pdf/'.$customer[0]->id . ' - ' . $customer[0]->name .'/' .$filedirchild[$k]['filename'] .'.pdf', $rawData, 'public');
+            }
+
+            $allFiles = \Storage::disk('public')->allFiles('pdf/' .$customer[0]->id . ' - ' . $customer[0]->name);
+
+            for($k = 0; $k < count($filedirchild); $k++){
+                $pdf->addPDF(base_path('storage/app/pdf/'.$customer[0]->id . ' - ' . $customer[0]->name .'/' .$filedirchild[$k]['filename'] .'.pdf'), 'all');
+            }
+
+            $pdf->merge();
+            $pdf->save(base_path('storage/app/pdf/' .$customer[0]->id . ' - ' . $customer[0]->name .'/InoviceMerged.pdf' ));
+
+            \Storage::cloud()->makeDirectory($dir['path'] . '/InvoiceMerged');
+
+            $contentInvoice = collect(\Storage::cloud()->listContents($dir['path'], false));
+            $dirInvoice = $contentInvoice->where('type', '=', 'dir')
+                ->where('filename', '=', 'InvoiceMerged')
+                ->first();
+
+            \Storage::cloud()->put($dirInvoice['path'] . '/InvoiceMerged.pdf', $pdf->output());
+
+            $fileinvoice = collect(\Storage::cloud()->listContents($dirInvoice['path'], false))->where('type', '=', 'file');
+
+            if (count($fileinvoice) == 0) {
+                $invoice['invoice_link'] = '';
+            } else {
+                $invoice['invoice_link'] = $fileinvoice[0]['basename'];
+            }
 
         } else {
-            $invoice['invoice_photo_link'] = $filedirchild[0]['basename'];
+            $invoice['invoice_link'] = '';
         }
-
-
+        
         $response = [
                 'success' => true,
                 'data' => $invoice,
-                'message' => 'Invoice retrieved successfully.',
+                'message' => 'Invoice Successfully Retrieved',
             ];
 
-            return response()->json($response, 200);
+        return response()->json($response, 200);
+    }
+
+    public function store(Request $request)
+    {
+        $body = $request->getContent();
+        $bodyJson = json_decode($body, true);
+
+        $rules = [
+            'invoice_no' => 'required|unique:invoices',
+            'id_payment_status' => 'required',
+            'id_customer' => 'required'
+        ];
+
+        $validator = Validator::make($bodyJson, $rules);
+        if ($validator->fails()) { 
+            return response(['success' => false, 'message' => $validator->errors()], 201);
+        } else {
+            $invoice = Invoice::create($bodyJson);
+
+            $response = [
+                'success' => true,
+                'message' => 'Invoice stored successfully.'
+            ];
+            return response()->json($response, 404);
+        }
     }
 
     public function store(Request $request)
