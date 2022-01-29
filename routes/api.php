@@ -195,9 +195,9 @@ Route::middleware('auth:api')->group(function () {
 });
 
 // drive
-// Route::middleware('auth:api')->group(function () {
-//     Route::get('drive/get_origin_photo', 'API\DrivePhotoController@getOriginPhoto');
-// });
+Route::middleware('auth:api')->group(function () {
+    Route::get('drive/get_origin_photo_with_pagination', 'API\DrivePhotoController@getOriginPhotoWithPagination');
+});
 Route::middleware('auth:api')->group(function () {
     Route::get('drive/get_origin_photo', 'API\DrivePhotoController@getOriginCachePhoto');
 });
