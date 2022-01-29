@@ -202,17 +202,14 @@ class DrivePhotoController extends Controller
 
     }
 
-    public function getOriginPhoto(){
+    public function getOriginPhoto($kategori, $page){
     
         $customer = DB::table('customers')
         ->leftJoin('users', 'customers.id_user', 'users.id')
-        ->leftJoin('packages', 'customers.id', 'packages.id_customer')
-        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name', 'packages.id as package_id')
+        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
         ->where('customers.id_user', '=', Auth::Id())
         ->get()->toArray();
 
-        $sub_package = DB::table('sub_packages')->where('id_package', '=', $customer[0]->package_id)->get()->toArray();
-        // die(print_r($sub_package));
         
         $folder = $customer[0]->id .' - ' .$customer[0]->name;
 
@@ -227,45 +224,57 @@ class DrivePhotoController extends Controller
         ->first(); // There could be duplicate directory names!
 
         $filedir = collect(\Storage::cloud()->listContents($dir['path'], false));
-        $directory = $filedir->where('type', '=', 'dir')->toArray();
+        $directory = $filedir->where('type', '=', 'dir')->where('filename', '=', 'Akad')->first();
         // $file= $filedir->where('type', '=', 'file')->toArray();
 
-
+        $filedirchild = collect(\Storage::cloud()->listContents($directory['path'], false))->where('type', '=', 'file')->ToArray();
         $data = array();
 
-        for($i = 0; $i < count($directory); $i++){
-            $dataFile = array();
-            
+        $totalPage = 0;
+        $currentPage = 0;
 
-            $filedirchild = collect(\Storage::cloud()->listContents($directory[$i]['path'], false))->where('type', '=', 'file');
-        
-            $parent = new \ArrayObject();
-            $parent['folder'] = $directory[$i]['name'];
-            for($j = 0; $j < count($sub_package); $j++){
-                if($sub_package[$j]->sub_package_name == $directory[$i]['name']){
-                    $parent['num_edit_photo'] = $sub_package[$i]->num_edit_photo;
-                    $parent['num_print_photo'] = $sub_package[$i]->num_print_photo;
-                    $parent['id_subpackage'] = $sub_package[$i]->id;
-                    $parent['is_downloaded'] = $sub_package[$i]->is_downloaded;
-                    $parent['num_selected_edit_photo'] = $sub_package[$i]->num_selected_edit_photo;
-                }else{
-                    continue;
+        $totalPage = ceil(count($filedirchild)/10);
+
+        if($page > $totalPage || $page < 1){
+            $response = [
+                'success' => false,
+                'message' => 'Page is not found',  
+            ];
+
+            return $response;
+        }else{
+            if($page != $totalPage){
+                for($i = ($page*10) - 10; $i < $page*10; $i++){
+                    $dataFile = array();
+
+                    $parent = new \ArrayObject();
+                    $parent['folder'] = $directory['name'];
+                    $parent['file'] = $filedirchild[$i];
+
+                    array_push($data, $parent);
+                }
+            }else{
+                for($i = ($page*10) - 10; $i < count($filedirchild); $i++){
+                    $dataFile = array();
+
+                    $parent = new \ArrayObject();
+                    $parent['folder'] = $directory['name'];
+                    $parent['file'] = $filedirchild[$i];
+
+                    array_push($data, $parent);
                 }
             }
-            
-            $parent['file'] = $filedirchild;
 
-            array_push($data, $parent);
+            $response = [
+                'success' => true,
+                'data' => $data,
+                'message' => 'Origin Photo retrieved successfully.',   
+                'totalPage' => $totalPage,
+                'currentPage' => $page
+            ];
 
+            return $response;
         }
-
-        $response = [
-            'success' => true,
-            'data' => $data,
-            'message' => 'Origin Photo retrieved successfully.',   
-        ];
-
-        return $response;
 
     }
 
