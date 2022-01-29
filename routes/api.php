@@ -179,7 +179,7 @@ Route::middleware('auth:api')->group(function () {
 
 //drive
 Route::middleware('auth:api')->group(function () {
-    Route::get('drive/get_origin_photo', 'API\DrivePhotoController@getOriginPhoto');
+    Route::get('drive/get_origin_photo/{kategori}/{page}', 'API\DrivePhotoController@getOriginPhoto');
 });
 Route::middleware('auth:api')->group(function () {
     Route::get('drive/get_choice_photo', 'API\DrivePhotoController@getChoicePhoto');
