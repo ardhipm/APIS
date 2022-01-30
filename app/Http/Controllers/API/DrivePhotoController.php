@@ -310,6 +310,82 @@ class DrivePhotoController extends Controller
             return $response;
         }
     }
+    
+    public function getOriginPhotoWithPagination($kategori, $page){
+    
+        $customer = DB::table('customers')
+        ->leftJoin('users', 'customers.id_user', 'users.id')
+        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
+        ->where('customers.id_user', '=', Auth::Id())
+        ->get()->toArray();
+
+        
+        $folder = $customer[0]->id .' - ' .$customer[0]->name;
+
+        $contents = collect(\Storage::cloud()->listContents('/', false));
+        $dir = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', $folder)
+                ->first(); // There could be duplicate directory names!
+        
+        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+        $dir = $contents->where('type', '=', 'dir')
+        ->where('filename', '=', 'Foto Mentah')
+        ->first(); // There could be duplicate directory names!
+
+        $filedir = collect(\Storage::cloud()->listContents($dir['path'], false));
+        $directory = $filedir->where('type', '=', 'dir')->where('filename', '=', 'Akad')->first();
+        // $file= $filedir->where('type', '=', 'file')->toArray();
+
+        $filedirchild = collect(\Storage::cloud()->listContents($directory['path'], false))->where('type', '=', 'file')->ToArray();
+        $data = array();
+
+        $totalPage = 0;
+        $currentPage = 0;
+
+        $totalPage = ceil(count($filedirchild)/10);
+
+        if($page > $totalPage || $page < 1){
+            $response = [
+                'success' => false,
+                'message' => 'Page is not found',  
+            ];
+
+            return $response;
+        }else{
+            if($page != $totalPage){
+                for($i = ($page*10) - 10; $i < $page*10; $i++){
+                    $dataFile = array();
+
+                    $parent = new \ArrayObject();
+                    $parent['folder'] = $directory['name'];
+                    $parent['file'] = $filedirchild[$i];
+
+                    array_push($data, $parent);
+                }
+            }else{
+                for($i = ($page*10) - 10; $i < count($filedirchild); $i++){
+                    $dataFile = array();
+
+                    $parent = new \ArrayObject();
+                    $parent['folder'] = $directory['name'];
+                    $parent['file'] = $filedirchild[$i];
+
+                    array_push($data, $parent);
+                }
+            }
+
+            $response = [
+                'success' => true,
+                'data' => $data,
+                'message' => 'Origin Photo retrieved successfully.',   
+                'totalPage' => $totalPage,
+                'currentPage' => $page
+            ];
+
+            return $response;
+        }
+
+    }
 
     public function getOriginPhoto(){
     
