@@ -333,7 +333,7 @@ class DrivePhotoController extends Controller
         ->first(); // There could be duplicate directory names!
 
         $filedir = collect(\Storage::cloud()->listContents($dir['path'], false));
-        $directory = $filedir->where('type', '=', 'dir')->where('filename', '=', 'Akad')->first();
+        $directory = $filedir->where('type', '=', 'dir')->where('filename', '=', $kategori)->first();
         // $file= $filedir->where('type', '=', 'file')->toArray();
 
         $filedirchild = collect(\Storage::cloud()->listContents($directory['path'], false))->where('type', '=', 'file')->ToArray();
