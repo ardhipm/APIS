@@ -119,7 +119,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('admin/invoice/detail/{id}', 'API\InvoiceController@viewAdmin');
 });
 Route::middleware('auth:api')->group(function () {
-    Route::get('invoice/view', 'API\InvoiceController@viewCustomer');
+    Route::get('invoice/customer/param', 'API\InvoiceController@viewDetailInvoiceByCustomer');
+});
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('invoice/view', 'API\InvoiceController@viewFromCustomer');
 });
 Route::middleware('auth:api')->group(function () {
     Route::post('invoice/delete_multiple', 'API\InvoiceController@deleteMultiple');
