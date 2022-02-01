@@ -19,6 +19,9 @@ class CreateSubPackageTable extends Migration
             $table->text('sub_package_description');
             $table->integer('num_edit_photo');
             $table->integer('id_package');
+            $table->tinyInteger('is_downloaded')->default('0');
+            $table->integer('num_selected_edit_photo')->default('0');
+
             $table->timestamps();
         });
     }

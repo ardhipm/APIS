@@ -18,14 +18,14 @@ export const PrivateRoute = ({ component: Component, role = [0], apiLink = "", t
             method: 'get',
             url: "/api/notification/fetch_notification",
             headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
-        }).then( res => {
+        }).then(res => {
             let values = res.data;
-            if(values.success == true){
+            if (values.success == true) {
                 localStorage.setItem("notification", JSON.stringify(values.data));
                 // setDownloadLink(values.data);
             }
 
-        }).catch( error => {
+        }).catch(error => {
             console.log(error);
         })
     }
@@ -39,9 +39,9 @@ export const PrivateRoute = ({ component: Component, role = [0], apiLink = "", t
                 return (<div>dilarang</div>);
 
             } else {
-                return (<MainPage tabValue={tabValue} showTab={showTab}>
-                    <Component  tabValue={tabValue} apiLink={apiLink} pageName={name} />
-                </MainPage>);
+                return (<MainPage tabValue={tabValue} showTab={showTab || false}>
+                            <Component tabValue={tabValue} apiLink={apiLink} pageName={name || ''} />
+                        </MainPage>);
             }
 
 
