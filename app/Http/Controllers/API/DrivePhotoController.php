@@ -303,6 +303,7 @@ class DrivePhotoController extends Controller
     public function getAlbumCache(){
         if (\Cache::has('album_user_'.Auth::Id())) {
             $response = \Cache::get('album_user_'.Auth::Id());
+
             return $response;
             
         } else {
@@ -1188,6 +1189,8 @@ class DrivePhotoController extends Controller
             if(\Cache::has('origin_photo_user_'.$userId)){
                 \Cache::forget('origin_photo_user_'.$userId);
                 \Cache::forget('choice_photo_user_'.$userId);
+                \Cache::forget('album_user_'.$userId);
+                \Cache::forget('video_user_'.$userId);
                 $isSuccess = true;
             }
         }else{
