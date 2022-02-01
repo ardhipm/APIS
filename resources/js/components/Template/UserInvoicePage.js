@@ -40,7 +40,8 @@ const UserInvoicePage = () => {
     const driveApiLink = (value) => {
         // return 'drive.google.com/thumbnail?export=view&sz=w600&id=' + value;
         // return 'lh3.google.com/u/6/d/'+value+'=w600'
-        return 'https://lh3.googleusercontent.com/d/'+value+'=w600?authuser=0'
+        // return 'https://lh3.googleusercontent.com/d/'+value+'=w600?authuser=0'
+        return `https://drive.google.com/file/d/${value}/preview`;
     }
 
     
@@ -103,7 +104,8 @@ const UserInvoicePage = () => {
                 </Grid>
             </Grid>
             <Grid className={classes.containerLayout} item xs={12}>
-                <img className={classes.imgLayout} src={invoicePic.length > 1 ? driveApiLink(invoicePic): null} /> 
+                {/* <img className={classes.imgLayout} src={invoicePic.length > 1 ? driveApiLink(invoicePic): null} />  */}
+                <iframe style={{width : '100%', height: '70vh'}} src={invoicePic.length > 1 ? driveApiLink(invoicePic): null} />
             </Grid>
             <Grid item xs={12}>
 {/*                 
