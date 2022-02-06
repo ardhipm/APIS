@@ -83,6 +83,10 @@ class UserController extends Controller
                 $dir = $contents->where('type', '=', 'dir')
                 ->where('filename', '=', $customer->id . ' - ' . $bodyJson['name'])
                 ->first(); // There could be duplicate directory names!
+                
+                $customer2 = Customer::find($customer->id);
+                $customer2->basename_gdrive = $dir['basename'];
+                $customer2->save();
 
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Mentah');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Pilihan');
