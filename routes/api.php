@@ -209,7 +209,19 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::get('drive/get_choice_photo', 'API\DrivePhotoController@getChoiceCachePhoto');
 });
+
+//origin
+Route::middleware('auth:api')->group(function () {
+    Route::get('/get_origin_photo/{subpackage}', function ($subpackage) {
+        return Origin::where('sub_package_name', '=', $subpackage)->paginate(15);
+    });
+});
+
 //inactive
+Route::middleware('auth:api')->group(function () {
+    Route::get('drive/save_to_db', 'API\DrivePhotoController@saveOriginToDB');
+});
+
 Route::middleware('auth:api')->group(function () {
     Route::get('drive/get_final_photo', 'API\DrivePhotoController@getFinalPhoto');
 });
