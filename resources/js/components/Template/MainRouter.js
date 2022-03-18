@@ -22,6 +22,10 @@ import EditDataPembayaran from '../Component/Admin/Pembayaran/UbahDataPembayaran
 import FormulirAdminMember from '../Component/Admin/PengurusAdmin/FormulirAdminMember';
 import TambahAdmin from '../Component/Admin/PengurusAdmin/TambahAdmin';
 import Faq from '../Component/Admin/Bantuan/FAQ';
+import Test from '../Component/Test/Test';
+import OriginPhotoPage from '../Component/User/OriginPhotoPage/OriginPhotoPage';
+import ChoicePhotoPage from '../Component/User/ChoicePhotoPage/ChoicePhotoPage';
+import NotificationPage from '../Component/Admin/Notifikasi/NotificationPage';
 
 // const history = createBrowserHistory();
 
@@ -29,17 +33,20 @@ const MainRouter = () => (
             <Switch>
                 <Route path="/" exact component={Login} />
                 <Route path="/login" exact component={Login} />
-                <PrivateRoute path="/mainpage" component={UserPicturePage} 
-                    role={[1]} />
-                <PrivateRoute path="/pelanggan/paket" exact 
+                {/* <PrivateRoute path="/mainpage" component={UserPicturePage} 
+                    role={[1]} /> */}
+                <PrivateRoute path="/pelanggan/paket" exact  showTab={true} component={OriginPhotoPage} role={[1]} tabValue={0}/>
+                <PrivateRoute path="/pelanggan/paket/foto-mentah" exact  showTab={true} component={OriginPhotoPage} role={[1]} tabValue={0}/>
+                <PrivateRoute path="/pelanggan/paket/foto-pilihan" exact  showTab={true} component={ChoicePhotoPage} role={[1]} tabValue={1}/>
+                {/* <PrivateRoute path="/pelanggan/paket" exact 
                     component={UserPicturePage} 
                     role={[1]} 
                     key="/api/drive/get_origin_photo"
                     apiLink="/api/drive/get_origin_photo" 
                     showTab={true}
                     tabValue={0} 
-                    />
-                <PrivateRoute path="/pelanggan/paket/foto-mentah" exact 
+                    /> */}
+                {/* <PrivateRoute path="/pelanggan/paket/foto-mentah" exact 
                     component={UserPicturePage} 
                     role={[1]} 
                     key="/api/drive/get_origin_photo"
@@ -51,7 +58,7 @@ const MainRouter = () => (
                     key="/api/drive/get_choice_photo"
                     apiLink="/api/drive/get_choice_photo" 
                     showTab={true}
-                    tabValue={1}/>
+                    tabValue={1}/> */}
                 {/* <PrivateRoute path="/pelanggan/paket/foto-akhir" exact 
                     component={UserPicturePage} role={[1]}  
                     key="/api/drive/get_final_photo"
@@ -86,6 +93,7 @@ const MainRouter = () => (
                 <PrivateRoute path="/admin/pengguna/tambah" exact component={FormulirAdminMember} role={[2]}/>
                 <PrivateRoute path="/admin/edit/syarat-ketentuan" exact  component={SyaratDanKetentuan} role={[2,3]} />
                 <PrivateRoute path="/admin/edit/faq" exact  component={Faq} role={[2,3]}/>
+                <PrivateRoute path="/admin/notifikasi" exact  component={NotificationPage} role={[2,3]}/>
             </Switch>
         // </Router>
     );

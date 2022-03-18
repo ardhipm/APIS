@@ -18,6 +18,7 @@ class CreateInvoicesTable extends Migration
             $table->string('invoice_no');
             $table->integer('id_payment_status');
             $table->string('id_google_drive_photo');
+            $table->string('basename_gdrive');
             $table->integer('id_customer');
             $table->timestamps();
         });

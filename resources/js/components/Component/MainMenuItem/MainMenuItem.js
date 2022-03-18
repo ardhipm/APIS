@@ -4,10 +4,13 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { useHistory, useLocation } from "react-router-dom";
-import { Collapse, makeStyles } from '@material-ui/core';
+import { Badge, Collapse, makeStyles } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { Icon } from '@iconify/react';
 import { Link } from 'react-router-dom';
+import { meanBy } from 'lodash';
+import { useDispatch, useSelector } from 'react-redux';
+import { getNotificationUser } from '../../Redux/Notification/notification.action';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -100,6 +103,13 @@ const MENU_ADMIN = [
         routeLink: "/admin/logistik"
     },
     {
+        id: 7,
+        title: "Pemberitahuan",
+        type: "single",
+        icon: "bx:bell",
+        routeLink: "/admin/notifikasi"
+    },
+    {
         id: 5,
         title: "Bantuan",
         type: "dropdown",
@@ -113,12 +123,13 @@ const MENU_ADMIN = [
         routeLink: "/admin/edit/syarat-ketentuan"
     },
     {
-        id: 7,
+        id: 8,
         title: "FAQ",
         type: "child",
         icon: "",
         routeLink: "/admin/edit/faq"
-    }
+    },
+    
 ]
 
 const MENU_SUPER_ADMIN = [
@@ -151,6 +162,13 @@ const MENU_SUPER_ADMIN = [
         routeLink: "/admin/logistik"
     },
     {
+        id: 7,
+        title: "Pemberitahuan",
+        type: "single",
+        icon: "bx:bell",
+        routeLink: "/admin/notifikasi"
+    },
+    {
         id: 5,
         title: "Bantuan",
         type: "dropdown",
@@ -165,13 +183,18 @@ const MENU_SUPER_ADMIN = [
         routeLink: "/admin/edit/syarat-ketentuan"
     },
     {
-        id: 7,
+        id: 8,
         title: "FAQ",
         type: "child",
         icon: "",
         routeLink: "/admin/edit/faq"
-    }
+    },
+    
 ]
+
+{/* <Badge color="secondary" variant="dot" invisible={invisible}>
+          <MailIcon />
+        </Badge> */}
 
 const MENU = (role) => {
     if (role === 1) {
@@ -192,22 +215,28 @@ const MENU = (role) => {
 const MainMenuItem = (props) => {
     const history = useHistory();
     const classes = useStyles();
-
     const menus = MENU(props.role);
+    const notifProps = useSelector((state) => state.notifReducer)
+    const dispatch = useDispatch();
+    
 
     const [selectedIndex, setSelectedIndex] = React.useState(1);
 
     useEffect(() => {
         // console.log(window.location.pathname);
-        
+
         menus.map((menu) => {
-            if(window.location.pathname === menu.routeLink){
+            if (window.location.pathname === menu.routeLink) {
                 // console.log(menu.routeLink)
                 setSelectedIndex(menu.id);
             }
         })
         
-    },[])
+    }, [])
+
+    useEffect(() => {
+        dispatch(getNotificationUser());
+    },[selectedIndex]);
 
     const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
@@ -219,7 +248,7 @@ const MainMenuItem = (props) => {
         // console.log(asd + " " + link);
         setSelectedIndex(idx);
         setDropdownOpen(false);
-        
+
 
     };
     const location = useLocation();
@@ -230,14 +259,18 @@ const MainMenuItem = (props) => {
                 menus.map((menu) => {
                     if (menu.type === "single") {
 
-                        return (<ListItem key={menu.id.toString()} button 
+                        return (<ListItem key={menu.id.toString()} button
                             component={Link}
                             to={menu.routeLink}
                             classes={{ root: classes.rootItem }}
                             selected={selectedIndex === menu.id}
                             onClick={(event) => handleListItemClick(event, menu.id, menu.routeLink)}>
+
                             <ListItemIcon classes={{ root: classes.icon }}>
-                                <Icon icon={menu.icon} style={{ fontSize: '24px', color: 'white' }} />
+                                {menu.title == "Pemberitahuan" ? <Badge color="error" variant="dot" invisible={!notifProps.newNotif}>
+                                    <Icon icon={menu.icon} style={{ fontSize: '24px', color: 'white' }} />
+                                </Badge> : <Icon icon={menu.icon} style={{ fontSize: '24px', color: 'white' }} />}
+
                             </ListItemIcon>
                             <ListItemText primary={menu.title} />
                         </ListItem>)

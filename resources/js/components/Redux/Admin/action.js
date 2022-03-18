@@ -59,9 +59,18 @@ import {
     GET_TERMS_ADMIN,
     GET_TERMS_ADMIN_SUCCESS,
     GET_TERMS_ADMIN_FAIL,
+    INDEX_CHOICE_PHOTO,
+    INDEX_CHOICE_PHOTO_FAIL,
+    INDEX_CHOICE_PHOTO_SUCCESS,
+    INDEX_ORIGIN_PHOTO,
+    INDEX_ORIGIN_PHOTO_FAIL,
+    INDEX_ORIGIN_PHOTO_SUCCESS
 } from '../actionTypes'
 
 import {api} from '../../Api/api'
+import { getAction } from 'connected-react-router';
+import { setOpenLoadingPopup } from '../Popup/Loading/loading.action';
+import { setOpenAlertPopup } from '../Popup/Alert/alert.action';
 
 export const getCustomers = () => dispatch => {
     dispatch({
@@ -654,4 +663,47 @@ export const updateTermsFail = (data) => dispatch => {
         type: PATCH_TERMS_ADMIN_FAIL,
         payload: data
     })
+}
+
+export const indexOriginPhoto = (customerId) => async dispatch => {
+    dispatch(setOpenLoadingPopup(true, 'Proses indeks sedang berlangsung'))
+    await dispatch({
+        type: INDEX_ORIGIN_PHOTO
+    });
+    console.log('api')
+    const response = api.indexOriginPhoto(customerId);
+
+    return response.then(
+        response => {
+            dispatch(setOpenLoadingPopup(false, ''))
+            dispatch(setOpenAlertPopup(true, 'Indeks foto pilihan berhasil', 'success'))
+            dispatch({type: INDEX_ORIGIN_PHOTO_SUCCESS, payload: response})
+        },
+        err => {
+            dispatch(setOpenLoadingPopup(false, ''))
+            dispatch(setOpenAlertPopup(true, 'Indeks foto pilihan gagal', 'error'))
+            dispatch({type: INDEX_ORIGIN_PHOTO_FAIL, payload: err})
+        }
+    )
+}
+
+export const indexChoicePhoto = (customerId) => async dispatch => {
+    dispatch(setOpenLoadingPopup(true, 'Sedang mengindeks foto pilihan'));
+    await dispatch({
+        type: INDEX_CHOICE_PHOTO
+    });
+    const response = api.indexChoicePhoto(customerId);
+
+    return response.then(
+        response => {
+            dispatch(setOpenLoadingPopup(false, ''));
+            dispatch(setOpenAlertPopup(true, 'Indeks foto pilihan berhasil', 'success'))
+            dispatch({type: INDEX_CHOICE_PHOTO_SUCCESS, payload: response})
+        },
+        err => {
+            dispatch(setOpenLoadingPopup(false, ''));
+            dispatch(setOpenAlertPopup(true, 'Indeks foto pilihan gagal', 'error'))
+            dispatch({type: INDEX_CHOICE_PHOTO_FAIL, payload: err})
+        }
+    )
 }

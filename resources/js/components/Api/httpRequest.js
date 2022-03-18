@@ -1,17 +1,20 @@
 import axios from "axios";
 // import { store } from "../../config";
 
-const token = localStorage.getItem('authToken')
-const defaultHeaders = {
-    'Content-Type': 'application/json',
-    'Authorization':'Bearer '+token
-}
+
 export default function AxiosRequest(method, url, data, params, responseType) {
-//   const { REACT_APP_API_URL } = process.env;
+
+  const token = localStorage.getItem('authToken')
+  const defaultHeaders = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + token
+  }
+  //   const { REACT_APP_API_URL } = process.env;
+  // console.log('==== >', localStorage.getItem('authToken'));
 
   return axios({
     method: method,
-    url:  `/api${url}`,
+    url: `/api${url}`,
     // url: "http://localhost:3030" + `/api${url}`,
     data: data,
     params: params,

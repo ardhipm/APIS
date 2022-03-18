@@ -2,6 +2,9 @@ import { makeStyles } from '@material-ui/core';
 import { display, lineHeight, maxHeight } from '@material-ui/system';
 import React, { useEffect } from 'react';
 import { Icon } from '@iconify/react';
+import { useDispatch, useSelector } from 'react-redux';
+import NotificationItem from '../MainMenuItem/NotificationItem';
+import { getNotificationUser } from '../../Redux/Notification/notification.action';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -13,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'block',
         flexFlow: 'column',
         boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
-        zIndex: theme.zIndex.drawer+2
+        zIndex: theme.zIndex.drawer + 2
 
     },
     outterLayout: {
@@ -74,6 +77,8 @@ const NotificationPopup = (props) => {
     const classes = useStyles();
 
     const [notifData, setNotifData] = React.useState([]);
+    const notifProps = useSelector((state) => state.notifReducer);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (props.open == true) {
@@ -81,17 +86,19 @@ const NotificationPopup = (props) => {
         }
     }, [props.open])
 
-    useEffect(() => {
-        // console.log("update popup cukk")
-        if(localStorage.getItem("notification") == null){
-            setNotifData([{"description": "Belum ada pemberitahuan"}])
-        }else{
-            setNotifData(JSON.parse(localStorage.getItem("notification")))
-        }
-        
-    }, [localStorage.getItem("notification")])
+    // useEffect(() => {
+    //     // console.log("update popup cukk")
+    //     if (localStorage.getItem("notification") == null) {
+    //         setNotifData([{ "description": "Belum ada pemberitahuan" }])
+    //     } else {
+    //         // setNotifData(JSON.parse(localStorage.getItem("notification")))
+    //     }
 
-    
+    // }, [localStorage.getItem("notification")])
+    useEffect(() => {
+        dispatch(getNotificationUser())
+    }, [])
+
 
     const handleClose = (event) => {
         if (event.target.id === "notif-layout") {
@@ -103,7 +110,7 @@ const NotificationPopup = (props) => {
     return (
         <div id="notif-layout"
             className={classes.outterLayout}
-            style={props.open ? { display: 'flex', alignItems: 'center', justifyContent: 'center' }: {display: 'none'}}
+            style={props.open ? { display: 'flex', alignItems: 'center', justifyContent: 'center' } : { display: 'none' }}
             onClick={(event) => handleClose(event)}>
 
             <div className={classes.root} >
@@ -112,15 +119,20 @@ const NotificationPopup = (props) => {
                     {/* <div><Icon icon="bx:bx-edit" style={{ color: 'white' }} /></div> */}
                 </div>
                 <div className={classes.body}>
-                    {notifData.length > 0 ? notifData.map((data, idx) => {
-                        return <div key={idx} className={classes.item}>
-                            <div className={classes.itemRectangle}><Icon icon="bx:bx-info-circle" style={{ color: '#828282', height: '24px', width: '24px' }} /></div>
-                            <div className={classes.itemText}>{data.description}</div>
-                        </div>
-                    }) : (<div className={classes.item}>
-                        <div className={classes.itemRectangle}><Icon icon="bx:bx-info-circle" style={{ color: '#828282', height: '24px', width: '24px' }} /></div>
-                        <div className={classes.itemText}>Belum ada notifikasi masuk</div>
-                    </div>)}
+                    {notifProps.notifications.map((element, index) => {
+                        // console.log(element);
+                        return <NotificationItem
+                            id={element.id}
+                            key={element.id}
+                            isRead={element.is_read}
+                            description={element.description}
+                            notificationType={element.notification_type}
+                            message={element.message}
+                            createdAt={element.created_at}
+                            customerId={element.id_customer}
+                            createdBy={element.created_by}
+                        />
+                    })}
 
                 </div>
             </div>

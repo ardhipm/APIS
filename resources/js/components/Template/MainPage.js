@@ -22,6 +22,8 @@ import TermsDialog from '../Component/Popup/TermsDialog';
 import Splashscreen from '../Component/Splashscreen';
 import { NotificationImportant } from '@material-ui/icons';
 import NotificationPopup from '../Component/Popup/NotificationPopup';
+import { useDispatch, useSelector } from 'react-redux';
+import { getNotificationUser } from '../Redux/Notification/notification.action';
 
 const drawerWidth = 280;
 
@@ -122,14 +124,17 @@ const ROLE = {
 export default function MainPage(props) {
     const classes = useStyles();
     const theme = useTheme();
+
+    // const role = useSelector((state) => state.loginReducer.user.roleId);
     const [open, setOpen] = React.useState(true);
     const [showPictureTab, setShowPictureTab] = React.useState(true);
-    const role = JSON.parse(localStorage.getItem("user")).role_id;
+    const role = JSON.parse(localStorage.getItem("user")).roleId;
     const [openLogoutPopup, setOpenLogoutPopup] = React.useState(false);
-    const [tabValue, setTabValue] = React.useState(props.tabValue);
+    // const [tabValue, setTabValue] = React.useState(props.tabValue);
     const [openTerms,setOpenTerms] = React.useState(false);
     const [openSplashScreen, setOpenSplashScreen] = React.useState(true)
     const [openNotif, setOpenNotif] = React.useState(false);
+    const dispatch = useDispatch();
 
     const history = useHistory();
     const handleCloseTerms =()=>{
@@ -145,6 +150,7 @@ export default function MainPage(props) {
             // console.log("wowowo")
             setOpenTerms(true)
         }
+        dispatch(getNotificationUser());
     }, []);
 
     const handleOnTabChange = (e, value) => {
@@ -152,6 +158,7 @@ export default function MainPage(props) {
         // setTabValue(value);
 
         if (value == 0) {
+            
             history.push('/pelanggan/paket/foto-mentah')
         }
 
@@ -192,7 +199,7 @@ export default function MainPage(props) {
     let tab = (props.showTab ?
         (<Tabs
             style={{ flexGrow: 1 }}
-            value={tabValue}
+            value={props.tabValue}
             onChange={handleOnTabChange}>
             <Tab label={<span >Foto Mentah</span>} />
             <Tab label={<span >Foto Pilihan</span>} />
@@ -276,7 +283,10 @@ export default function MainPage(props) {
                 })}
             >
                 <div className={classes.drawerHeader} />
-                {props.children}
+                <div style={{height: '100vh', position:'relative'}}>
+                    {props.children}
+                </div>
+                
             </main>
             <LogoutDialog closePopup={handleClosePopup} open={openLogoutPopup} />
             <TermsDialog open = {openTerms} handleClose={handleCloseTerms}/>

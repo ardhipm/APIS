@@ -14,9 +14,11 @@ class CreateSelectedPhotoTable extends Migration
     public function up()
     {
         Schema::create('selected_photo', function (Blueprint $table) {
-            $table->bigIncrements('id');
             $table->integer('id_customer');
-            $table->string('basename');
+            $table->integer('id_subpackage');
+            $table->string('basename')->unique();
+            $table->string('choice_basename')->unique()->nullable();
+            
         });
     }
 

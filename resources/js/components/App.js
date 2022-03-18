@@ -24,7 +24,7 @@ function App() {
 
     <React.Fragment>
       <BrowserRouter>
-        <Container maxWidth={false} disableGutters={true}>
+        <Container maxWidth={false} disableGutters={true} style={{overflow : 'hidden'}}>
           <ThemeProvider theme={theme}>
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
 

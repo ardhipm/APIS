@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundSize: 'cover'
     },
     cardLogin: {
-
+        boxShadow: 'none',
         maxWidth: 500 + 'px',
         minWidth: 370 + 'px',
         justifySelf: 'center',
@@ -46,30 +46,15 @@ const useStyles = makeStyles((theme) => ({
         margin: 'auto',
         borderRadius: 16 + 'px',
         display: 'flex',
-        padding: 12 + 'px',
         display: 'flex',
         flexDirection: 'column',
         zIndex: 1,
-        backgroundColor: 'rgb(23, 23, 23, 0.5)'
+        backgroundColor: 'rgba(0,0,0,0)'
 
     },
     imgLogo: {
         position: 'absolute',
-        [theme.breakpoints.down('sm')]: {
-            top: 15 + '%',
-        },
-        [theme.breakpoints.up('md')]: {
-            top: 15 + '%',
-        },
-        [theme.breakpoints.up('lg')]: {
-            top: 15 + '%',
-        },
-        [theme.breakpoints.up(1281)]: {
-            top: 13 + '%',
-        },
-        [theme.breakpoints.up(1400)]: {
-            top: 23 + '%',
-        },
+        top: 0,
         height: 115 + 'px',
         width: 115 + 'px',
         zIndex: 5,
@@ -81,10 +66,12 @@ const useStyles = makeStyles((theme) => ({
     box1: {
         flex: 1,
         alignSelf: 'flex-end',
+        backgroundColor: 'rgb(23, 23, 23, 0.5)'
     },
     box2: {
         flex: 11,
-        padding: 20 + 'px'
+        padding: 20 + 'px',
+        backgroundColor: 'rgb(23, 23, 23, 0.5)'
 
     },
     formLogin: {
@@ -101,7 +88,10 @@ const useStyles = makeStyles((theme) => ({
     },
     typoBold: {
         fontWeight: 'bold',
-        color: 'white'
+        color: 'white',
+        paddingRight: '10px',
+        paddingTop: '8px'
+
     },
     bgLogo: {
         position: 'absolute',
@@ -129,11 +119,18 @@ export default function Login() {
             {isLogged}
 
             <Card className={classes.cardLogin} >
-                <img className={classes.imgLogo} src="/img/logo.png" />
-                <Box width="100%" textAlign="right" className={classes.box1}>
-                    <Typography variant="h5" className={classes.typoBold} gutterBottom >
-                        MASUK
-                    </Typography>
+                <div style={{position: 'relative'}}>
+                    
+                    <div style={{height: '50px'}}></div>
+                    <img className={classes.imgLogo} src="/img/logo.png" />
+                    <div style={{height: '50px', backgroundColor: 'rgb(23, 23, 23, 0.5)', borderRadius: '16px 16px 0 0', textAlign: 'right'}}>
+                        <Typography variant="h5" className={classes.typoBold} gutterBottom >
+                            MASUK
+                        </Typography>
+                    </div>
+                </div>
+                <Box width="100%" textAlign="right" className={classes.box1} >
+                    
                 </Box>
                 <Box display="flex" className={classes.box2}>
 

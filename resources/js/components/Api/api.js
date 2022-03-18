@@ -23,23 +23,30 @@ export const api = {
     addFaq,
     addTerms,
     updateFaq,
-    updateTerms
+    updateTerms,
+    indexOriginPhoto,
+    indexChoicePhoto
 }
 
-const token = localStorage.getItem('authToken')
-
-const defaultHeaders = {
-    'Content-Type': 'application/json',
-    'Authorization':'Bearer '+token
-}
 
 function clearStoredCreds() {
     localStorage.removeItem('authToken'); 
 }
 
+function getHeader() {
+    const token = localStorage.getItem('authToken')
+
+    const defaultHeaders = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+    }
+
+    return defaultHeaders;
+}
 
 async function getCustomers() {
     // const authToken = {'Authorization':'Bearer '+token}
+    const defaultHeaders = getHeader();
     try {
         const url = '/api/customer/view';
         const headers = {...defaultHeaders};
@@ -59,6 +66,7 @@ async function getCustomers() {
 
 async function getAllCustomers() {
     // const authToken = {'Authorization':'Bearer '+token}
+    const defaultHeaders = getHeader();
     try {
         const url = '/api/customer/viewAll';
         const headers = {...defaultHeaders};
@@ -77,6 +85,7 @@ async function getAllCustomers() {
 }
 
 async function getInvoice() {
+    const defaultHeaders = getHeader();
     try {
         const url = '/api/admin/invoice/view';
         const headers = {...defaultHeaders};
@@ -95,6 +104,7 @@ async function getInvoice() {
 }
 
 async function getLogistic() {
+    const defaultHeaders = getHeader();
     try {
         const url = '/api/admin/shipment/view';
         const headers = {...defaultHeaders};
@@ -113,6 +123,7 @@ async function getLogistic() {
 }
 
 async function getShipmentUser() {
+    const defaultHeaders = getHeader();
     try {
         const url = `${BASE_URL}shipment/view`;
         const headers = {...defaultHeaders, token};
@@ -131,7 +142,9 @@ async function getShipmentUser() {
 }
 
 async function getAdminMember() {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
+    // console.log(defaultHeaders);
     try {
         const url = '/api/admin/member/view';
         const headers = {...defaultHeaders};
@@ -150,6 +163,7 @@ async function getAdminMember() {
 }
 
 async function patchShipmentAdmin(data,id) {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = `/api/admin/shipment/update/${id}`;
@@ -170,6 +184,7 @@ async function patchShipmentAdmin(data,id) {
 }
 
 async function patchInvoiceAdmin(data,id) {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = `/api/admin/invoice/update/${id}`;
@@ -190,6 +205,7 @@ async function patchInvoiceAdmin(data,id) {
 }
 
 async function patchMemberAdmin(data,id) {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = `/api/admin/user/update/${id}`;
@@ -210,6 +226,7 @@ async function patchMemberAdmin(data,id) {
 }
 
 async function addMemberAdmin(data) {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = `/api/admin/member/register`;
@@ -230,6 +247,7 @@ async function addMemberAdmin(data) {
 }
 
 async function getAdminMemberDetail(id) {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = `/api/admin/member/detail/${id}`;
@@ -249,6 +267,7 @@ async function getAdminMemberDetail(id) {
 }
 
 async function getAdminShipmentDetail(id) {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = `/api/admin/shipment/detail/${id}`;
@@ -268,6 +287,7 @@ async function getAdminShipmentDetail(id) {
 }
 
 async function getAdminInvoiceDetail(id) {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = `/api/admin/invoice/detail/${id}`;
@@ -287,6 +307,7 @@ async function getAdminInvoiceDetail(id) {
 }
 
 async function deleteInvoice(data) {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = `/api/invoice/delete_multiple`;
@@ -307,6 +328,7 @@ async function deleteInvoice(data) {
 }
 
 async function deleteShipment(data) {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = `/api/shipment/delete_multiple`;
@@ -328,6 +350,7 @@ async function deleteShipment(data) {
 
 
 async function deleteAdminMember(data) {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = `/api/user/delete_multiple`;
@@ -348,6 +371,7 @@ async function deleteAdminMember(data) {
 }
 
 async function getFaq() {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = `/api/faq/view`;
@@ -369,6 +393,7 @@ async function getFaq() {
 
 
 async function getTerms() {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = `/api/term/view`;
@@ -388,6 +413,7 @@ async function getTerms() {
 }
 
 async function updateFaq(data,id) {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = `/api/faq/update/${id}`;
@@ -409,6 +435,7 @@ async function updateFaq(data,id) {
 
 
 async function updateTerms(data,id) {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = `/api/term/update/${id}`;
@@ -429,6 +456,7 @@ async function updateTerms(data,id) {
 }
 
 async function addFaq(data) {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = `/api/faq/create`;
@@ -449,6 +477,7 @@ async function addFaq(data) {
 }
 
 async function addTerms(data) {
+    const defaultHeaders = getHeader();
     // const authToken = {'Authorization':'Bearer '+token}
     try {
         const url = `/api/term/create`;
@@ -463,6 +492,49 @@ async function addTerms(data) {
     } catch (error) {
         if(error.response === 401) {
             clearStoredCreds();
+        }
+        return Promise.reject(error.response);
+    }
+}
+
+async function indexOriginPhoto(customerId){
+    const defaultHeaders = getHeader();
+    // const authToken = {'Authorization':'Bearer '+token}
+    // console.log('asdlkfjsadfl')
+    try {
+        const url = `/api/drive/save_to_db/${customerId}`;
+        const headers = {...defaultHeaders};
+        const response = await axios({
+            method: 'GET',
+            url,
+            headers
+        });
+        // console.log(response);
+        return response;
+    } catch (error) {
+        if(error.response === 401) {
+            // clearStoredCreds();
+        }
+        // console.log(error);
+        return Promise.reject(error.response);
+    }
+}
+
+async function indexChoicePhoto(customerId){
+    const defaultHeaders = getHeader();
+    // const authToken = {'Authorization':'Bearer '+token}
+    try {
+        const url = `/api/drive/save_choice_to_db/${customerId}`;
+        const headers = {...defaultHeaders};
+        const response = await axios({
+            method: 'GET',
+            url,
+            headers
+        });
+        return response;
+    } catch (error) {
+        if(error.response === 401) {
+            // clearStoredCreds();
         }
         return Promise.reject(error.response);
     }
