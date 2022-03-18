@@ -59,6 +59,12 @@ import {
     GET_TERMS_ADMIN,
     GET_TERMS_ADMIN_SUCCESS,
     GET_TERMS_ADMIN_FAIL,
+    INDEX_CHOICE_PHOTO,
+    INDEX_CHOICE_PHOTO_FAIL,
+    INDEX_CHOICE_PHOTO_SUCCESS,
+    INDEX_ORIGIN_PHOTO,
+    INDEX_ORIGIN_PHOTO_FAIL,
+    INDEX_ORIGIN_PHOTO_SUCCESS
 } from '../actionTypes'
 
 const initialState ={
@@ -117,6 +123,9 @@ const initialState ={
 		error: false,
 		data: [],
 	},
+    index: {
+        loading: false,
+    }
 
 }
 
@@ -242,7 +251,55 @@ const reducer = (state = initialState, action) => {
             return {...state, patch:{...state.patch, data: action.payload, loading: false, error: false}};
         case PATCH_FAQ_ADMIN_FAIL:
             return {...state, patch:{...state.patch, loading: false, error: action.payload}};
-
+        case INDEX_ORIGIN_PHOTO: 
+            return {
+                ...state,
+                index: {
+                    ...state.index,
+                    loading:true
+                }
+            };
+        case INDEX_ORIGIN_PHOTO_SUCCESS: 
+            return {
+                ...state,
+                index: {
+                    ...state.index,
+                    loading:false
+                }
+            };
+        case INDEX_ORIGIN_PHOTO_FAIL: 
+            return {
+                ...state,
+                index: {
+                    ...state.index,
+                    loading:false
+                }
+            };
+        case INDEX_CHOICE_PHOTO: 
+            return {
+                ...state,
+                index: {
+                    ...state.index,
+                    loading:true
+                }
+            };
+        case INDEX_CHOICE_PHOTO_SUCCESS: 
+            return {
+                ...state,
+                index: {
+                    ...state.index,
+                    loading:false
+                }
+            };
+        case INDEX_CHOICE_PHOTO_FAIL: 
+            return {
+                ...state,
+                index: {
+                    ...state.index,
+                    loading:false
+                }
+            };
+            
         default:
             return state;
     }

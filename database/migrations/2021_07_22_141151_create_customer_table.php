@@ -21,6 +21,7 @@ class CreateCustomerTable extends Migration
             $table->integer('id_user');
             $table->integer('restrict_album_print')->default('0');
             $table->integer('restrict_delete')->default('0');
+            $table->string('basename_gdrive');
             $table->timestamps();
         });
     }

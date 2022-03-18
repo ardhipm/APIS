@@ -5,6 +5,9 @@ use App\SelectedPhoto;
 use App\Customer;
 use App\SubPackage;
 use App\User;
+use App\Origin;
+use App\Choice;
+use App\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -303,7 +306,6 @@ class DrivePhotoController extends Controller
     public function getAlbumCache(){
         if (\Cache::has('album_user_'.Auth::Id())) {
             $response = \Cache::get('album_user_'.Auth::Id());
-
             return $response;
             
         } else {
@@ -344,6 +346,9 @@ class DrivePhotoController extends Controller
         $currentPage = 0;
 
         $totalPage = ceil(count($filedirchild)/10);
+        $response = new \stdClass();
+        $response->folder = $directory['name'];
+        
 
         if($page > $totalPage || $page < 1){
             $response = [
@@ -356,22 +361,33 @@ class DrivePhotoController extends Controller
             if($page != $totalPage){
                 for($i = ($page*10) - 10; $i < $page*10; $i++){
                     $dataFile = array();
-
+                    $filePhoto = new \stdClass();
+                    $filePhoto->name = $filedirchild[$i]['name'];
+                    $filePhoto->basename = $filedirchild[$i]['basename'];
+                    $filePhoto->path = $filedirchild[$i]['path'];
+                    // $filePhoto->name = $filedirchild[$i]['name'];
+                    // die(var_dump($filePhoto));
                     $parent = new \ArrayObject();
                     $parent['folder'] = $directory['name'];
-                    $parent['file'] = $filedirchild[$i];
+                    // $parent['file'] = $filedirchild[$i];
+                    $parent['file'] = $filePhoto;
 
-                    array_push($data, $parent);
+                    array_push($response->photos, $parent);
                 }
             }else{
                 for($i = ($page*10) - 10; $i < count($filedirchild); $i++){
                     $dataFile = array();
-
+                    $filePhoto = new \stdClass();
+                    $filePhoto->name = $filedirchild[$i]['name'];
+                    $filePhoto->basename = $filedirchild[$i]['basename'];
+                    $filePhoto->path = $filedirchild[$i]['path'];
+                    // die(var_dump($filePhoto));
                     $parent = new \ArrayObject();
-                    $parent['folder'] = $directory['name'];
-                    $parent['file'] = $filedirchild[$i];
+                    // $parent['folder'] = $directory['name'];
+                    // $parent['file'] = $filedirchild[$i];
+                    // $parent['file'] = $filePhoto;
 
-                    array_push($data, $parent);
+                    array_push($response->photos, $parent);
                 }
             }
 
@@ -387,6 +403,8 @@ class DrivePhotoController extends Controller
         }
 
     }
+
+    
 
     public function getOriginPhoto(){
     
@@ -523,36 +541,6 @@ class DrivePhotoController extends Controller
         \Cache::put('album_user_'.Auth::Id(), $response, 600);
 
         return $response;
-    }
-
-    public function insertSelected(Request $request)
-    {
-        $body = $request->getContent();
-        $bodyJson = json_decode($body, true);
-
-        $customer = DB::table('customers')
-            ->leftJoin('users', 'customers.id_user', 'users.id')
-            ->select('customers.id', 'customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
-            ->where('customers.id_user', '=', Auth::Id())
-            ->get()->toArray();
-
-        DB::delete('DELETE from selected_photos where id_customer = '/$customer[0]->id);
-
-
-        $listBasename = $bodyJson['list_basename'];
-        for ($x = 0; $x <= count($listBasename) - 1; $x++) {
-            $parent = new \ArrayObject();
-            $parent['id_customer'] = $customer[0]->id;
-            $parent['basename'] = $listBasename[$x]['basename'];
-
-            $parentArray = (array) $parent;
-
-            // return $parent;
-            SelectedPhoto::create($parentArray);
-        }
-
-        return response(['success' => true, 'message' => 'Selected Photo inserted'], 201);
-
     }
 
     public function createZipFile($folderName){
@@ -1205,4 +1193,236 @@ class DrivePhotoController extends Controller
         
         
     }
+
+    public function saveOriginToDB($customerId){
+
+        $user = Auth::user();
+
+        if($user->role_id != 2){
+            return response(['message' => 'Unauthorized'], 401);
+        }
+        $customer = DB::table('customers')
+        ->leftJoin('users', 'customers.id_user', 'users.id')
+        ->leftJoin('packages', 'customers.id', 'packages.id_customer')
+        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name', 'packages.id as package_id')
+        ->where('customers.id', '=', $customerId)
+        ->get()->toArray();
+    
+        DB::delete('DELETE from origin_photo where id_customer = '.$customer[0]->id);
+    
+        $sub_package = DB::table('sub_packages')->where('id_package', '=', $customer[0]->package_id)->get()->toArray();
+        // die(print_r($sub_package));
+        
+        $folder = $customer[0]->id .' - ' .$customer[0]->name;
+    
+        $contents = collect(\Storage::cloud()->listContents('/', false));
+        $dir = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', $folder)
+                ->first(); // There could be duplicate directory names!
+        
+        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+        $dir = $contents->where('type', '=', 'dir')
+        ->where('filename', '=', 'Foto Mentah')
+        ->first(); // There could be duplicate directory names!
+    
+        $filedir = collect(\Storage::cloud()->listContents($dir['path'], false));
+        $directory = $filedir->where('type', '=', 'dir')->toArray();
+        // $file= $filedir->where('type', '=', 'file')->toArray();
+    
+        $data = array();
+    
+        for($i = 0; $i < count($directory); $i++){
+    
+            $filedirchild = collect(\Storage::cloud()->listContents($directory[$i]['path'], false))->where('type', '=', 'file')->toArray();
+    
+            for($j = 0; $j < count($filedirchild); $j++){
+                $bodyJson['id_customer'] = $customer[0]->id;
+                $bodyJson['sub_package_name'] = $directory[$i]['filename'];
+                foreach ( $sub_package as $element ) {
+                    if ( $bodyJson['sub_package_name'] == $element->sub_package_name ) {
+                        $bodyJson['sub_package_id'] = $element->id;
+                    }
+                }
+                $bodyJson['filename'] = $filedirchild[$j]['filename'];
+                $bodyJson['path'] = $filedirchild[$j]['path'];
+                $bodyJson['basename'] = $filedirchild[$j]['basename'];
+    
+                Origin::create($bodyJson);
+    
+            }
+        }
+
+        $notif = new Notification;
+        $notif->notification_type = 'CUSTOMER';
+        $notif->message = 'Foto mentah telah diperbarui';
+        $notif->description = 'FOTO MENTAH';
+        $notif->is_read = 0;
+        $notif->created_by = User::where('role_id', '=', 2)->get()->first()->id;
+        $notif->id_customer = $customerId;
+        $notif->save();
+
+    
+        return response(['success' => true, 'message' => 'Synchronize Successfully']);
+    
+    }
+
+    public function countSelectedOriginPhoto($subPackageId){
+        $customer = Customer::where('id_user', '=', Auth::id())->get()->first();
+        $tbl = DB::table('origin_photo as op')
+        ->rightJoin('selected_photo as sp', 'op.basename', 'sp.basename')
+        ->select('op.id','op.sub_package_id', 'op.sub_package_name', 'op.filename', 'op.path', 'op.basename', 'op.id_customer', 
+            DB::raw('(CASE WHEN sp.basename is null THEN false ELSE true END) AS is_selected')
+        )
+        ->where('op.id_customer', '=', $customer->id)
+        ->where('op.sub_package_id', '=', $subPackageId)->get();
+        // $selectedPhoto = SelectedPhoto::where('id_customer', '=', $customer->id)->get()->toArray();
+        // die(print_r(count($selectedPhoto)));
+        return response(['success' => true,'data'=>count($tbl), 'message' => 'Synchronize Successfully']);
+    }
+    
+    public function getDownloadLinkGoogleDrive($type){
+
+        $gdriveFolderName = '';
+        if($type == NULL){
+            return response(['success' => false,'message' => 'Tipe folder tidak ditemukan']);
+        }
+
+        if($type == 'origin'){
+            $gdriveFolderName = 'Foto Mentah';
+        }
+
+        if($type == 'choice'){
+            $gdriveFolderName = 'Foto Pilihan';
+        }
+
+        if($type == 'album'){
+            $gdriveFolderName = 'Album';
+        }
+
+        if($type == 'video'){
+            $gdriveFolderName = 'Video';
+        }
+
+        $customer = Customer::where('id_user', '=', Auth::id())->get()->first();
+        $drivelink = 'drive.google.com/drive/folders/';
+        $drivesharing = '?usp=sharing';
+
+
+        $obj = new \stdClass();
+        $contents = collect(\Storage::cloud()->listContents('/', false));
+        $dir = $contents->where('type', '=', 'dir')
+                ->where('basename', '=', $customer->basename_gdrive)
+                ->first(); // There could be duplicate directory names!
+
+                
+        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+        $dir = $contents->where('type', '=', 'dir')
+            ->where('filename', '=', $gdriveFolderName)
+            ->first(); // There could be duplicate directory names!
+
+        $obj->parent_folder_name  =  $dir['name'];
+        $obj->parent_link = $drivelink.$dir['basename'].$drivesharing;
+
+        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+        $dir = $contents->where('type', '=', 'dir');
+        $obj->child = array();
+
+        foreach($dir as $value){
+            $childDir = new \stdClass();
+            $childDir->child_folder_name = $value['name'];
+            $childDir->child_link = $drivelink.$value['basename'].$drivesharing;
+            array_push($obj->child, $childDir);
+
+        }
+
+        return response(['success' => true,'data'=>$obj, 'message' => 'Link retrieved']);
+    }
+
+    public function saveChoiceToDB($customerId){
+
+
+        $user = Auth::user();
+
+        if($user->role_id != 2){
+            return response(['message' => 'Unauthorized'], 401);
+        }
+        $customer = DB::table('customers')
+        ->leftJoin('users', 'customers.id_user', 'users.id')
+        ->leftJoin('packages', 'customers.id', 'packages.id_customer')
+        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name', 'packages.id as package_id', 'customers.basename_gdrive')
+        ->where('customers.id', '=', $customerId)
+        ->get()->toArray();
+    
+        DB::delete('DELETE from choice_photo where id_customer = '.$customer[0]->id);
+    
+        $sub_package = DB::table('sub_packages')->where('id_package', '=', $customer[0]->package_id)->get()->toArray();
+        // die(print_r($sub_package));
+        
+        $folder = $customer[0]->id .' - ' .$customer[0]->name;
+    
+        $contents = collect(\Storage::cloud()->listContents('/', false));
+        $dir = $contents->where('type', '=', 'dir')
+                ->where('basename', '=', $customer[0]->basename_gdrive)
+                ->first(); // There could be duplicate directory names!
+        
+        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+        $dir = $contents->where('type', '=', 'dir')
+        ->where('filename', '=', 'Foto Pilihan')
+        ->first(); // There could be duplicate directory names!
+    
+        $filedir = collect(\Storage::cloud()->listContents($dir['path'], false));
+        $directory = $filedir->where('type', '=', 'dir')->toArray();
+        // $file= $filedir->where('type', '=', 'file')->toArray();
+    
+        $data = array();
+
+        $selectedPhotoArray = collect(DB::table('selected_photo as select')
+            ->join('sub_packages as sp', 'sp.id', 'select.id_subpackage')
+            ->join('packages as p', 'p.id', 'sp.id_package')
+            ->join('customers as c', 'c.id', 'p.id_customer')
+            ->select('select.choice_basename')
+            ->where('c.id', '=', $customerId)
+            ->whereNotNull('select.choice_basename')->get()->toArray());
+            // ->where('select.sub_package_id', '=', $subpackageId)
+    
+        for($i = 0; $i < count($directory); $i++){
+    
+            $filedirchild = collect(\Storage::cloud()->listContents($directory[$i]['path'], false))->where('type', '=', 'file')->toArray();
+    
+            for($j = 0; $j < count($filedirchild); $j++){
+                if(count($selectedPhotoArray->where('choice_basename','=',$filedirchild[$j]['basename'])) > 0){
+                    $bodyJson['is_edited'] = false;
+                }else{
+                    $bodyJson['is_edited'] = true;
+                }
+                $bodyJson['id_customer'] = $customer[0]->id;
+                $bodyJson['sub_package_name'] = $directory[$i]['filename'];
+                foreach ( $sub_package as $element ) {
+                    if ( $bodyJson['sub_package_name'] == $element->sub_package_name ) {
+                        $bodyJson['sub_package_id'] = $element->id;
+                    }
+                }
+                $bodyJson['filename'] = $filedirchild[$j]['filename'];
+                $bodyJson['path'] = $filedirchild[$j]['path'];
+                $bodyJson['basename'] = $filedirchild[$j]['basename'];
+    
+                Choice::create($bodyJson);
+    
+            }
+        }
+
+        $notif = new Notification;
+        $notif->notification_type = 'CUSTOMER';
+        $notif->message = 'Foto pilihan telah diperbarui';
+        $notif->description = 'FOTO PILIHAN';
+        $notif->is_read = 0;
+        $notif->created_by = User::where('role_id', '=', 2)->get()->first()->id;
+        $notif->id_customer = $customerId;
+        $notif->save();
+    
+        return response(['success' => true, 'message' => 'Synchronize Successfully']);
+    
+    }
+
 }
+    

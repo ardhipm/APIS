@@ -347,6 +347,7 @@ export default function EnhancedTable() {
     <div className={classes.root}>
       <div style={{display:"flex"}}>
         <h2>Data Pelanggan</h2>
+        {/* <button onClick={() => {console.log(localStorage.getItem('authToken'), localStorage.getItem('user'))}}>print auth token</button> */}
         <div style={{
           position:"absolute",
           right:30

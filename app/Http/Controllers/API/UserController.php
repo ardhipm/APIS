@@ -84,6 +84,10 @@ class UserController extends Controller
                 ->where('filename', '=', $customer->id . ' - ' . $bodyJson['name'])
                 ->first(); // There could be duplicate directory names!
 
+                $customer2 = Customer::find($customer->id);
+                $customer2->basename_gdrive = $dir['basename'];
+                $customer2->save();
+                
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Mentah');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Pilihan');
                 \Storage::cloud()->makeDirectory($dir['path'] . '/Foto Album');
@@ -316,8 +320,12 @@ class UserController extends Controller
                 return response(['success' => false, 'message' => 'This User does not exist, check your details'], 400);
             }
             $accessToken = auth()->user()->createToken('authToken')->accessToken;
+            $user = new \stdClass();
+            $user->username = auth()->user()->username;
+            $user->role = auth()->user()->role_id;
+            $user->is_active = auth()->user()->is_active;
             
-            return response(['success' => true, 'message' => 'Login successfully', 'user' => auth()->user(), 'access_token' => $accessToken]);
+            return response(['success' => true, 'message' => 'Login successfully','user'=> $user, 'access_token' => $accessToken]);
         }
        
     }

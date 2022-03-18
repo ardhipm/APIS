@@ -1,4 +1,4 @@
-import { InputLabel, TextField, Typography, Button, FormControlLabel, Grid, withStyles, InputBase, alpha, makeStyles, Backdrop, CircularProgress, setRef } from '@material-ui/core';
+import { InputLabel, TextField, Typography, Button, FormControlLabel, Grid, withStyles, InputBase, alpha, makeStyles, Backdrop, CircularProgress, setRef, Tooltip } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import * as Yup from 'yup';
@@ -11,8 +11,15 @@ import FormPersonalPelanggan from './FormPersonalPelanggan';
 import axios from 'axios';
 import SuccessDialog from '../../Popup/SuccessDialog';
 import ErrorDialog from '../../Popup/ErrorDialog';
-import RefreshIcon from '@material-ui/icons/Refresh';
 import IconButton from '@material-ui/core/IconButton';
+import { Autorenew, FolderOpen } from '@material-ui/icons';
+import { Refresh } from '@material-ui/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { setOpenConfirmDialog, confirmDialogType } from '../../../Redux/User/features/confirmdialog/confirmdialog.action';
+import ConfirmationDialog from '../../Popup/ConfirmationDialog';
+import LoadingSnackbar from '../../User/OriginPhotoPage/LoadingSnackbar';
+import PhotoAlert from '../../User/OriginPhotoPage/PhotoAlert';
+import { setOpenLoadingPopup } from '../../../Redux/Popup/Loading/loading.action';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -84,6 +91,9 @@ function FormulirTambahPelanggan(props) {
 
     let { customerId } = useParams();
     const classes = useStyles();
+    const adminProps = useSelector((state) => state.admin);
+    const allProps = useSelector((state) => state);
+    const dispatch = useDispatch();
 
     const [openPackagePopup, setOpenPackagePopup] = React.useState(false);
     const [dataPackage, setDataPackage] = React.useState(dummySubPaketData);
@@ -93,6 +103,7 @@ function FormulirTambahPelanggan(props) {
     const [isErrorPopup, setIsErrorPopup] = React.useState(false);
     const [alertText, setAlertText] = React.useState("Tambah pelanggan berhasil")
     const [refreshPopup, setRefreshPopup] = React.useState(false);
+    const [linkToFolderDrive, setLinkToFolderDrive] = React.useState('');
 
     const handleCreateCustomer = (values) => {
         setSubmitLoading(true);
@@ -290,6 +301,7 @@ function FormulirTambahPelanggan(props) {
                         formik.setFieldValue('password', values.plain_password);
                         formik.setFieldValue('confirmPassword', values.plain_password);
                         formik.setFieldValue('oldPassword', values.password);
+                        setLinkToFolderDrive(values.basename_gdrive);
 
                         let subPackage = [];
 
@@ -351,6 +363,18 @@ function FormulirTambahPelanggan(props) {
         setOpenPackagePopup(false);
     }
 
+    const openDriveLink = () => {
+        window.open(`https://drive.google.com/drive/u/1/folders/${linkToFolderDrive}`, '_blank');
+    }
+
+    const handleIndexOriginPhoto = () => {
+        dispatch(setOpenConfirmDialog(true, 'Foto mentah pada google drive akan terindeks, lanjutkan ?',confirmDialogType.INDEX_ORIGIN_PHOTO ))
+    }
+
+    const handleIndexChoicePhoto = () => {
+        dispatch(setOpenConfirmDialog(true, 'Foto pilihan pada google drive akan terindeks, lanjutkan ?',confirmDialogType.INDEX_CHOICE_PHOTO ))
+    }
+
 
     const handlePackageData = (packageData) => {
         setDataPackage(prevState => {
@@ -363,6 +387,10 @@ function FormulirTambahPelanggan(props) {
 
 
         // //console.log('handlePackageDtaa ' + dataPackage);
+    }
+
+    const handleLoading = () => {
+        dispatch(setOpenLoadingPopup(true, 'alskdjf'))
     }
 
     const showAlertPopup = (isErrorPopup ?
@@ -384,6 +412,7 @@ function FormulirTambahPelanggan(props) {
             </Grid>
         </Grid>)
 
+    
 
     const refreshPhotoUser = () => {
         // console.log('here')
@@ -391,9 +420,9 @@ function FormulirTambahPelanggan(props) {
         const token = localStorage.getItem('authToken');
         axios.request({
             method: 'post',
-            url: '/api/admin/drive/refresh_photo/param?customerId='+customerId,
+            url: '/api/admin/drive/refresh_photo/param?customerId=' + customerId,
             headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
-        }).then( res => {
+        }).then(res => {
             console.log('kesini')
             setSubmitLoading(false)
             console.log(res)
@@ -412,12 +441,42 @@ function FormulirTambahPelanggan(props) {
 
 
     return (
-        <div>
+        <div style={{ overflow: 'auto', height: '85vh' }}>
+            <div style={{ position: 'absolute', top: 0, right: 0 }}>
+
+            </div>
             <Typography variant="h4" style={{ marginBottom: '24px' }}>
-                <b>Tambah Pelanggan</b> 
-                <IconButton onClick={refreshPhotoUser}>
-                    <RefreshIcon />
-                </IconButton>
+                <b>{customerId == undefined ? 'Tambah' : 'Edit'} Pelanggan</b>
+                {customerId != undefined ? <Tooltip title="Buka folder drive">
+                    <IconButton onClick={openDriveLink}>
+                        <FolderOpen />
+                    </IconButton>
+                </Tooltip>:<></>}
+                {customerId != undefined ?<Tooltip title="Indeks foto mentah">
+                    <IconButton onClick={handleIndexOriginPhoto}>
+                        <Autorenew style={{ color: '#559DCC'}} />
+                    </IconButton>
+                </Tooltip>:<></>}
+                {customerId != undefined ?<Tooltip title="Indeks foto pilihan">
+                    <IconButton onClick={handleIndexChoicePhoto}>
+                        <Autorenew style={{ color: '#FB9300'}}/>
+                    </IconButton>
+                </Tooltip>:<></>}
+                {/* <button onClick={() => console.log(allProps)}>show props</button>
+                <button onClick={handleLoading}>show loading</button> */}
+
+
+                {/* <Tooltip title="Indeks Foto Pilihan">
+                    <IconButton onClick={refreshPhotoUser}>
+                        <RefreshIcon />
+                    </IconButton>
+                    <Button
+                        style={{ textTransform: "capitalize", backgroundColor: "#000", color: "#FFF", width: "100%", marginTop: '16px' }}
+                        type="submit"
+                    >
+                        Test
+                    </Button>
+                </Tooltip> */}
             </Typography>
             <form onSubmit={formik.handleSubmit}>
                 <Grid container>
@@ -465,7 +524,10 @@ function FormulirTambahPelanggan(props) {
             <SuccessDialog
                 open={refreshPopup}
                 text={"Sinkronisasi berhasil"}
-                handleClose={handleCloseRefreshPopup} />)
+                handleClose={handleCloseRefreshPopup} />
+            <ConfirmationDialog />
+            <LoadingSnackbar />
+            <PhotoAlert />
         </div >
     );
 }
