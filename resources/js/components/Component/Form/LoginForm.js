@@ -1,7 +1,7 @@
-import React, { useState, setState } from 'react';
+import React, { useState, setState, useEffect } from 'react';
 import { makeStyles, withStyles, alpha } from '@material-ui/core/styles';
 import { v4 as uuidv4 } from 'uuid';
-import { Backdrop,CircularProgress, Checkbox, FormControlLabel, Grid, IconButton, InputAdornment, InputBase, Link } from '@material-ui/core';
+import { Backdrop, CircularProgress, Checkbox, FormControlLabel, Grid, IconButton, InputAdornment, InputBase, Link } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -10,11 +10,14 @@ import { Formik, useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userLogIn } from '../../actions';
 import Splashscreen from '../Splashscreen';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import { isTokenExists, login } from '../../Redux/Login/login.action';
+import { getOriginPhotoMetadata } from '../../Redux/User/features/originphoto/originphoto.action';
+import { GET_CUSTOMER_VIEW } from '../../Redux/actionTypes';
 
 const useStyles = makeStyles({
     root: {
@@ -168,7 +171,8 @@ const LoginForm = (props) => {
     const [openSplashScreen, setOpenSplashScreen] = React.useState(false)
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = React.useState(false);
-    const [loading, setLoading] = React.useState(false);
+    const loginReducer = useSelector((state) => state.loginReducer);
+    const user = JSON.parse(localStorage.getItem("user"));
 
     const classes = useStyles();
     let history = useHistory();
@@ -178,98 +182,50 @@ const LoginForm = (props) => {
         errorMsg: ""
     })
 
-    const handleSubmit = (values) => {
-        setLoading(true);
-        const loginForm = {
-            username: values.userName,
-            password: values.password
-        };
-
-        axios.post("/api/login", {
-            username: values.userName,
-            password: values.password
-        }).then(res => {
-            if (res.data.success) {
-                // //console.log(res.data.role_id);
-
-                let user = res.data.user;
-                let userData = {
-                    id: user.id,
-                    username: user.username,
-                    email: user.email,
-                    is_active: user.is_active,
-                    role_id: user.role_id
-                }
-                // dispatch(userLogIn(res.data.user));
-
-
-                if (user.is_active == 1) {
-                    setLoading(false);
-                    setOpenSplashScreen(true);
-                    setTimeout(() => {
-                        localStorage.setItem("authToken", res.data.access_token);
-                        localStorage.setItem("SOURCE_TO_CHOICE", false);
-                        localStorage.setItem("user", JSON.stringify(userData));
-
-                        setTimeout(function () { //Start the timer
-                            //console.log('start') //After 1 second, set render to true
-                            if (res.data.user.role_id == 1) {
-                                history.push({ pathname: "/pelanggan/paket", state: { role: "pelanggan" } });
-                                // const test = React.createContext(history.location.state.role);
-                            }
-                            if (res.data.user.role_id == 2) {
-                                history.push({ pathname: "/admin/pengguna", state: { role: "superadmin" } });
-                                localStorage.setItem("FIRST_TERMS", false)
-                                window.location.reload();
-                            }
-                            if (res.data.user.role_id == 3) {
-                                history.push({ pathname: "/admin/pelanggan", state: { role: "admin" } });
-                                localStorage.setItem("FIRST_TERMS", false)
-                                window.location.reload();
-                            }
-                        }.bind(this), 3)
-
-
-                        setOpenSplashScreen(false)
-                    }, 8000)
-                } else {
-                    setLoading(false);
-                    setState(prevState => ({
-                        ...prevState,
-                        errorMsg: 'User tidak Aktif.'
-                    }));
-                    return null;
-
-                }
-
-            } else {
-                setLoading(false);
-                setState(prevState => ({
-                    ...prevState,
-                    errorMsg: 'Username tidak di temukan.'
-                }));
-                return null;
-
+    useEffect(() => {
+        dispatch(isTokenExists());
+        // dispatch({type: GET_CUSTOMER_VIEW});
+        if (loginReducer.isAuthenticated) {
+            // console.log('is authentication true');
+            setOpenSplashScreen(true);
+            if(user.roleId == 1){
+                dispatch(getOriginPhotoMetadata());
             }
 
-        }).catch(error => {
-                setLoading(false);
-                setState(prevState => ({
-                    ...prevState,
-                    errorMsg: 'Username tidak di temukan.'
-                }));
-                return null;
+            const timer = setTimeout(() => {
+                // setCount('Timeout called!');
+                setOpenSplashScreen(false);
+                // console.log('start') //After 1 second, set render to true
+                if (user.roleId == 1) {
+                    history.push({ pathname: "/pelanggan/paket", state: { role: "pelanggan" } });
+                    // const test = React.createContext(history.location.state.role);
+                }
+                if (user.roleId == 2) {
+                    history.push({ pathname: "/admin/pengguna", state: { role: "superadmin" } });
+                    // localStorage.setItem("FIRST_TERMS", false)
+                    // window.location.reload();
+                }
+                if (user.roleId == 3) {
+                    history.push({ pathname: "/admin/pelanggan", state: { role: "admin" } });
+                    // localStorage.setItem("FIRST_TERMS", false)
+                    // window.location.reload();
+                }
+            }, 8000);
+            return () => clearTimeout(timer);
+        }
 
-                //console.log(error);
-            })
+    }, [loginReducer.isAuthenticated])
 
-
+    const handleSubmit = (values) => {
+        // console.log(values);
+        dispatch(login(values.userName, values.password, values.rememberMe))
     }
 
     const formik = useFormik({
         initialValues: {
             userName: '',
             password: '',
+            rememberMe: false
         },
         validationSchema: loginSchema,
         onSubmit: (values) => {
@@ -281,6 +237,7 @@ const LoginForm = (props) => {
     return (
 
         <form className={classes.formLogin} onSubmit={formik.handleSubmit}>
+            {/* <button onClick={(e) => { e.preventDefault(); console.log(loginReducer) }}>print selector</button> */}
             {/* <form className={classes.formLogin} onSubmit={handleSubmit}> */}
             <Grid container spacing={4}>
                 <Grid className={classes.gridItem} item xs={12}>
@@ -340,7 +297,11 @@ const LoginForm = (props) => {
                         classes={{ label: classes.label }}
                         control={
                             <Checkbox
-                                defaultValue={false}
+                                defaultValue={formik.values.rememberMe}
+                                // onChange={formik.handleChange}
+                                onChange={(e) => {
+                                    formik.setFieldValue('rememberMe', e.target.checked);
+                                }}
                                 color="primary"
                                 inputProps={{ 'aria-label': 'secondary checkbox' }}
                                 style={{ textAlign: 'left', paddingTop: 0 + 'px', paddingBottom: 0 + 'px', color: 'white' }}
@@ -356,7 +317,7 @@ const LoginForm = (props) => {
                 <Grid item xs={12} style={{ paddingTop: 50 + 'px' }}>
                     <Button variant="contained" color="primary" type="submit" className={classes.inputBtn}>
                         Masuk
-                        </Button>
+                    </Button>
                     <Typography className={classes.errorMsg} color="textSecondary" gutterBottom
                         style={{ fontSize: 12 + 'px', display: 'inline', lineHeight: 'normal' }}>
                         {state.errorMsg}
@@ -365,7 +326,7 @@ const LoginForm = (props) => {
             </Grid>
             <Splashscreen open={openSplashScreen} />
             <Backdrop style={{ zIndex: 1000, color: '#fff', }}
-                open={loading} >
+                open={loginReducer.loading} >
                 <CircularProgress color="inherit" />
             </Backdrop>
         </form>

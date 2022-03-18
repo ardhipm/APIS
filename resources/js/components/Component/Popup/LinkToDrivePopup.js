@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, makeStyles, Typography } from '@material-ui/core';
 import { GetApp } from '@material-ui/icons';
+import { getDownloadLink, setOpenDownloadPopup } from '../../Redux/User/features/originphoto/originphoto.action';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -11,18 +13,25 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const LinkToDrivePopup = (props) => {
+const LinkToDrivePopup = () => {
     const classes = useStyles();
 
-    const [data, setData] = React.useState(props.data);
+    const originPhotoProps = useSelector((state) => state.originPhotoReducer);
+    const dispatch = useDispatch();
+    // const [data, setData] = React.useState(props.data);
 
     
     useEffect(() => {
-        setData(props.data);
-    },[props.data])
+        // setData(props.data);
+        // console.log('linktoprop')
+    },[originPhotoProps.openDownloadPopup]);
+
+    const handleClose = () => {
+        dispatch(setOpenDownloadPopup(false));
+    }
 
     return(
-        <Dialog open={props.open} className={classes.dialogLayout} onClose={props.handleClose} aria-labelledby="form-dialog-title">
+        <Dialog open={originPhotoProps.openDownloadPopup} className={classes.dialogLayout} onClose={handleClose} aria-labelledby="form-dialog-title">
             <DialogContent>
                 <Grid
                     container
@@ -38,12 +47,21 @@ const LinkToDrivePopup = (props) => {
                             Pilih salah satu link untuk menuju ke link download
                         </Typography>
                         <Typography style={{display: 'flex', flexFlow: 'column'}}>
-                            <a href={"https://drive.google.com/drive/folders/"+data.parent_basename+"?usp=sharing"} target="_blank">{data.parent_filename}</a>
-                            {data.child != undefined && data.child.map((element, idx) => {
-                                let link = "https://drive.google.com/drive/folders/"+element.basename+"?usp=sharing";
-                                let foldername = element.name;
-                                return <a key={idx} href={link} target="_blank" data-sub-name={element.name} data-idx={idx} onClick={props.handleClose}>{foldername}</a>
+                            <a href={'https://'+originPhotoProps.parentFolderLink} target="_blank">{originPhotoProps.parentFolderName}</a>
+                            {originPhotoProps.downloadChild.map((element, idx) => {
+                                let link = 'https://'+element.child_link;
+                                let foldername = element.child_folder_name;
+                                return <a 
+                                    key={element.child_link}  
+                                    href={link} target="_blank" 
+                                    data-sub-name={element.name} 
+                                    data-idx={idx}>
+                                        {foldername}
+                                    </a>
                             })}
+                            {/* {data.child != undefined && data.child.map((element, idx) => {
+                                
+                            })} */}
                             
                             {/* <a href="https://www.google.com" target="_blank">Sub Folder 2</a> */}
                         </Typography>

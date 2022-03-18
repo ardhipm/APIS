@@ -26,9 +26,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-
         //fix bug package name not change in user
-    $customer = DB::table('customers')
+        $customer = DB::table('customers')
         ->leftJoin('users', 'customers.id_user', 'users.id')
         ->leftJoin('packages', 'customers.id', 'packages.id_customer')
         ->select('customers.id', 
@@ -190,6 +189,7 @@ class CustomerController extends Controller
             'customers.partner_name', 
             'customers.restrict_album_print',
             'customers.restrict_delete',
+            'customers.basename_gdrive',
             'users.is_active', 
             'packages.id as packages_id', 
             'packages.package_name', 
@@ -576,5 +576,73 @@ class CustomerController extends Controller
 
         return response(['success' => true, 'message' => 'Deleted Successfully'], 201);
 
+    }
+
+    public function customerMetadata(Request $request){
+        // $user = Auth::user();
+        try{
+            $customer = DB::table('customers')
+            ->where('id_user', '=', Auth::id())
+            ->get();
+            $package = DB::table('packages')
+            ->where('id_customer', '=', $customer[0]->id)
+            ->get();
+            $subpackage = DB::table('sub_packages')
+            ->where('id_package', '=', $package[0]->id)
+            ->get()->toArray();
+            
+            $data = new \stdClass();
+            $data->package_name = $package[0]->package_name;
+            $data->package_description = $package[0]->package_description;
+            $data->subpackage = array();
+            foreach($subpackage as $value){
+                $subpackagetemp = new \stdClass();
+                $subpackagetemp->id = $value->id;
+                $subpackagetemp->name = $value->sub_package_name;
+                $subpackagetemp->description = $value->sub_package_description;
+                $subpackagetemp->num_limit_edit_photo = $value->num_edit_photo;
+                $subpackagetemp->num_selected_edit_photo = $value->num_selected_edit_photo;
+                
+                array_push($data->subpackage, $subpackagetemp);
+            }
+
+            return response(['success' => true, 'message'=> 'data retrieved', 'data'=>$data], 200);
+        }catch(Exception $e){
+            return response(['success' => false, 'message'=> $e], 500);
+        }
+    }
+
+    public function customerSelectedSubpackage($id){
+        try{
+            // $subId = $id;
+            // $customer = DB::table('customers')
+            // ->where('id_user', '=', Auth::id())
+            // ->get();
+            // $package = DB::table('packages')
+            // ->where('id_customer', '=', $customer[0]->id)
+            // ->get();
+            $subpackage = DB::table('sub_packages')
+            ->where('id', '=', $id)
+            ->first();
+            
+            // $data = new \stdClass();
+            // $data->package_name = $package[0]->package_name;
+            // $data->package_description = $package[0]->package_description;
+            // $data->subpackage = array();
+            // foreach($subpackage as $value){
+            $subpackagetemp = new \stdClass();
+            $subpackagetemp->id = $subpackage->id;
+            $subpackagetemp->name = $subpackage->sub_package_name;
+            $subpackagetemp->description = $subpackage->sub_package_description;
+            $subpackagetemp->num_limit_edit_photo = $subpackage->num_edit_photo;
+            $subpackagetemp->num_selected_edit_photo = $subpackage->num_selected_edit_photo;
+                
+            //     array_push($data->subpackage, $subpackagetemp);
+            // }
+
+            return response(['success' => true, 'message'=> 'data retrieved', 'data'=>$subpackagetemp], 200);
+        }catch(Exception $e){
+            return response(['success' => false, 'message'=> $e], 500);
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Notification;
+use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use GuzzleHttp\Client;
@@ -148,5 +149,41 @@ class NotificationController extends Controller
         return response($res->getBody(), 201);
     }
 
+    public function testCreate(){
+        $notif = new Notification;
+        $notif->notification_type = 'ADMIN';
+        $notif->message = 'sala123 telah memilih foto mentah';
+        $notif->description = 'FOTO MENTAH';
+        $notif->is_read = 0;
+        $notif->id_customer = User::where('role_id', '=', 2)->get()->first()->id;
+        $notif->created_by = 4;
+        $notif->save();
+    }
+
+    public function getNotificationByCustomer(){
+        // die(print_r($customerId));
+
+        $userId = Auth::Id();
+        $notif = null;
+        
+        if(Auth::user()->role_id == 2 || Auth::user()->role_id == 3){
+            $notif = Notification::where('notification_type', '=', 'ADMIN')->orderBy('created_at', 'desc')->get();
+        }else{
+            $customer = DB::table('customers')
+            ->leftJoin('users', 'customers.id_user', 'users.id')
+            ->select('customers.id')
+            ->where('customers.id_user', '=', $userId)
+            ->get()->first();
+            // die(print_r($customer));
+            $notif = Notification::where('id_customer', '=', $customer->id)->orderBy('created_at', 'desc')->get();
+        }
+
+        return response(['success' => true, 'data' => $notif, 'message'=>'Notification retrieve']);
+    }
+
+    public function updateIsRead($notifId){
+        Notification::where('id', '=', $notifId)->update(['is_read' => 1]);
+        return response(['success' => true, 'message'=>'Notif readed']);
+    }
     
 }

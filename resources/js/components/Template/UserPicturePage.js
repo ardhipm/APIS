@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Backdrop, Box, Button, CardMedia, CircularProgress, Container, Grid, makeStyles, Tab, Tabs, Typography } from '@material-ui/core';
 import { Delete, GetApp, LocalConvenienceStoreOutlined, Send } from '@material-ui/icons';
 import PhotoImage from '../Component/PhotoImage/PhotoImage';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import PhotoZoom from '../Component/PhotoImage/PhotoZoom';
 import axios from 'axios';
 import WarningDialog from '../Component/Popup/WarningDialog';
@@ -11,6 +11,7 @@ import SuccessDialog from '../Component/Popup/SuccessDialog';
 import ErrorDialog from '../Component/Popup/ErrorDialog';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import LinkToDrivePopup from '../Component/Popup/LinkToDrivePopup';
+import { getOriginPhotoMetadata } from '../Redux/User/features/originphoto/originphoto.action';
 
 const useStyles = makeStyles((theme) => ({
     tabLabel: {
@@ -54,6 +55,8 @@ const ALBUM_PRINT = "ALBUM_PRINT";
 
 const UserPicturePage = (props) => {
     const classes = useStyles();
+    const theState = useSelector((state) => state);
+    const dispatch = useDispatch();
 
     const [value, setValue] = React.useState(0);
     const [pictures, setPictures] = React.useState([]);
@@ -105,6 +108,7 @@ const UserPicturePage = (props) => {
     
 
     useEffect(() => {
+        dispatch(getOriginPhotoMetadata());
         getUserDownloadLink();
     }, []);
 
@@ -646,7 +650,7 @@ const UserPicturePage = (props) => {
             
 
         }).catch( error => {
-            console.log(error);
+            // console.log(error);
         })
         
     }
@@ -780,6 +784,7 @@ const UserPicturePage = (props) => {
                                 <Typography variant="h4" style={{ fontWeight: 'bold' }}>
                                     {packageName}
                                 </Typography>
+                                <button onClick={() => {console.log(theState)}}>click for props</button>
                             </Grid>
                             <Grid item xs={12}>
                                 <Typography variant="subtitle1" >

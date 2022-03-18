@@ -99,8 +99,8 @@ const PhotoZoom = (props) => {
 
     useEffect(() => {
         // setPhotoName(props.photoSrc.basename);
-        console.log('currentPhoto')
-        console.log(props.photoSrc)
+        // console.log('currentPhoto')
+        // console.log(props.photoSrc)
         setCheck(props.photoSrc.selected)
         setAlbumCheck(props.photoSrc.albumSelected)
         setPrintCheck(props.photoSrc.printSelected)
@@ -142,8 +142,8 @@ const PhotoZoom = (props) => {
 
     const handleSelect = (e) => {
         if (e.target.type === 'checkbox') {
-            console.log(e.target);
-            console.log(props.maxSelectedPhoto);
+            // console.log(e.target);
+            // console.log(props.maxSelectedPhoto);
             if (e.target.id == "checkzoom-album") {
                 if (totalSelectedAlbumPhoto >= totalRestrictionAlbumPhoto) {
                     setAlbumCheck(false)

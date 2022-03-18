@@ -127,7 +127,7 @@ function EditDataPembayaran(props) {
                 <Typography variant="h4">
                <b>Edit Pembayaran</b> 
             </Typography>
-            <div>
+            <div style={{margin:30}}>
                 <div className="pelanggan">
                     <InputLabel style={{marginBottom:10,marginTop:10}}><b>Nama Pelanggan</b></InputLabel>
                     <TextField
@@ -137,6 +137,9 @@ function EditDataPembayaran(props) {
                             width:"100%"
                         }}
                         size="small"
+                        InputProps={{
+                            readOnly: true
+                        }}
                         value={values.customer_name || ''}
                         error={errors.customer_name}
                         helperText={errors.customer_name}
@@ -150,6 +153,9 @@ function EditDataPembayaran(props) {
                             width:"100%"
                         }}
                         size="small"
+                        InputProps={{
+                            readOnly: true
+                        }}
                         value={values.partner_name}
                         error={errors.partner_name}
                         helperText={errors.partner_name}
@@ -196,10 +202,7 @@ function EditDataPembayaran(props) {
                 style={{textTransform:"capitalize",
                 backgroundColor:"#000", 
                 color:"#FFF", 
-                position:"absolute",
-                bottom:"0",
-                marginBottom:"12px",
-                width:"80%"}}>
+                width:"100%"}}>
                 Simpan
             </Button>
             </div>
