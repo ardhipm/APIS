@@ -204,15 +204,18 @@ export const openPicturePreview = (show) => ({
 })
 
 export const checkoutSelectedPhoto = (subpackageId) => async dispatch => {
+    dispatch(setOpenLoadingPopup(true, 'Loading...'));
     dispatch({type: CHECKOUT_SELECTED_PHOTO});
     const response = api.checkoutSelectedPhoto(subpackageId);
 
     return response.then(
         response => {
+            dispatch(setOpenLoadingPopup(false, ''));
             dispatch({type: CHECKOUT_SELECTED_PHOTO_SUCCESS, payload: response.data})
             dispatch(setOpenAlertPopup(true, 'Pemilihan foto berhasil'))
         },        
         err => {
+            dispatch(setOpenLoadingPopup(false, ''));
             dispatch({type: CHECKOUT_SELECTED_PHOTO_FAIL, payload: err})
             dispatch(setOpenAlertPopup(false, 'Terjadi kesalahan silahkan coba beberapa saat lagi', 'error'))
         }
