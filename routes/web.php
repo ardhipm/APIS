@@ -17,6 +17,14 @@
 
 // Route::view('/{path?}', 'welcome');
 
-Route::get('/{any}', function () {
-    return view('welcome'); // or wherever your React app is bootstrapped.
-})->where('any', '.*');
+// Route::get('/{any?}', function () {
+//     return view('welcome'); // or wherever your React app is bootstrapped.
+// })->where('any', '.*');
+
+Route::get('/{path?}', function () {
+    return view('welcome');
+})->where('path', '.*');
+
+// Route::fallback(function() {
+//     return view('welcome');
+// });

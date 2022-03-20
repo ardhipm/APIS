@@ -139,7 +139,7 @@ const ChoicePhotoPreveiwPicture = () => {
         // console.log('kesini aja bray')
         // console.log('----->',choicePhotoProps.showPreview)
 
-    }, [choicePhotoProps.basename, choicePhotoProps.currentChoicePhoto])
+    }, [choicePhotoProps.currentChoicePhoto])
 
     useEffect(() => {
         setError(false);
@@ -150,7 +150,9 @@ const ChoicePhotoPreveiwPicture = () => {
                 setPrintSelect(element.is_print_selected);
             }
         })
-    }, [choicePhotoProps.showPreview, albumSelect, printSelect, choicePhotoProps.currentPhotoPreview])
+    }, [choicePhotoProps.showPreview,choicePhotoProps.currentPhotoPreview])
+
+    
 
     const handleOnClose = (e) => {
         // console.log(e)
