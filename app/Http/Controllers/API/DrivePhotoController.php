@@ -1237,7 +1237,7 @@ class DrivePhotoController extends Controller
     
             for($j = 0; $j < count($filedirchild); $j++){
                 $bodyJson['id_customer'] = $customer[0]->id;
-                $bodyJson['sub_package_name'] = $directory[$i]['filename'];
+                $bodyJson['sub_package_name'] = $directory[$i]['name'];
                 foreach ( $sub_package as $element ) {
                     if ( $bodyJson['sub_package_name'] == $element->sub_package_name ) {
                         $bodyJson['sub_package_id'] = $element->id;

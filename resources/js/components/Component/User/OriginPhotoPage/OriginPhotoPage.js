@@ -203,9 +203,9 @@ const OriginPhotoPage = () => {
                     </Tabs>}
 
             </Grid>
-            <Grid item >
+            <Grid item style={ {flex: '11'}}>
                 <div style={{ marginTop: '12px'}}>
-                    <div id="observeGrid" style={{ display: 'flex', flexFlow: 'wrap', maxHeight: '620px', overflowX: 'auto', gap: '5px' }}>
+                    <div id="observeGrid" style={{ display: 'flex', maxHeight: '65vh', flexFlow: 'wrap', overflowX: 'auto', gap: '10px' }}>
 
                         {/* {originPhotoProps.loading && <CircularProgress />} */}
                         {originPhotoProps.currentOriginPhoto.length < 1 && 'Tidak ada data'} 

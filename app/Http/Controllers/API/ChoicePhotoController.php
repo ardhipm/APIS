@@ -6,6 +6,7 @@ use App\Customer;
 use App\SelectedAlbumPhoto;
 use App\SelectedPrintPhoto;
 use App\Notification;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -64,7 +65,8 @@ class ChoicePhotoController extends Controller
 
     public function checkoutAlbumPrintPhoto(){
         $customer = Customer::where('id_user', '=', Auth::id())->get()->first();
-        $user = User::where('id','=',Auth::id());
+        $user = User::where('id','=',Auth::id())->get()->first();
+        // die(var_dump($user->username));
 
         $contents = collect(\Storage::cloud()->listContents('/', false));
         $dir = $contents->where('type', '=', 'dir')
@@ -103,7 +105,7 @@ class ChoicePhotoController extends Controller
             ->union($t1)
             ->get();
 
-        // die()
+        // die(json_encode($t2));
         
         // $asd = DB::table($tb2." as test")->get();
 
@@ -141,7 +143,7 @@ class ChoicePhotoController extends Controller
         $notif->description = 'FOTO ALBUM CETAK';
         $notif->is_read = 0;
         $notif->id_customer = User::where('role_id', '=', 2)->get()->first()->id;
-        $notif->created_by = $customerId;
+        $notif->created_by = $customer->id;
         $notif->save();
 
         return response(['success'=> true, 'data'=>$t2, 'message'=>'Checkout success']);

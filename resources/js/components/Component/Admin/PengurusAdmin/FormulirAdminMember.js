@@ -241,14 +241,23 @@ function FormulirAdminMember() {
             </div>
             <Button 
                 onClick={handleSubmit}
+                variant="outlined"
                 disabled={!dirty || !isValid || isSubmitting}
-                style={{textTransform:"capitalize",
-                backgroundColor:"#000", 
-                color:"#FFF", 
-                position:"absolute",
-                bottom:"0",
-                marginBottom:"12px",
-                width:"80%"}}>
+                style={!dirty || !isValid || isSubmitting ? {
+                    textTransform: "capitalize",
+                    position: "absolute",
+                    bottom: "0",
+                    marginBottom: "12px",
+                    width: "100%"
+                } : {
+                    textTransform: "capitalize",
+                    backgroundColor: "#000",
+                    color: "#FFF",
+                    position: "absolute",
+                    bottom: "0",
+                    marginBottom: "12px",
+                    width: "100%"
+                }}>
                 Simpan
             </Button>
             </div>

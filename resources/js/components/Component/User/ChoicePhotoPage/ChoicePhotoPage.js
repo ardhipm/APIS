@@ -169,7 +169,7 @@ const ChoicePhotoPage = () => {
                                 </Typography>
                             </div>
                             <div>
-                                <button onClick={() => { console.log(choicePhotoProps) }}>print props</button>
+                                {/* <button onClick={() => { console.log(choicePhotoProps) }}>print props</button> */}
                                 <Typography variant="subtitle1" >
 
                                     Silahkan pilih foto untuk dijadikan <strong>Album</strong> dan untuk <strong>Cetak</strong><br />
@@ -211,9 +211,9 @@ const ChoicePhotoPage = () => {
                                 </Tabs>}
 
                         </Grid>
-                        <Grid item >
+                        <Grid item style={ {flex: '11'}}>
                             <div style={{ marginTop: '12px' }}>
-                                <div id="observeGrid" style={{ display: 'flex', flexFlow: 'wrap', maxHeight: '620px', overflowX: 'auto', gap: '10px' }}>
+                            <div id="observeGrid" style={{ display: 'flex', maxHeight: '65vh', flexFlow: 'wrap', overflowX: 'auto', gap: '5px' }}>
                                     {/* <ChoicePhotoPicture src="1WYAb1Ui0V6pf9a_bHeQL7tLZopDp-0AU" isEdited={0}/>
                                     <ChoicePhotoPicture src="1qzqMN9sfA9gSOEKJ_Jd4-PkPiX8-LE_T" isEdited={1}/> */}
                                     {choicePhotoProps.currentChoicePhoto.length < 1 && 'Tidak ada data'}
