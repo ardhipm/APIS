@@ -56,7 +56,14 @@ class SelectedPrintPhotoController extends Controller
             return response(['message' => 'Delete restricted'], 401);
         }
 
-        $deletedPhoto = DB::table('selected_print_photo')->where('basename', $basename)->delete();
+        $deletedPhoto = DB::table('selected_print_photo')->where('basename', $basename)->get()->first();
+        if($deletedPhoto->print_basename != null){
+            return response(['message' => 'Tidak dapat menghapus foto yang telah di pilih'], 401);
+        }else{
+            DB::table('selected_print_photo')->where('basename', $basename)->delete();
+        }
+
+
 
         return response(['success' => true, 'data' => $basename, 'message' => 'Photo Deleted'], 201);
     }

@@ -79,6 +79,8 @@ const useStyles = makeStyles((theme) => ({
             duration: theme.transitions.duration.leavingScreen,
         }),
         marginLeft: -drawerWidth,
+        display: 'flex',
+        flexFlow: 'column'
     },
     contentShift: {
         transition: theme.transitions.create('margin', {
@@ -283,7 +285,7 @@ export default function MainPage(props) {
                 })}
             >
                 <div className={classes.drawerHeader} />
-                <div style={{height: '100vh', position:'relative'}}>
+                <div style={{height: '100%', position:'relative', flexFlow: 'column', display: 'flex'}}>
                     {props.children}
                 </div>
                 
