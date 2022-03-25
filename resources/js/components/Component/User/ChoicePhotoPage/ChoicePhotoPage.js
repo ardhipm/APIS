@@ -213,7 +213,7 @@ const ChoicePhotoPage = () => {
                         </Grid>
                         <Grid item style={ {flex: '11'}}>
                             <div style={{ marginTop: '12px' }}>
-                            <div id="observeGrid" style={{ display: 'flex', maxHeight: '65vh', flexFlow: 'wrap', overflowX: 'auto', gap: '5px' }}>
+                            <div id="observeGrid" style={{ display: 'flex', maxHeight: '55vh', flexFlow: 'wrap', overflowX: 'auto', gap: '5px' }}>
                                     {/* <ChoicePhotoPicture src="1WYAb1Ui0V6pf9a_bHeQL7tLZopDp-0AU" isEdited={0}/>
                                     <ChoicePhotoPicture src="1qzqMN9sfA9gSOEKJ_Jd4-PkPiX8-LE_T" isEdited={1}/> */}
                                     {choicePhotoProps.currentChoicePhoto.length < 1 && 'Tidak ada data'}
