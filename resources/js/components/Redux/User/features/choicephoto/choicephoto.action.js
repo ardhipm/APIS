@@ -94,9 +94,9 @@ export const addSelectAlbumPhoto = (basename, subpackageId) => async (dispatch, 
     return  response.then(
         async response => {
             dispatch({type: SELECT_ALBUM_PHOTO_SUCCESS, payload: response.data})
-            await dispatch(resetChoicePhoto());
-            dispatch(getChoicePhotoWithPagination(getState().choicePhotoReducer.selectedSubPackageIdx, 1));
-            dispatch(countSelectedAlbumPhoto());
+            // await dispatch(resetChoicePhoto());
+            // dispatch(getChoicePhotoWithPagination(getState().choicePhotoReducer.selectedSubPackageIdx, 1));
+            // dispatch(countSelectedAlbumPhoto());
         },        
         err => dispatch({type: SELECT_ALBUM_PHOTO_FAIL, payload: err})   
     )
@@ -110,9 +110,9 @@ export const addSelectPrintPhoto = (basename, subpackageId) => async (dispatch, 
     return  response.then(
         async response => {
             dispatch({type: SELECT_PRINT_PHOTO_SUCCESS, payload: response.data})
-            await dispatch(resetChoicePhoto());
-            dispatch(getChoicePhotoWithPagination(getState().choicePhotoReducer.selectedSubPackageIdx, 1));
-            dispatch(countSelectedPrintPhoto());
+            // await dispatch(resetChoicePhoto());
+            // dispatch(getChoicePhotoWithPagination(getState().choicePhotoReducer.selectedSubPackageIdx, 1));
+            // dispatch(countSelectedPrintPhoto());
         },
         err => dispatch({type: SELECT_PRINT_PHOTO_FAIL, payload: err})   
     )
@@ -126,9 +126,9 @@ export const deleteSelectAlbumPhoto = (basename, subpackageId) => async (dispatc
     return  response.then(
         async response => {
             dispatch({type: DELETE_ALBUM_PHOTO_SUCCESS, payload: response.data})
-            await dispatch(resetChoicePhoto());
-            dispatch(getChoicePhotoWithPagination(getState().choicePhotoReducer.selectedSubPackageIdx, 1));
-            dispatch(countSelectedAlbumPhoto());
+            // await dispatch(resetChoicePhoto());
+            // dispatch(getChoicePhotoWithPagination(getState().choicePhotoReducer.selectedSubPackageIdx, 1));
+            // dispatch(countSelectedAlbumPhoto());
         },
         err => dispatch({type: DELETE_ALBUM_PHOTO_FAIL, payload: err})   
     )
@@ -142,9 +142,9 @@ export const deleteSelectPrintPhoto = (basename, subpackageId) => async (dispatc
     return  response.then(
         async response => {
             dispatch({type: DELETE_PRINT_PHOTO_SUCCESS, payload: response.data})
-            await dispatch(resetChoicePhoto());
-            dispatch(getChoicePhotoWithPagination(getState().choicePhotoReducer.selectedSubPackageIdx, 1));
-            dispatch(countSelectedPrintPhoto());
+            // await dispatch(resetChoicePhoto());
+            // dispatch(getChoicePhotoWithPagination(getState().choicePhotoReducer.selectedSubPackageIdx, 1));
+            // dispatch(countSelectedPrintPhoto());
         },        
         err => dispatch({type: DELETE_PRINT_PHOTO_FAIL, payload: err})   
     )

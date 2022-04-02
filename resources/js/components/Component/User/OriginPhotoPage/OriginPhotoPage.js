@@ -215,6 +215,7 @@ const OriginPhotoPage = () => {
                             if(originPhotoProps.currentOriginPhoto.length === idx+1){
                                 return (<OriginPhotoPicture 
                                     id='lastImg' 
+                                    idx={idx}
                                     innerRef={theRef} 
                                     isSelected={element.is_selected} 
                                     filename={element.filename} 
@@ -224,6 +225,7 @@ const OriginPhotoPage = () => {
                                     />)
                             }else{
                                 return (<OriginPhotoPicture 
+                                    idx={idx}
                                     key={element.id} 
                                     isSelected={element.is_selected} 
                                     filename={element.filename}  

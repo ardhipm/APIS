@@ -74,7 +74,7 @@ const ConfirmationDialog = () => {
             case confirmDialogType.CHECKOUT_ALBUM_PRINT_PHOTO:
                 dispatch(checkoutAlbumPrintPhoto());
                 dispatch(setOpenConfirmDialog(false, confirmDialogProps.message, null));
-                refreshChoicePhoto();
+                // refreshChoicePhoto();
                 break;
             case confirmDialogType.INDEX_ORIGIN_PHOTO:
                 // console.log(customerId);
