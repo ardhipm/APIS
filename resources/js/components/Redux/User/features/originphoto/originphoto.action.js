@@ -125,8 +125,8 @@ export const addSelectedPhoto = (basename, subpackageId) => async (dispatch, get
         async response => {
             dispatch(setOpenLoadingPopup(false, ''));
             dispatch({type: ORIGIN_SELECTED_PHOTO_SUCCESS, payload: response.data})
-            await dispatch(resetOriginPhoto());
-            dispatch(getOriginPhotoWithPagination(getState().originPhotoReducer.selectedSubPackageIdx, 1));
+            // await dispatch(resetOriginPhoto());
+            // dispatch(getOriginPhotoWithPagination(getState().originPhotoReducer.selectedSubPackageIdx, 1));
         },        
         err => {
             
@@ -150,14 +150,14 @@ export const removeSelectedPhoto = (basename) => async (dispatch, getState) => {
             dispatch({type: ORIGIN_DELETE_PHOTO_SUCCESS, payload: response.data})
             if(response.data.success){
                 await dispatch(setOpenAlertPopup(true, 'Hapus foto berhasil', 'success'));
-                console.log('hapus berhasil');
+                // console.log('hapus berhasil');
             }else{
                 await dispatch(setOpenAlertPopup(true, 'Hapus foto gagal, foto sedang dalam pengeditan', 'error'));
                 console.log('hapus gagl')
             }
             
-            await dispatch(resetOriginPhoto());
-            dispatch(getOriginPhotoWithPagination(getState().originPhotoReducer.selectedSubPackageIdx, 1));
+            // await dispatch(resetOriginPhoto());
+            // dispatch(getOriginPhotoWithPagination(getState().originPhotoReducer.selectedSubPackageIdx, 1));
         },
         err => {
             dispatch(setOpenLoadingPopup(false, ''));

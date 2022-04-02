@@ -1,5 +1,5 @@
 import { Button, Checkbox, makeStyles } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -54,6 +54,7 @@ const useStyles = makeStyles({
 })
 
 const ChoicePhotoPicture = ({
+    idx,
     id,
     isAlbumSelected,
     isPrintSelected,
@@ -73,6 +74,11 @@ const ChoicePhotoPicture = ({
 
     const [selectAlbum, setSelectAlbum] = useState(isAlbumSelected);
     const [selectPrint, setSelectPrint] = useState(isPrintSelected);
+
+    useEffect(() => {
+        setSelectAlbum(isAlbumSelected);
+        setSelectPrint(isPrintSelected);
+    }, [choicePhotoProps.currentChoicePhoto[idx].is_album_selected, choicePhotoProps.currentChoicePhoto[idx].is_print_selected])
 
     const handleAlbumSelected = () => {
         if (choicePhotoProps.restrictedAlbumPhoto == 1) {

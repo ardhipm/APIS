@@ -180,12 +180,20 @@ const originPhotoReducer = (state = initialState, action) => {
                 popupMessage: ''
             }
         case ORIGIN_SELECTED_PHOTO_SUCCESS:
+            
+            let idxSelect = state.currentOriginPhoto.findIndex(element => { return element.basename == action.payload.data})
+            let copyCurrentOriginPhotoSelect = [...state.currentOriginPhoto];
+            copyCurrentOriginPhotoSelect[idxSelect].is_selected = 1;
+
+
             return {
                 ...state,
                 loadingProcess: false,
                 showPopup: true,
                 processSuccess: true,
-                popupMessage: 'foto berhasil di pilih'
+                popupMessage: 'foto berhasil di pilih',
+                subPackageNumSelectedEditPhoto: state.subPackageNumSelectedEditPhoto + 1, 
+                currentOriginPhoto: copyCurrentOriginPhotoSelect
 
             }
         case ORIGIN_SELECTED_PHOTO_FAIL:
@@ -202,6 +210,10 @@ const originPhotoReducer = (state = initialState, action) => {
                 loadingCheckout: true,
             }
         case ORIGIN_DELETE_PHOTO_SUCCESS:
+
+            let idxDelete = state.currentOriginPhoto.findIndex(element => { return element.basename == action.payload.data})
+            let copyCurrentOriginPhotoDelete = [...state.currentOriginPhoto];
+            copyCurrentOriginPhotoDelete[idxDelete].is_selected = 0;
             
             return {
                 ...state,
@@ -209,6 +221,8 @@ const originPhotoReducer = (state = initialState, action) => {
                 showAlert: true,
                 alertMessage: action.payload.message,
                 alertType: action.payload.success ? 'success' : 'error',
+                subPackageNumSelectedEditPhoto: state.subPackageNumSelectedEditPhoto  - 1,
+                currentOriginPhoto: copyCurrentOriginPhotoDelete
 
             }
         case ORIGIN_DELETE_PHOTO_FAIL:

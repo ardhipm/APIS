@@ -224,6 +224,7 @@ const ChoicePhotoPage = () => {
                                             return (<ChoicePhotoPicture
                                                 id='lastImg'
                                                 innerRef={theRef}
+                                                idx={idx}
                                                 // isSelected={element.is_selected}
                                                 isAlbumSelected={element.is_album_selected}
                                                 isPrintSelected={element.is_print_selected}
@@ -237,6 +238,7 @@ const ChoicePhotoPage = () => {
                                             />)
                                         } else {
                                             return (<ChoicePhotoPicture
+                                                idx={idx}
                                                 isAlbumSelected={element.is_album_selected}
                                                 isPrintSelected={element.is_print_selected}
                                                 filename={element.filename}

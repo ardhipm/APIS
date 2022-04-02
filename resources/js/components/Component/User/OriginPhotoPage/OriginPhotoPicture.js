@@ -49,17 +49,22 @@ const useStyles = makeStyles({
     }
 })
 
-const OriginPhotoPicture = ({ id, src, choice, filename, innerRef, isSelected }) => {
+const OriginPhotoPicture = ({ id, src, choice, filename, innerRef, isSelected, idx }) => {
 
     const classes = useStyles();
     const dispatch = useDispatch();
     const originPhotoProps = useSelector((state) => state.originPhotoReducer);
+    const [isSelectedState, setIsSelectedState] = useState(isSelected == 1?true:false);
 
     const height = '150px';
     const width = '150px';
-    useEffect(() => {
 
-    }, [src]);
+    useEffect(() => {
+        setIsSelectedState(isSelected === 1)
+    }, [originPhotoProps.currentOriginPhoto[idx].is_selected])
+    useEffect(() => {
+        
+    }, [src, isSelectedState]);
 
     const refreshOriginPhoto = () => {
         dispatch(resetOriginPhoto());
@@ -75,6 +80,7 @@ const OriginPhotoPicture = ({ id, src, choice, filename, innerRef, isSelected })
                 dispatch(setOpenAlertPopup(true, "Maksimal foto telah terisi", "error"))
                 
             } else {
+                setIsSelectedState(e.target.checked);
                 dispatch(addSelectedPhoto(src, originPhotoProps.selectedSubPackageIdx));
                 // refreshOriginPhoto();
             }
@@ -84,6 +90,7 @@ const OriginPhotoPicture = ({ id, src, choice, filename, innerRef, isSelected })
                 dispatch(setOpenConfirmDialog(true, "Foto telah masuk pada foto pilihan, lanjutan untuk menghapus ?", confirmDialogType.DELETE_CHOICE_PHOTO_AFTER_CHECKOUT))
             }else{
                 dispatch(removeSelectedPhoto(src));
+                setIsSelectedState(e.target.checked);
                 // refreshOriginPhoto();
             }
             
@@ -113,7 +120,7 @@ const OriginPhotoPicture = ({ id, src, choice, filename, innerRef, isSelected })
                 icon={<RadioButtonUncheckedIcon className={classes.icon} />}
                 checkedIcon={<CheckCircleIcon className={classes.icon} />}
                 style={{ position: 'absolute', top: '0', right: '0' }}
-                checked={isSelected == 1 ? true : false}
+                checked={isSelectedState}
                 onChange={handleSelectedPhoto}
                 name="checkedA"
             />
