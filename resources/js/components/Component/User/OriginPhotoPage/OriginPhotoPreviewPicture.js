@@ -102,6 +102,7 @@ const OriginPhotoPreviewPicture = (props) => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    const [isSelected, setIsSelected] = useState(false);
     // const [errorMsg, setErrorMsg] = useState('failed to load');
 
     useEffect(() => {
@@ -110,13 +111,19 @@ const OriginPhotoPreviewPicture = (props) => {
 
     useEffect(() => {
 
-    }, [loading])
+    }, [loading, isSelected])
+
 
     useEffect(() => {
         // console.log('kesini aja bray')
         // console.log('----->',originPhotoProps.showPreview)
-
-    }, [originPhotoProps.basename, originPhotoProps.currentOriginPhoto])
+        originPhotoProps.currentOriginPhoto.map((element, index) => {
+            if (element.basename === originPhotoProps.currentPhotoPreview) {
+                setIsSelected(element.is_selected === 1);
+                // setPrintSelect(element.is_print_selected);
+            }
+        })
+    }, [originPhotoProps.basename, originPhotoProps.currentPhotoPreview])
 
     useEffect(() => {
         setError(false);
@@ -156,6 +163,7 @@ const OriginPhotoPreviewPicture = (props) => {
                 dispatch(setOpenAlertPopup(true, "Maksimal foto telah terisi", "error"))
             } else {
                 dispatch(addSelectedPhoto(originPhotoProps.currentPhotoPreview , originPhotoProps.selectedSubPackageIdx));
+                setIsSelected(e.target.checked);
             }
         } else {
             const currentObject = originPhotoProps.currentOriginPhoto.filter(element => element.basename == originPhotoProps.currentPhotoPreview);
@@ -163,6 +171,7 @@ const OriginPhotoPreviewPicture = (props) => {
                 dispatch(setOpenConfirmDialog(true, "Foto telah masuk pada foto pilihan, lanjutan untuk menghapus ?", confirmDialogType.DELETE_CHOICE_PHOTO_AFTER_CHECKOUT))
             }else{
                 dispatch(removeSelectedPhoto(originPhotoProps.currentPhotoPreview));
+                setIsSelected(e.target.checked);
 
             }
 
@@ -212,7 +221,7 @@ const OriginPhotoPreviewPicture = (props) => {
                                         // style={{position: 'absolute', top: '0', right: '0'}}
                                         className={classes.checkLayout}
                                         key={element.basename}
-                                        checked={element.is_selected === 1}
+                                        checked={isSelected}
                                         onChange={handleSelectedPhoto}
                                         name="checkedA" />
                                     {/* <span>isSelect : {element.isSelected}</span> */}

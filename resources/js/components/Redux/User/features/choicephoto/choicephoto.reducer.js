@@ -141,8 +141,16 @@ const choicePhotoReducer = (state = initialState, action) => {
                 ...state
             }
         case SELECT_ALBUM_PHOTO_SUCCESS:
+
+            let idxAlbum = state.currentChoicePhoto.findIndex(element => { return element.basename == action.payload.data})
+            let copyCurrentChoicePhotoAlbum = [...state.currentChoicePhoto];
+            copyCurrentChoicePhotoAlbum[idxAlbum].is_album_selected = 1;
+
             return {
-                ...state
+                ...state,
+                totalSelectedAlbumPhoto: state.totalSelectedAlbumPhoto + 1,
+                currentChoicePhoto: copyCurrentChoicePhotoAlbum
+                
             }
         case SELECT_ALBUM_PHOTO_FAIL:
             return {
@@ -153,8 +161,15 @@ const choicePhotoReducer = (state = initialState, action) => {
                 ...state
             }
         case SELECT_PRINT_PHOTO_SUCCESS:
+
+            let idxPrint = state.currentChoicePhoto.findIndex(element => { return element.basename == action.payload.data})
+            let copyCurrentChoicePhotoPrint = [...state.currentChoicePhoto];
+            copyCurrentChoicePhotoPrint[idxPrint].is_print_selected = 1;
+
             return {
-                ...state
+                ...state,
+                totalSelectedPrintPhoto: state.totalSelectedPrintPhoto + 1,
+                currentChoicePhoto: copyCurrentChoicePhotoPrint
             }
         case SELECT_PRINT_PHOTO_FAIL:
             return {
@@ -165,8 +180,15 @@ const choicePhotoReducer = (state = initialState, action) => {
                 ...state,
             };
         case DELETE_ALBUM_PHOTO_SUCCESS:
+
+            let idxAlbumDelete = state.currentChoicePhoto.findIndex(element => { return element.basename == action.payload.data})
+            let copyCurrentChoicePhotoAlbumDelete = [...state.currentChoicePhoto];
+            copyCurrentChoicePhotoAlbumDelete[idxAlbumDelete].is_album_selected = 0;
+
             return {
                 ...state,
+                totalSelectedAlbumPhoto: state.totalSelectedAlbumPhoto - 1,
+                currentChoicePhoto: copyCurrentChoicePhotoAlbumDelete
             };
         case DELETE_ALBUM_PHOTO_FAIL:
             return {
@@ -177,8 +199,15 @@ const choicePhotoReducer = (state = initialState, action) => {
                 ...state,
             };
         case DELETE_PRINT_PHOTO_SUCCESS:
+
+            let idxPrintDelete = state.currentChoicePhoto.findIndex(element => { return element.basename == action.payload.data})
+            let copyCurrentChoicePhotoPrintDelete = [...state.currentChoicePhoto];
+            copyCurrentChoicePhotoPrintDelete[idxPrintDelete].is_print_selected = 0;
+
             return {
                 ...state,
+                totalSelectedPrintPhoto: state.totalSelectedPrintPhoto - 1,
+                currentChoicePhoto: copyCurrentChoicePhotoPrintDelete
             };
         case DELETE_PRINT_PHOTO_FAIL:
             return {

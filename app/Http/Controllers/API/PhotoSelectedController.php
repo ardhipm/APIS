@@ -109,7 +109,7 @@ class PhotoSelectedController extends Controller
 
         $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
         $dir = $contents->where('type', '=', 'dir')
-        ->where('filename', '=', $subpackage->sub_package_name)
+        ->where('name', '=', $subpackage->sub_package_name)
         ->first(); 
 
         // $files = collect(\Storage::cloud()->listContents($dir['path'], false))
