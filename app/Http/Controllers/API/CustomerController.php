@@ -561,7 +561,7 @@ class CustomerController extends Controller
             DB::delete('DELETE from sub_packages where id = ' .$listDelete[$x]['id_sub_package']);
 
             Storage::cloud()->deleteDirectory($subDir['path']);
-            Storage::cloud()->deleteDirectory($subDir2['path']);
+            // Storage::cloud()->deleteDirectory($subDir2['path']);
             Storage::cloud()->deleteDirectory($subDir3['path']);
         }
 
