@@ -536,16 +536,11 @@ class CustomerController extends Controller
             ->where('filename', '=', "Foto Pilihan")
             ->first(); // There could be duplicate directory names!
 
-        $dir2 = $contents->where('type', '=', 'dir')
-        ->where('filename', '=', "Foto Akhir")
-        ->first(); // There could be duplicate directory names!
-
         $dir3 = $contents->where('type', '=', 'dir')
         ->where('filename', '=', "Foto Mentah")
         ->first(); // There could be duplicate directory names!
 
         $contentsSubDir = collect(\Storage::cloud()->listContents($dir['path'], $recursive));
-        $contentsSubDir2 = collect(\Storage::cloud()->listContents($dir2['path'], $recursive));
         $contentsSubDir3 = collect(\Storage::cloud()->listContents($dir3['path'], $recursive));
 
         $listDelete = $bodyJson['list_delete_sub_package'];
@@ -553,17 +548,13 @@ class CustomerController extends Controller
 
         for ($x = 0; $x <= count($listDelete) - 1; $x++) {
             $subDir = $contentsSubDir->where('type', '=', 'dir')
-            ->where('filename', '=', $listDelete[$x]['sub_package_name'])
+            ->where('name', '=', $listDelete[$x]['sub_package_name'])
             ->first(); // There could be duplicate directory names!
             // die(print_r($subDir));
-            
-            $subDir2 = $contentsSubDir2->where('type', '=', 'dir')
-            ->where('filename', '=', $listDelete[$x]['sub_package_name'])
-            ->first(); // There could be duplicate directory names!
 
             // die(print_r($subDir2));
             $subDir3 = $contentsSubDir3->where('type', '=', 'dir')
-            ->where('filename', '=', $listDelete[$x]['sub_package_name'])
+            ->where('name', '=', $listDelete[$x]['sub_package_name'])
             ->first(); // There could be duplicate directory names!
 
 

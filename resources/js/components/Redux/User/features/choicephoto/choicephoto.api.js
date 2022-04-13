@@ -30,7 +30,7 @@ async function getChoicePhotoMetadata(){
 
     const defaultHeaders = getHeader();
     try {
-        const url = `${BASE_URL}choice/metadata`;
+        const url = `${BASE_URL}/api/choice/metadata`;
         // console.log(url);
         const headers = { ...defaultHeaders };
         const response = await axios({
@@ -51,7 +51,7 @@ async function getChoicePhotoWithPagination(subpackage, page) {
     // const authToken = {'Authorization':'Bearer '+token}
     const defaultHeaders = getHeader();
     try {
-        const url = `${BASE_URL}v2/drive/get_choice_photo/subpackage/${subpackage}?page=${page}`;
+        const url = `${BASE_URL}/api/v2/drive/get_choice_photo/subpackage/${subpackage}?page=${page}`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
@@ -70,7 +70,7 @@ async function getChoicePhotoWithPagination(subpackage, page) {
 async function selectAlbumPhoto(basename, subpackageId = NULL){
     const defaultHeaders = getHeader();
     try{
-        const url = `${BASE_URL}drive/choice/selected_album_photo?basename=${basename}&subpackageId=${subpackageId}`;
+        const url = `${BASE_URL}/api/drive/choice/selected_album_photo?basename=${basename}&subpackageId=${subpackageId}`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
@@ -89,7 +89,7 @@ async function selectAlbumPhoto(basename, subpackageId = NULL){
 async function selectPrintPhoto(basename, subpackageId = NULL){
     const defaultHeaders = getHeader();
     try{
-        const url = `${BASE_URL}drive/choice/selected_print_photo?basename=${basename}&subpackageId=${subpackageId}`;
+        const url = `${BASE_URL}/api/drive/choice/selected_print_photo?basename=${basename}&subpackageId=${subpackageId}`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
@@ -108,7 +108,7 @@ async function selectPrintPhoto(basename, subpackageId = NULL){
 async function deleteAlbumPhoto(basename){
     const defaultHeaders = getHeader();
     try{
-        const url = `${BASE_URL}drive/choice/delete_album_photo/${basename}`;
+        const url = `${BASE_URL}/api/drive/choice/delete_album_photo/${basename}`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
@@ -127,7 +127,7 @@ async function deleteAlbumPhoto(basename){
 async function deletePrintPhoto(basename){
     const defaultHeaders = getHeader();
     try{
-        const url = `${BASE_URL}drive/choice/delete_print_photo/${basename}`;
+        const url = `${BASE_URL}/api/drive/choice/delete_print_photo/${basename}`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
@@ -146,7 +146,7 @@ async function deletePrintPhoto(basename){
 async function countSelectedAlbumPhoto(){
     const defaultHeaders = getHeader();
     try{
-        const url = `${BASE_URL}drive/choice/get_count_selected_album_photo`;
+        const url = `${BASE_URL}/api/drive/choice/get_count_selected_album_photo`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
@@ -165,7 +165,7 @@ async function countSelectedAlbumPhoto(){
 async function countSelectedPrintPhoto(){
     const defaultHeaders = getHeader();
     try{
-        const url = `${BASE_URL}drive/choice/get_count_selected_print_photo`;
+        const url = `${BASE_URL}/api/drive/choice/get_count_selected_print_photo`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
@@ -184,7 +184,7 @@ async function countSelectedPrintPhoto(){
 async function checkoutAlbumPrintPhoto(){
     const defaultHeaders = getHeader();
     try{
-        const url = `${BASE_URL}drive/choice/checkout_album_print_photo`;
+        const url = `${BASE_URL}/api/drive/choice/checkout_album_print_photo`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
