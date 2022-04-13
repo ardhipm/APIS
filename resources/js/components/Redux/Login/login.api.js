@@ -13,7 +13,7 @@ const defaultHeaders = {
 async function login(userId, password, rememberMe) {
     // console.log('here');
     try {
-        const url = `${BASE_URL}login`;
+        const url = `${BASE_URL}/api/login`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'POST',

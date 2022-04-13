@@ -55,7 +55,7 @@ async function getOriginPhotoWithPagination(subpackage, page) {
     // const authToken = {'Authorization':'Bearer '+token}
     const defaultHeaders = getHeader();
     try {
-        const url = `${BASE_URL}get_origin_photo/subpackage/${subpackage}?page=${page}`;
+        const url = `${BASE_URL}/api/get_origin_photo/subpackage/${subpackage}?page=${page}`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
@@ -74,7 +74,7 @@ async function getOriginPhotoWithPagination(subpackage, page) {
 async function getOriginPhotoMetadata() {
     const defaultHeaders = getHeader();
     try {
-        const url = `${BASE_URL}origin/metadata`;
+        const url = `${BASE_URL}/api/origin/metadata`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
@@ -93,7 +93,7 @@ async function getOriginPhotoMetadata() {
 async function getSubpackage(id) {
     const defaultHeaders = getHeader();
     try {
-        const url = `${BASE_URL}customer/subpackage/${id}`;
+        const url = `${BASE_URL}/api/customer/subpackage/${id}`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
@@ -112,7 +112,7 @@ async function getSubpackage(id) {
 async function selectOriginPhoto(basename, subpackageId = NULL) {
     const defaultHeaders = getHeader();
     try {
-        const url = `${BASE_URL}drive/selected_photo?basename=${basename}&subpackageId=${subpackageId}`;
+        const url = `${BASE_URL}/api/drive/selected_photo?basename=${basename}&subpackageId=${subpackageId}`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
@@ -131,7 +131,7 @@ async function selectOriginPhoto(basename, subpackageId = NULL) {
 async function removeSelectedOriginPhoto(basename) {
     const defaultHeaders = getHeader();
     try {
-        const url = `${BASE_URL}drive/delete_selected_origin_photo/${basename}`;
+        const url = `${BASE_URL}/api/drive/delete_selected_origin_photo/${basename}`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
@@ -150,7 +150,7 @@ async function removeSelectedOriginPhoto(basename) {
 async function countSelectedOriginPhoto(subPackageId) {
     const defaultHeaders = getHeader();
     try {
-        const url = `${BASE_URL}drive/get_count_selected_photo/${subPackageId}`;
+        const url = `${BASE_URL}/api/drive/get_count_selected_photo/${subPackageId}`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
@@ -169,7 +169,7 @@ async function countSelectedOriginPhoto(subPackageId) {
 async function checkoutSelectedPhoto(subpackageId) {
     const defaultHeaders = getHeader();
     try {
-        const url = `${BASE_URL}drive/checkout_origin_photo?subpackageId=${subpackageId}`;
+        const url = `${BASE_URL}/api/drive/checkout_origin_photo?subpackageId=${subpackageId}`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
@@ -188,7 +188,7 @@ async function checkoutSelectedPhoto(subpackageId) {
 async function getLinkOfDownload(type) {
     const defaultHeaders = getHeader();
     try {
-        const url = `${BASE_URL}drive/get_origin_photo_download_link/${type}`;
+        const url = `${BASE_URL}/api/drive/get_origin_photo_download_link/${type}`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
