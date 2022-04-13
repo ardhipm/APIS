@@ -125,7 +125,7 @@ async function getLogistic() {
 async function getShipmentUser() {
     const defaultHeaders = getHeader();
     try {
-        const url = `${BASE_URL}shipment/view`;
+        const url = `${BASE_URL}/api/shipment/view`;
         const headers = {...defaultHeaders, token};
         const response = await axios({
             method: 'GET',

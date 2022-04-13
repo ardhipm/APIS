@@ -21,7 +21,7 @@ function getHeader() {
 async function getUserNotification(){
     const defaultHeaders = getHeader();
     try {
-        const url = `${BASE_URL}notification`;
+        const url = `${BASE_URL}/api/notification`;
         // console.log('aljasdlksdjflksdlksfdj',url);
         const headers = { ...defaultHeaders };
         const response = await axios({
@@ -41,7 +41,7 @@ async function getUserNotification(){
 async function readNotification(notifId){
     const defaultHeaders = getHeader();
     try {
-        const url = `${BASE_URL}notification/updateIsRead/${notifId}`;
+        const url = `${BASE_URL}/api/notification/updateIsRead/${notifId}`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
