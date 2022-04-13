@@ -408,22 +408,28 @@ class DrivePhotoController extends Controller
 
     public function getOriginPhoto(){
     
-        $customer = DB::table('customers')
-        ->leftJoin('users', 'customers.id_user', 'users.id')
-        ->leftJoin('packages', 'customers.id', 'packages.id_customer')
-        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name', 'packages.id as package_id')
-        ->where('customers.id_user', '=', Auth::Id())
-        ->get()->toArray();
+        // $customer = DB::table('customers')
+        // ->leftJoin('users', 'customers.id_user', 'users.id')
+        // ->leftJoin('packages', 'customers.id', 'packages.id_customer')
+        // ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name', 'packages.id as package_id')
+        // ->where('customers.id_user', '=', Auth::Id())
+        // ->get()->toArray();
 
-        $sub_package = DB::table('sub_packages')->where('id_package', '=', $customer[0]->package_id)->get()->toArray();
+        $sub_package = DB::table('sub_packages')->where('id_package', '=', 19)->get()->toArray();
         // die(print_r($sub_package));
         
-        $folder = $customer[0]->id .' - ' .$customer[0]->name;
+        // $sub_package = array();
+
+        // $folder = $customer[0]->id .' - ' .$customer[0]->name;
 
         $contents = collect(\Storage::cloud()->listContents('/', false));
         $dir = $contents->where('type', '=', 'dir')
-                ->where('filename', '=', $folder)
+                ->where('filename', '=', '19 - Andin')
                 ->first(); // There could be duplicate directory names!
+
+        // $dir = $contents->where('type', '=', 'dir')
+        //         ->where('basename', '=', $folder)
+        //         ->first(); // There could be duplicate directory names!
         
         $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
         $dir = $contents->where('type', '=', 'dir')
@@ -1196,73 +1202,77 @@ class DrivePhotoController extends Controller
 
     public function saveOriginToDB($customerId){
 
-        $user = Auth::user();
+        try{
+            $user = Auth::user();
 
-        if($user->role_id != 2){
-            return response(['message' => 'Unauthorized'], 401);
-        }
-        $customer = DB::table('customers')
-        ->leftJoin('users', 'customers.id_user', 'users.id')
-        ->leftJoin('packages', 'customers.id', 'packages.id_customer')
-        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name', 'packages.id as package_id')
-        ->where('customers.id', '=', $customerId)
-        ->get()->toArray();
-    
-        DB::delete('DELETE from origin_photo where id_customer = '.$customer[0]->id);
-    
-        $sub_package = DB::table('sub_packages')->where('id_package', '=', $customer[0]->package_id)->get()->toArray();
-        // die(print_r($sub_package));
-        
-        $folder = $customer[0]->id .' - ' .$customer[0]->name;
-    
-        $contents = collect(\Storage::cloud()->listContents('/', false));
-        $dir = $contents->where('type', '=', 'dir')
-                ->where('filename', '=', $folder)
-                ->first(); // There could be duplicate directory names!
-        
-        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
-        $dir = $contents->where('type', '=', 'dir')
-        ->where('filename', '=', 'Foto Mentah')
-        ->first(); // There could be duplicate directory names!
-    
-        $filedir = collect(\Storage::cloud()->listContents($dir['path'], false));
-        $directory = $filedir->where('type', '=', 'dir')->toArray();
-        // $file= $filedir->where('type', '=', 'file')->toArray();
-    
-        $data = array();
-    
-        for($i = 0; $i < count($directory); $i++){
-    
-            $filedirchild = collect(\Storage::cloud()->listContents($directory[$i]['path'], false))->where('type', '=', 'file')->toArray();
-    
-            for($j = 0; $j < count($filedirchild); $j++){
-                $bodyJson['id_customer'] = $customer[0]->id;
-                $bodyJson['sub_package_name'] = $directory[$i]['name'];
-                foreach ( $sub_package as $element ) {
-                    if ( $bodyJson['sub_package_name'] == $element->sub_package_name ) {
-                        $bodyJson['sub_package_id'] = $element->id;
-                    }
-                }
-                $bodyJson['filename'] = $filedirchild[$j]['filename'];
-                $bodyJson['path'] = $filedirchild[$j]['path'];
-                $bodyJson['basename'] = $filedirchild[$j]['basename'];
-    
-                Origin::create($bodyJson);
-    
+            if($user->role_id != 2){
+                return response(['message' => 'Unauthorized'], 401);
             }
+            $customer = DB::table('customers')
+            ->leftJoin('users', 'customers.id_user', 'users.id')
+            ->leftJoin('packages', 'customers.id', 'packages.id_customer')
+            ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name', 'packages.id as package_id')
+            ->where('customers.id', '=', $customerId)
+            ->get()->toArray();
+        
+            DB::delete('DELETE from origin_photo where id_customer = '.$customer[0]->id);
+        
+            $sub_package = DB::table('sub_packages')->where('id_package', '=', $customer[0]->package_id)->get()->toArray();
+            // die(print_r($sub_package));
+            
+            $folder = $customer[0]->id .' - ' .$customer[0]->name;
+        
+            $contents = collect(\Storage::cloud()->listContents('/', false));
+            $dir = $contents->where('type', '=', 'dir')
+                    ->where('filename', '=', $folder)
+                    ->first(); // There could be duplicate directory names!
+            
+            $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+            $dir = $contents->where('type', '=', 'dir')
+            ->where('filename', '=', 'Foto Mentah')
+            ->first(); // There could be duplicate directory names!
+        
+            $filedir = collect(\Storage::cloud()->listContents($dir['path'], false));
+            $directory = $filedir->where('type', '=', 'dir')->toArray();
+            // $file= $filedir->where('type', '=', 'file')->toArray();
+        
+            $data = array();
+        
+            for($i = 0; $i < count($directory); $i++){
+        
+                $filedirchild = collect(\Storage::cloud()->listContents($directory[$i]['path'], false))->where('type', '=', 'file')->toArray();
+        
+                for($j = 0; $j < count($filedirchild); $j++){
+                    $bodyJson['id_customer'] = $customer[0]->id;
+                    $bodyJson['sub_package_name'] = $directory[$i]['name'];
+                    foreach ( $sub_package as $element ) {
+                        if ( $bodyJson['sub_package_name'] == $element->sub_package_name ) {
+                            $bodyJson['sub_package_id'] = $element->id;
+                        }
+                    }
+                    $bodyJson['filename'] = $filedirchild[$j]['filename'];
+                    $bodyJson['path'] = $filedirchild[$j]['path'];
+                    $bodyJson['basename'] = $filedirchild[$j]['basename'];
+        
+                    Origin::create($bodyJson);
+        
+                }
+            }
+
+            $notif = new Notification;
+            $notif->notification_type = 'CUSTOMER';
+            $notif->message = 'Foto mentah telah diperbarui';
+            $notif->description = 'FOTO MENTAH';
+            $notif->is_read = 0;
+            $notif->created_by = User::where('role_id', '=', 2)->get()->first()->id;
+            $notif->id_customer = $customerId;
+            $notif->save();
+
+        
+            return response(['success' => true, 'message' => 'Synchronize Successfully']);
+        }catch(\Exception $e){
+            return response(['success' => false, 'message' => 'Failed '.$e]);
         }
-
-        $notif = new Notification;
-        $notif->notification_type = 'CUSTOMER';
-        $notif->message = 'Foto mentah telah diperbarui';
-        $notif->description = 'FOTO MENTAH';
-        $notif->is_read = 0;
-        $notif->created_by = User::where('role_id', '=', 2)->get()->first()->id;
-        $notif->id_customer = $customerId;
-        $notif->save();
-
-    
-        return response(['success' => true, 'message' => 'Synchronize Successfully']);
     
     }
 
