@@ -147,122 +147,124 @@ const UserLogisticPage = () => {
         return 'https://drive.google.com/uc?export=view&id=' + value;
     }
 
-    const renderPhoto = data.basename == null ? "Foto bukti belum tersedia" : <img className={classes.imgLayout} style={{maxWidth: '670px'}} src={driveApiLink(data.basename)} />;
+    const renderPhoto = data.basename == null ? "Foto bukti belum tersedia" : <img className={classes.imgLayout} style={{ maxWidth: '670px' }} src={driveApiLink(data.basename)} />;
 
     return (
-        <Grid container spacing={4}>
-            <Grid item xs={12}>
-                <Grid container>
-                    <Grid item xs={6}>
-                        <Grid container spacing={0}>
-                            <Grid item xs={12}>
-                                <Typography variant="h4" style={{ fontWeight: 'bold' }}>
-                                    Konfirmasi Pesanan
-                                </Typography>
+        <div style={{ overflowY: 'scroll', overflowX: 'hidden' }}>
+            <Grid container spacing={4}>
+                <Grid item xs={12}>
+                    <Grid container>
+                        <Grid item xs={6}>
+                            <Grid container spacing={0}>
+                                <Grid item xs={12}>
+                                    <Typography variant="h4" style={{ fontWeight: 'bold' }}>
+                                        Konfirmasi Pesanan
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography variant="subtitle1" >
+                                        Halo, Terima kasih atas pesanannya. Anda dapat melacak status pesanan anda di situs yang kami berikan di bawah ini
+                                    </Typography>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12}>
-                                <Typography variant="subtitle1" >
-                                    Halo, Terima kasih atas pesanannya. Anda dapat melacak status pesanan anda di situs yang kami berikan di bawah ini
-                                </Typography>
-                            </Grid>
+
                         </Grid>
 
                     </Grid>
-
                 </Grid>
-            </Grid>
-            <Grid className={classes.containerLayout} item xs={12}>
-                <Grid container spacing={3}>
-                    <Grid item >
-                        <Box>
-                            <Typography className={classes.title}>
-                                ID Pelanggan
-                            </Typography>
-                            <Typography >
-                                {data.idPelanggan}
-                            </Typography>
-                        </Box>
-                    </Grid>
-                    <Grid item>
-                        <Box >
-                            <Typography className={classes.title}>
-                                Tanggal Pesanan
-                        </Typography>
-                            <Typography >
-                                {data.tglPesanan}
-                            </Typography>
-                        </Box>
-                    </Grid>
-                    <Grid item >
-                        <Box display="flex" flexWrap="wrap">
+                <Grid className={classes.containerLayout} item xs={12}>
+                    <Grid container spacing={3}>
+                        <Grid item >
                             <Box>
                                 <Typography className={classes.title}>
-                                    No. Resi
+                                    ID Pelanggan
                                 </Typography>
-                                <Typography id="noResi">
-                                    {data.noResi != null && data.noResi.length > 0 ? data.noResi : "Resi belum tersedia"}
+                                <Typography >
+                                    {data.idPelanggan}
                                 </Typography>
                             </Box>
-
-                            <Box style={{ marginLeft: 8 + 'px', padding: '4px' }}>
-                                {data.noResi != null && data.noResi.length > 0 ? (<Button
-                                    id="btnResi"
-                                    className={classes.bgIcon}
-                                    disableRipple={true}
-                                    disableFocusRipple={true}
-                                    disableTouchRipple={true}
-                                    variant="outlined"
-                                    onClick={handleCopy}>
-                                    <Icon icon="bx:bx-copy" style={{ color: 'white', fontSize: "24px" }} />
-                                </Button>) : null}
-                            </Box>
-                        </Box>
-
-                    </Grid>
-                    <Grid item >
-                        <Box display="flex" flexWrap="wrap">
+                        </Grid>
+                        <Grid item>
                             <Box >
                                 <Typography className={classes.title}>
-                                    Link Pelacakan
+                                    Tanggal Pesanan
                                 </Typography>
-                                <Typography id="linkPelacakan">
-                                    {data.link != null && data.link.length > 0 ? data.link : "Link belum tersedia"}
+                                <Typography >
+                                    {data.tglPesanan}
                                 </Typography>
                             </Box>
-                            <Box style={{ marginLeft: 8 + 'px', padding: '4px' }}>
-                                {data.link != null && data.link.length > 0 ? (<Button
-                                    id="btnLink"
-                                    className={classes.bgIcon}
-                                    disableRipple={true}
-                                    disableFocusRipple={true}
-                                    disableTouchRipple={true}
-                                    variant="outlined"
-                                    onClick={handleCopy}>
-                                    <Icon icon="bx:bx-copy" style={{ color: 'white', fontSize: "24px" }} />
-                                </Button>) : null}
+                        </Grid>
+                        <Grid item >
+                            <Box display="flex" flexWrap="wrap">
+                                <Box>
+                                    <Typography className={classes.title}>
+                                        No. Resi
+                                    </Typography>
+                                    <Typography id="noResi">
+                                        {data.noResi != null && data.noResi.length > 0 ? data.noResi : "Resi belum tersedia"}
+                                    </Typography>
+                                </Box>
 
+                                <Box style={{ marginLeft: 8 + 'px', padding: '4px' }}>
+                                    {data.noResi != null && data.noResi.length > 0 ? (<Button
+                                        id="btnResi"
+                                        className={classes.bgIcon}
+                                        disableRipple={true}
+                                        disableFocusRipple={true}
+                                        disableTouchRipple={true}
+                                        variant="outlined"
+                                        onClick={handleCopy}>
+                                        <Icon icon="bx:bx-copy" style={{ color: 'white', fontSize: "24px" }} />
+                                    </Button>) : null}
+                                </Box>
                             </Box>
 
-                        </Box>
+                        </Grid>
+                        <Grid item >
+                            <Box display="flex" flexWrap="wrap">
+                                <Box >
+                                    <Typography className={classes.title}>
+                                        Link Pelacakan
+                                    </Typography>
+                                    <Typography id="linkPelacakan">
+                                        {data.link != null && data.link.length > 0 ? data.link : "Link belum tersedia"}
+                                    </Typography>
+                                </Box>
+                                <Box style={{ marginLeft: 8 + 'px', padding: '4px' }}>
+                                    {data.link != null && data.link.length > 0 ? (<Button
+                                        id="btnLink"
+                                        className={classes.bgIcon}
+                                        disableRipple={true}
+                                        disableFocusRipple={true}
+                                        disableTouchRipple={true}
+                                        variant="outlined"
+                                        onClick={handleCopy}>
+                                        <Icon icon="bx:bx-copy" style={{ color: 'white', fontSize: "24px" }} />
+                                    </Button>) : null}
+
+                                </Box>
+
+                            </Box>
+                        </Grid>
+
                     </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography className={classes.title} variant="subtitle2" >
+                        Bukti Barang Pengiriman
+                    </Typography>
+                    <div style={{ paddingBottom: '100px' }}>
+                        {renderPhoto}
+                    </div>
+
 
                 </Grid>
+                <BasicPopover
+                    description={popoverDescription}
+                    anchorEl={anchorEl}
+                    handleClosePopover={handleClosePopover} />
             </Grid>
-            <Grid item xs={12}>
-                <Typography className={classes.title} variant="subtitle2" >
-                    Bukti Barang Pengiriman
-                </Typography>
-                <div>
-                    {renderPhoto}
-                </div>
-
-
-            </Grid>
-            <BasicPopover
-                description={popoverDescription}
-                anchorEl={anchorEl}
-                handleClosePopover={handleClosePopover} />
-        </Grid>
+        </div>
     );
 }
 
