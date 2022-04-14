@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 
 use ZipArchive;
 use File;
@@ -1203,6 +1204,8 @@ class DrivePhotoController extends Controller
     public function saveOriginToDB($customerId){
 
         try{
+
+            Log::info('-------- start saveOriginToDB ------------');
             $user = Auth::user();
 
             if($user->role_id != 2){
@@ -1222,6 +1225,7 @@ class DrivePhotoController extends Controller
             
             $folder = $customer[0]->id .' - ' .$customer[0]->name;
         
+            Log::info('-------- find filename of '.$folder.' -------------');
             $contents = collect(\Storage::cloud()->listContents('/', false));
             $dir = $contents->where('type', '=', 'dir')
                     ->where('filename', '=', $folder)
@@ -1239,14 +1243,16 @@ class DrivePhotoController extends Controller
             $data = array();
         
             for($i = 0; $i < count($directory); $i++){
-        
+                Log::info('-------- start looping of directory -------');
                 $filedirchild = collect(\Storage::cloud()->listContents($directory[$i]['path'], false))->where('type', '=', 'file')->toArray();
-        
+                Log::info('------ file name :'.$directory[$i]['name']);
                 for($j = 0; $j < count($filedirchild); $j++){
+                    Log::info('------- start looping of dir child --------');
                     $bodyJson['id_customer'] = $customer[0]->id;
                     $bodyJson['sub_package_name'] = $directory[$i]['name'];
                     foreach ( $sub_package as $element ) {
                         if ( $bodyJson['sub_package_name'] == $element->sub_package_name ) {
+                            Log::info('----- subpackagename : '.$element->sub_package_name);
                             $bodyJson['sub_package_id'] = $element->id;
                         }
                     }
@@ -1254,7 +1260,9 @@ class DrivePhotoController extends Controller
                     $bodyJson['path'] = $filedirchild[$j]['path'];
                     $bodyJson['basename'] = $filedirchild[$j]['basename'];
         
+                    
                     Origin::create($bodyJson);
+                    Log::info('----- indexed file : '.$filedirchild[$j]['filename']);
         
                 }
             }
@@ -1268,9 +1276,12 @@ class DrivePhotoController extends Controller
             $notif->id_customer = $customerId;
             $notif->save();
 
+            Log::info('----- index origin photo success -------- ');
         
             return response(['success' => true, 'message' => 'Synchronize Successfully']);
         }catch(\Exception $e){
+            echo $e;
+            Log::error('----- index origin photo failed -------- '.$e);
             return response(['success' => false, 'message' => 'Failed '.$e]);
         }
     
