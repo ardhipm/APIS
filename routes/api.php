@@ -235,7 +235,7 @@ Route::get('drive/get_origin_photo_test', 'API\DrivePhotoController@getOriginPho
 Route::middleware('auth:api')->group(function () {
     Route::get('/get_origin_photo/subpackage/{id}', function ($id) {
         $customer = Customer::where('id_user', '=', Auth::id())->get()->first();
-        $joinedTbl = DB::table('selected_photo as sp')->where('sp.id_subpackage', '=', $subPackageId);
+        $joinedTbl = DB::table('selected_photo as sp')->where('sp.id_subpackage', '=', $id);
         $tbl = DB::table('origin_photo as op')
         ->leftJoinSub($joinedTbl, 'sp', function($join){
             $join->on('op.basename','=', 'sp.basename');
