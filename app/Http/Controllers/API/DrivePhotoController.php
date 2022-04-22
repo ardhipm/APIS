@@ -1292,13 +1292,18 @@ class DrivePhotoController extends Controller
     public function countSelectedOriginPhoto($subPackageId){
         $customer = Customer::where('id_user', '=', Auth::id())->get()->first();
         $tbl = DB::table('origin_photo as op')
-        ->rightJoin('selected_photo as sp', 'op.basename', 'sp.basename')
+        ->rightJoin('(select basename, 
+        choice_basename, 
+        id_subpackage 
+        from selected_photo where id_subpackage = '.$subpackageId.') as sp',
+         'op.basename', 
+         'sp.basename')
         ->select('op.id','op.sub_package_id', 'op.sub_package_name', 'op.filename', 'op.path', 'op.basename', 'op.id_customer', 
             DB::raw('(CASE WHEN sp.basename is null THEN false ELSE true END) AS is_selected')
         )
         ->where('op.id_customer', '=', $customer->id)
-        ->where('op.sub_package_id', '=', $subPackageId)
-        ->orWhere('sp.id_subpackage', '=', $subPackageId)->get();
+        ->where('op.sub_package_id', '=', $subPackageId)->get();
+        // ->orWhere('sp.id_subpackage', '=', $subPackageId)->get();
         // $selectedPhoto = SelectedPhoto::where('id_customer', '=', $customer->id)->get()->toArray();
         // die(print_r(count($selectedPhoto)));
         return response(['success' => true,'data'=>count($tbl), 'message' => 'Synchronize Successfully']);
