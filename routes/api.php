@@ -240,7 +240,7 @@ Route::middleware('auth:api')->group(function () {
             '(select basename, 
             choice_basename, 
             id_subpackage from selected_photo 
-            where id_subpackage = '.$subpackageId.') as sp', 
+            where id_subpackage = '.$id.') as sp', 
             'op.basename', 
             'sp.basename')
         ->select('op.id','op.sub_package_id', 'op.sub_package_name', 'op.filename', 'op.path', 'op.basename', 'op.id_customer', 'sp.choice_basename',
