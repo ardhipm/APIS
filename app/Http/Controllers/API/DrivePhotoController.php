@@ -1247,7 +1247,7 @@ class DrivePhotoController extends Controller
                 $filedirchild = collect(\Storage::cloud()->listContents($directory[$i]['path'], false))->where('type', '=', 'file')->toArray();
                 Log::info('------ file name :'.$directory[$i]['name']);
                 for($j = 0; $j < count($filedirchild); $j++){
-                    DB::delete('DELETE from origin_photo where basename = '.$customer[0]->id);
+                    // DB::delete('DELETE from origin_photo where basename = '.$customer[0]->id);
                     $filedirchild[$j]['basename'];
                     Log::info('------- start looping of dir child --------');
                     $bodyJson['id_customer'] = $customer[0]->id;
