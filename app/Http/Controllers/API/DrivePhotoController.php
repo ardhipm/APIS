@@ -1292,7 +1292,7 @@ class DrivePhotoController extends Controller
     public function countSelectedOriginPhoto($subPackageId){
         $customer = Customer::where('id_user', '=', Auth::id())->get()->first();
         $tbl = DB::table('origin_photo as op')
-        ->rightJoin('selected_photo as sp', 'op.sub_package_id', 'sp.id_sub_package')
+        ->rightJoin('selected_photo as sp', 'op.sub_package_id', 'sp.id_subpackage')
         ->select('op.id','op.sub_package_id', 'op.sub_package_name', 'op.filename', 'op.path', 'op.basename', 'op.id_customer', 
             DB::raw('(CASE WHEN sp.basename is null THEN false ELSE true END) AS is_selected')
         )
