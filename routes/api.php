@@ -236,12 +236,13 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/get_origin_photo/subpackage/{id}', function ($id) {
         $customer = Customer::where('id_user', '=', Auth::id())->get()->first();
         $tbl = DB::table('origin_photo as op')
-        ->leftJoin('selected_photo as sp', 'op.sub_package_id', 'sp.id_subpackage')
+        ->rightJoin('selected_photo as sp', 'op.basename', 'sp.basename')
         ->select('op.id','op.sub_package_id', 'op.sub_package_name', 'op.filename', 'op.path', 'op.basename', 'op.id_customer', 'sp.choice_basename',
             DB::raw('(CASE WHEN sp.basename is null THEN false ELSE true END) AS is_selected')
         )
         ->where('op.id_customer', '=', $customer->id)
-        ->where('op.sub_package_id', '=', $id)->paginate(50);
+        ->where('op.sub_package_id', '=', $id)
+        ->where('sp.id_subpackage', '=', $id)->paginate(50);
         return $tbl;
     });
 });
