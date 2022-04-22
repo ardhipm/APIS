@@ -1247,7 +1247,7 @@ class DrivePhotoController extends Controller
                 $filedirchild = collect(\Storage::cloud()->listContents($directory[$i]['path'], false))->where('type', '=', 'file')->toArray();
                 Log::info('------ file name :'.$directory[$i]['name']);
                 for($j = 0; $j < count($filedirchild); $j++){
-                    // DB::delete('DELETE from origin_photo where basename = '.$customer[0]->id);
+                    DB::delete('DELETE from origin_photo where basename = '.$customer[0]->id);
                     $filedirchild[$j]['basename'];
                     Log::info('------- start looping of dir child --------');
                     $bodyJson['id_customer'] = $customer[0]->id;
@@ -1292,12 +1292,13 @@ class DrivePhotoController extends Controller
     public function countSelectedOriginPhoto($subPackageId){
         $customer = Customer::where('id_user', '=', Auth::id())->get()->first();
         $tbl = DB::table('origin_photo as op')
-        ->rightJoin('selected_photo as sp', 'op.sub_package_id', 'sp.id_subpackage')
+        ->rightJoin('selected_photo as sp', 'op.basename', 'sp.basename')
         ->select('op.id','op.sub_package_id', 'op.sub_package_name', 'op.filename', 'op.path', 'op.basename', 'op.id_customer', 
             DB::raw('(CASE WHEN sp.basename is null THEN false ELSE true END) AS is_selected')
         )
         ->where('op.id_customer', '=', $customer->id)
-        ->where('op.sub_package_id', '=', $subPackageId)->get();
+        ->where('op.sub_package_id', '=', $subPackageId)
+        ->where('sp.id_subpackage', '=', $subPackageId)->get();
         // $selectedPhoto = SelectedPhoto::where('id_customer', '=', $customer->id)->get()->toArray();
         // die(print_r(count($selectedPhoto)));
         return response(['success' => true,'data'=>count($tbl), 'message' => 'Synchronize Successfully']);
