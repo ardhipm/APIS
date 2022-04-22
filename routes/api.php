@@ -242,7 +242,7 @@ Route::middleware('auth:api')->group(function () {
         )
         ->where('op.id_customer', '=', $customer->id)
         ->where('op.sub_package_id', '=', $id)
-        ->where('sp.id_subpackage', '=', $subPackageId)->paginate(50);
+        ->where('sp.id_subpackage', '=', $id)->paginate(50);
         return $tbl;
     });
 });
