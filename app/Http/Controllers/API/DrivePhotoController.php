@@ -1298,7 +1298,7 @@ class DrivePhotoController extends Controller
         )
         ->where('op.id_customer', '=', $customer->id)
         ->where('op.sub_package_id', '=', $subPackageId)
-        ->where('sp.id_subpackage', '=', $subPackageId)->get();
+        ->orWhere('sp.id_subpackage', '=', $subPackageId)->get();
         // $selectedPhoto = SelectedPhoto::where('id_customer', '=', $customer->id)->get()->toArray();
         // die(print_r(count($selectedPhoto)));
         return response(['success' => true,'data'=>count($tbl), 'message' => 'Synchronize Successfully']);
