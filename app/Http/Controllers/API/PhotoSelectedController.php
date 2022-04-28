@@ -41,14 +41,19 @@ class PhotoSelectedController extends Controller
             ->join('sub_packages as sp', 'sp.id', 'select.id_subpackage')
             ->join('packages as p', 'p.id', 'sp.id_package')
             ->join('customers as c', 'c.id', 'p.id_customer')
-            ->select('c.name','c.basename_gdrive','p.package_name','sp.sub_package_name','select.basename', 'select.choice_basename')
+            ->select('c.name', 'c.restrict_delete','c.basename_gdrive','p.package_name','sp.sub_package_name','select.basename', 'select.choice_basename')
             ->where('select.basename', '=', $basename)->get()->first();
 
         // $seletedPhotoToDelete = DB::table('selected_photo')->where('basename', $basename)->get()->first();
         // die($selectedPhotoToDelete);
+        if($dbResponse->restrict_delete == 1){
+            return response(['success' => false, 'data' => null, 'message' => 'Penghapusan gagal, Akses hapus dibatasi']);
+        }
+
         if($dbResponse->choice_basename != NULL){
             $fileFromChoicePhoto = $this->findFileFromChoicePhoto($dbResponse->basename_gdrive, $dbResponse->sub_package_name, $dbResponse->choice_basename);
             // die(var_dump($fileFromChoicePhoto == null));
+            
             if($fileFromChoicePhoto == null){
                 return response(['success' => false, 'data' => null, 'message' => 'Penghapusan gagal, Foto sedang dalam pengeditan']);
             }else{
