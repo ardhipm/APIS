@@ -584,6 +584,7 @@ class CustomerController extends Controller
             
             $data = new \stdClass();
             $data->package_name = $package[0]->package_name;
+            $data->restrict_delete = $customer[0]->restrict_delete;
             $data->package_description = $package[0]->package_description;
             $data->subpackage = array();
             foreach($subpackage as $value){

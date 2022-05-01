@@ -56,6 +56,7 @@ const initialState = {
     pageNumber: 1,
     showPreview: false,
     currentPhotoPreview: '',
+    restrictDelete: 0,
     //alert
     showAlert: false,
     alertMessage: '',
@@ -139,6 +140,7 @@ const originPhotoReducer = (state = initialState, action) => {
                 packageDescription: action.payload.data.package_description,
                 selectedSubPackageIdx: action.payload.data.subpackage[0].id,
                 subPackageNumEditPhoto: action.payload.data.subpackage[0].num_limit_edit_photo,
+                restrictDelete: action.payload.data.restrict_delete
                 // subPackageNumSelectedEditPhoto: action.payload.data.subpackage[0].num_selected_edit_photo
 
             };
