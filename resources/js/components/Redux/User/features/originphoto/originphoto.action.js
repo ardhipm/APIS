@@ -153,7 +153,7 @@ export const removeSelectedPhoto = (basename) => async (dispatch, getState) => {
                 // console.log('hapus berhasil');
             }else{
                 await dispatch(setOpenAlertPopup(true, 'Hapus foto gagal, foto sedang dalam pengeditan', 'error'));
-                console.log('hapus gagl')
+                // console.log('hapus gagl')
             }
             
             // await dispatch(resetOriginPhoto());

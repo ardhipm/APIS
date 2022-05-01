@@ -85,6 +85,10 @@ const OriginPhotoPicture = ({ id, src, choice, filename, innerRef, isSelected, i
                 // refreshOriginPhoto();
             }
         } else {
+            if(originPhotoProps.restrictDelete === 1){
+                dispatch(setOpenAlertPopup(true, "Akses hapus foto anda di batasi, untuk saat ini tidak dapat menghapus foto", "error"));
+                return;
+            }
             dispatch(updateCurrentPreviewPhoto(src));
             if(choice != null){
                 dispatch(setOpenConfirmDialog(true, "Foto telah masuk pada foto pilihan, lanjutan untuk menghapus ?", confirmDialogType.DELETE_CHOICE_PHOTO_AFTER_CHECKOUT))
