@@ -79,6 +79,7 @@ class SelectedPrintPhotoController extends Controller
             ->join('packages as p', 'p.id', 'sp.id_package')
             ->join('customers as c', 'c.id', 'p.id_customer')
             ->where('c.id','=', $customer->id)->get()->toArray())->get();
-        return response(['success' => true,'data'=>$tbl, 'message' => 'Synchronize Successfully']);
+            return $tbl;
+        // return response(['success' => true,'data'=>$tbl, 'message' => 'Synchronize Successfully']);
     }
 }
