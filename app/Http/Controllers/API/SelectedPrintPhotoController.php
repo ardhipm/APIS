@@ -74,11 +74,11 @@ class SelectedPrintPhotoController extends Controller
             ->select('spp.basename')
             ->where('spp.id_customer', '=', $customer->id)
             ->whereIn('sap.sub_package_id', 
-            DB::raw('select sp.id from sub_packages sp 
-            join packages p on p.id = sp.id_package
-            join customers c on c.id = p.id_customer
-            join users u on u.id = c.id_user
-            where c.id = '.$customer->id)->get()->toArray()) ->count();
+            DB::table('sub_packages as sp')
+            ->select('sp.id')
+            ->join('packages as p', 'p.id', 'sp.id_packags')
+            ->join('customer as c', 'c.id', 'p.id_customer')
+            ->where('c.id','=', $customer->id)->get()->toArray())->count();
         return response(['success' => true,'data'=>$tbl, 'message' => 'Synchronize Successfully']);
     }
 }
