@@ -78,7 +78,7 @@ class SelectedPrintPhotoController extends Controller
             join packages p on p.id = sp.id_package
             join customers c on c.id = p.id_customer
             join users u on u.id = c.id_user
-            where c.id = '.$customer->id)) ->count();
+            where c.id = '.$customer->id)->get()->toArray()) ->count();
         return response(['success' => true,'data'=>$tbl, 'message' => 'Synchronize Successfully']);
     }
 }
