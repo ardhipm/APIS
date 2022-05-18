@@ -76,7 +76,7 @@ class SelectedAlbumPhotoController extends Controller
             DB::table('sub_packages as sp')
             ->select('sp.id')
             ->join('packages as p', 'p.id', 'sp.id_packags')
-            ->join('customer as c', 'c.id', 'p.id_customer')
+            ->join('customers as c', 'c.id', 'p.id_customer')
             ->where('c.id','=', $customer->id)->get()->toArray())->count();
         return response(['success' => true,'data'=>$tbl, 'message' => 'Synchronize Successfully']);
     }
