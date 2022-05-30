@@ -30,7 +30,7 @@ const UserInvoicePage = () => {
     const classes = useStyles();
     const [descMessage, setDescMessage] = React.useState("");
     const [invoicePic, setInvoicePic] =React.useState("");
-    const [isPaid, setIsPaid] = React.useState(false);
+    const [isPaid, setIsPaid] = React.useState("");
 
     useEffect(() => {
         getInvoicePhoto()
@@ -52,19 +52,20 @@ const UserInvoicePage = () => {
         const token = localStorage.getItem('authToken');
         axios.request({
             method: "get",
-            url: "/api/invoice/view",
+            url: "/api/invoice/view_customer",
             headers: { 'Content-Type': 'application/text', 'Authorization': 'Bearer ' + token }
         }).then(res => {
             let values = res.data.data;
             // console.log(values)
-            if(values.invoice_photo_link.length < 1){
+            if(values.invoice_link.length < 1){
                 setDescMessage("Kamu belum memiliki tagihan");
+                setIsPaid("Belum Bayar");
 
             }else{
                 setDescMessage("Silahkan selesaikan pembayaranmu ya!");
                 //console.log(values)
-                setInvoicePic(values.invoice_photo_link);
-                setIsPaid(values.id_payment_status);
+                setInvoicePic(values.invoice_link);
+                setIsPaid("Sudah Bayar");
             }
         }).catch(error => {
             //console.log(error);
@@ -72,7 +73,7 @@ const UserInvoicePage = () => {
         })
     }
 
-    const statusBayar = isPaid?"Sudah Bayar": "Belum Bayar";
+    const statusBayar = isPaid;
 
     
 

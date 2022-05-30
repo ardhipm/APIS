@@ -150,6 +150,9 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::get('invoice/get_photo', 'API\InvoiceController@getInvoicePhoto');
 });
+Route::middleware('auth:api')->group(function () {
+    Route::get('invoice/view_customer', 'API\InvoiceController@viewCustomer');
+});
 
 
 

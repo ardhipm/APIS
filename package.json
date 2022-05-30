@@ -47,6 +47,7 @@
     },
     "dependencies": {
         "@material-ui/lab": "^4.0.0-alpha.60",
-        "react-pdf": "^5.7.0"
+        "react-pdf": "^5.7.0",
+        "react-tabs": "^5.1.0"
     }
 }

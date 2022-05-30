@@ -43,7 +43,7 @@ class CustomerController extends Controller
             'packages.num_album_photo',
             'packages.num_print_photo',
             'packages.num_selected_album_photo',
-            'packages.num_selected_print_photo',
+            'packages.num_selected_print_photo'
             )
         ->where('users.id', '=', Auth::id())
         ->get();

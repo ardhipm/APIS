@@ -56,7 +56,7 @@ class ChoicePhotoController extends Controller
         ->leftJoin('selected_print_photo as pp', 'cp.basename', 'pp.basename')
         ->select('cp.id','cp.sub_package_id', 'cp.sub_package_name', 'cp.filename', 'cp.path', 'cp.basename', 'cp.id_customer', 'cp.is_edited','ap.album_basename', 'pp.print_basename',
             DB::raw('(CASE WHEN ap.basename is null THEN false ELSE true END) AS is_album_selected'),
-            DB::raw('(CASE WHEN pp.basename is null THEN false ELSE true END) AS is_print_selected'),
+            DB::raw('(CASE WHEN pp.basename is null THEN false ELSE true END) AS is_print_selected')
         )
         ->where('cp.id_customer', '=', $customer->id)
         ->where('cp.sub_package_id', '=', $subpackageId)->paginate(50);
