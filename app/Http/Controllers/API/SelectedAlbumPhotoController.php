@@ -71,7 +71,14 @@ class SelectedAlbumPhotoController extends Controller
         $customer = Customer::where('id_user', '=', Auth::id())->get()->first();
         $tbl = DB::table('selected_album_photo as sap')
             ->select('sap.basename')
-            ->where('sap.id_customer', '=', $customer->id)->count();
-        return response(['success' => true,'data'=>$tbl, 'message' => 'Synchronize Successfully']);
+            ->where('sap.id_customer', '=', $customer->id)
+            ->whereIn('sap.sub_package_id', 
+            DB::table('sub_packages as sp')
+            ->select('sp.id')
+            ->join('packages as p', 'p.id', 'sp.id_package')
+            ->join('customers as c', 'c.id', 'p.id_customer')
+            ->where('c.id','=', $customer->id)->get())->count();
+        return $tbl;
+        // return response(['success' => true,'data'=>$tbl, 'message' => 'Synchronize Successfully']);
     }
 }
