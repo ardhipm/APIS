@@ -27,7 +27,7 @@ const PhotoAlert = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-
+        // console.log('===>',alertProps)
     }, [alertProps.show])
 
     const handleOnClose = () => {
@@ -40,9 +40,13 @@ const PhotoAlert = () => {
             <Snackbar 
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 open={alertProps.show} 
+                // open={true} 
                 autoHideDuration={4000} 
                 onClose={handleOnClose}>
-                <Alert onClose={handleOnClose} severity={alertProps.type}>
+                <Alert onClose={handleOnClose} 
+                severity={alertProps.type}
+                // severity='error'
+                >
                     {alertProps.message}
                 </Alert>
             </Snackbar>

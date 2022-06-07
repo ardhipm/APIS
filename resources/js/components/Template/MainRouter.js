@@ -22,7 +22,7 @@ import EditDataPembayaran from '../Component/Admin/Pembayaran/UbahDataPembayaran
 import FormulirAdminMember from '../Component/Admin/PengurusAdmin/FormulirAdminMember';
 import TambahAdmin from '../Component/Admin/PengurusAdmin/TambahAdmin';
 import Faq from '../Component/Admin/Bantuan/FAQ';
-import Test from '../Component/Test/Test';
+// import Test from '../Component/Test/Test';
 import OriginPhotoPage from '../Component/User/OriginPhotoPage/OriginPhotoPage';
 import ChoicePhotoPage from '../Component/User/ChoicePhotoPage/ChoicePhotoPage';
 import NotificationPage from '../Component/Admin/Notifikasi/NotificationPage';

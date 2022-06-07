@@ -9,6 +9,7 @@ const initialState = {
 }
 
 const alertReducer = (state = initialState, action) => {
+    
     switch(action.type){
         case OPEN_ALERT:
             return {

@@ -1,0 +1,608 @@
+[2022-04-21 06:29:48] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/league/oauth2-server/src/Exception/OAuthServerException.php:223)
+[stacktrace]
+#0 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/league/oauth2-server/src/AuthorizationValidators/BearerTokenValidator.php(89): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('Access token ha...')
+#1 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/league/oauth2-server/src/ResourceServer.php(84): League\\OAuth2\\Server\\AuthorizationValidators\\BearerTokenValidator->validateAuthorization(Object(Zend\\Diactoros\\ServerRequest))
+#2 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/passport/src/Guards/TokenGuard.php(175): League\\OAuth2\\Server\\ResourceServer->validateAuthenticatedRequest(Object(Zend\\Diactoros\\ServerRequest))
+#3 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/passport/src/Guards/TokenGuard.php(127): Laravel\\Passport\\Guards\\TokenGuard->getPsrRequestViaBearerToken(Object(Illuminate\\Http\\Request))
+#4 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/passport/src/Guards/TokenGuard.php(90): Laravel\\Passport\\Guards\\TokenGuard->authenticateViaBearerToken(Object(Illuminate\\Http\\Request))
+#5 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/passport/src/PassportServiceProvider.php(275): Laravel\\Passport\\Guards\\TokenGuard->user(Object(Illuminate\\Http\\Request))
+#6 [internal function]: Laravel\\Passport\\PassportServiceProvider->Laravel\\Passport\\{closure}(Object(Illuminate\\Http\\Request), NULL)
+#7 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Auth/RequestGuard.php(58): call_user_func(Object(Closure), Object(Illuminate\\Http\\Request), NULL)
+#8 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Auth/GuardHelpers.php(60): Illuminate\\Auth\\RequestGuard->user()
+#9 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(62): Illuminate\\Auth\\RequestGuard->check()
+#10 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(41): Illuminate\\Auth\\Middleware\\Authenticate->authenticate(Object(Illuminate\\Http\\Request), Array)
+#11 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Auth\\Middleware\\Authenticate->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'api')
+#12 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#13 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#14 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(682): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#15 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(657): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#16 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(623): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#17 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(612): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#18 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(176): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#19 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(30): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#20 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Middleware/Cors.php(18): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#21 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): App\\Http\\Middleware\\Cors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#22 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#23 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Middleware/ForceJsonResponse.php(20): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#24 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): App\\Http\\Middleware\\ForceJsonResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#25 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#26 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#27 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#30 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#33 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#35 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php(62): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#36 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\CheckForMaintenanceMode->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/fideloper/proxy/src/TrustProxies.php(57): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#39 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Fideloper\\Proxy\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#41 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#42 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#43 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#44 /Applications/XAMPP/xamppfiles/htdocs/APIS/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#45 /Applications/XAMPP/xamppfiles/htdocs/APIS/server.php(21): require_once('/Applications/X...')
+#46 {main}
+"} 
+[2022-04-21 06:31:16] local.ERROR: {
+ "error": {
+  "errors": [
+   {
+    "domain": "global",
+    "reason": "required",
+    "message": "Login Required",
+    "locationType": "header",
+    "location": "Authorization"
+   }
+  ],
+  "code": 401,
+  "message": "Login Required"
+ }
+}
+ {"userId":1,"exception":"[object] (Google\\Service\\Exception(code: 401): {
+ \"error\": {
+  \"errors\": [
+   {
+    \"domain\": \"global\",
+    \"reason\": \"required\",
+    \"message\": \"Login Required\",
+    \"locationType\": \"header\",
+    \"location\": \"Authorization\"
+   }
+  ],
+  \"code\": 401,
+  \"message\": \"Login Required\"
+ }
+}
+ at /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Http/REST.php:128)
+[stacktrace]
+#0 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Http/REST.php(103): Google\\Http\\REST::decodeHttpResponse(Object(GuzzleHttp\\Psr7\\Response), Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...')
+#1 [internal function]: Google\\Http\\REST::doExecute(Object(GuzzleHttp\\Client), Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...')
+#2 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Task/Runner.php(182): call_user_func_array(Array, Array)
+#3 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Http/REST.php(66): Google\\Task\\Runner->run()
+#4 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Client.php(918): Google\\Http\\REST::execute(Object(GuzzleHttp\\Client), Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...', Array, NULL)
+#5 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Service/Resource.php(238): Google\\Client->execute(Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...')
+#6 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient-services/src/Drive/Resource/Files.php(101): Google\\Service\\Resource->call('create', Array, 'Google\\\\Service\\\\...')
+#7 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/nao-pon/flysystem-google-drive/src/GoogleDriveAdapter.php(1077): Google\\Service\\Drive\\Resource\\Files->create(Object(Google\\Service\\Drive\\DriveFile), Array)
+#8 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/nao-pon/flysystem-google-drive/src/GoogleDriveAdapter.php(400): Hypweb\\Flysystem\\GoogleDrive\\GoogleDriveAdapter->createDirectory('20 - Testing Di...', '1SZ7wUhKraQq7k6...')
+#9 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/league/flysystem/src/Filesystem.php(262): Hypweb\\Flysystem\\GoogleDrive\\GoogleDriveAdapter->createDir('20 - Testing Di...', Object(League\\Flysystem\\Config))
+#10 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemAdapter.php(653): League\\Flysystem\\Filesystem->createDir('20 - Testing Di...')
+#11 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Controllers/API/UserController.php(77): Illuminate\\Filesystem\\FilesystemAdapter->makeDirectory('20 - Testing Di...')
+#12 [internal function]: App\\Http\\Controllers\\API\\UserController->registerUserCustomer(Object(Illuminate\\Http\\Request))
+#13 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): call_user_func_array(Array, Array)
+#14 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(45): Illuminate\\Routing\\Controller->callAction('registerUserCus...', Array)
+#15 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Route.php(219): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\API\\UserController), 'registerUserCus...')
+#16 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Route.php(176): Illuminate\\Routing\\Route->runController()
+#17 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(680): Illuminate\\Routing\\Route->run()
+#18 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(30): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#19 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(41): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#20 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#21 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#22 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(43): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#23 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Auth\\Middleware\\Authenticate->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'api')
+#24 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#25 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#26 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(682): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#27 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(657): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#28 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(623): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#29 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(612): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#30 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(176): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#31 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(30): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#32 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Middleware/Cors.php(18): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#33 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): App\\Http\\Middleware\\Cors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#35 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Middleware/ForceJsonResponse.php(20): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#36 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): App\\Http\\Middleware\\ForceJsonResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#39 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#41 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#42 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#45 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php(62): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#48 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\CheckForMaintenanceMode->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#50 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/fideloper/proxy/src/TrustProxies.php(57): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#51 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Fideloper\\Proxy\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#52 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#54 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#55 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#56 /Applications/XAMPP/xamppfiles/htdocs/APIS/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#57 /Applications/XAMPP/xamppfiles/htdocs/APIS/server.php(21): require_once('/Applications/X...')
+#58 {main}
+"} 
+[2022-04-21 06:32:06] local.ERROR: {
+ "error": {
+  "errors": [
+   {
+    "domain": "global",
+    "reason": "required",
+    "message": "Login Required",
+    "locationType": "header",
+    "location": "Authorization"
+   }
+  ],
+  "code": 401,
+  "message": "Login Required"
+ }
+}
+ {"userId":1,"exception":"[object] (Google\\Service\\Exception(code: 401): {
+ \"error\": {
+  \"errors\": [
+   {
+    \"domain\": \"global\",
+    \"reason\": \"required\",
+    \"message\": \"Login Required\",
+    \"locationType\": \"header\",
+    \"location\": \"Authorization\"
+   }
+  ],
+  \"code\": 401,
+  \"message\": \"Login Required\"
+ }
+}
+ at /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Http/REST.php:128)
+[stacktrace]
+#0 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Http/REST.php(103): Google\\Http\\REST::decodeHttpResponse(Object(GuzzleHttp\\Psr7\\Response), Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...')
+#1 [internal function]: Google\\Http\\REST::doExecute(Object(GuzzleHttp\\Client), Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...')
+#2 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Task/Runner.php(182): call_user_func_array(Array, Array)
+#3 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Http/REST.php(66): Google\\Task\\Runner->run()
+#4 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Client.php(918): Google\\Http\\REST::execute(Object(GuzzleHttp\\Client), Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...', Array, NULL)
+#5 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Service/Resource.php(238): Google\\Client->execute(Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...')
+#6 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient-services/src/Drive/Resource/Files.php(101): Google\\Service\\Resource->call('create', Array, 'Google\\\\Service\\\\...')
+#7 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/nao-pon/flysystem-google-drive/src/GoogleDriveAdapter.php(1077): Google\\Service\\Drive\\Resource\\Files->create(Object(Google\\Service\\Drive\\DriveFile), Array)
+#8 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/nao-pon/flysystem-google-drive/src/GoogleDriveAdapter.php(400): Hypweb\\Flysystem\\GoogleDrive\\GoogleDriveAdapter->createDirectory('21 - Testing Di...', '1SZ7wUhKraQq7k6...')
+#9 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/league/flysystem/src/Filesystem.php(262): Hypweb\\Flysystem\\GoogleDrive\\GoogleDriveAdapter->createDir('21 - Testing Di...', Object(League\\Flysystem\\Config))
+#10 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemAdapter.php(653): League\\Flysystem\\Filesystem->createDir('21 - Testing Di...')
+#11 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Controllers/API/UserController.php(77): Illuminate\\Filesystem\\FilesystemAdapter->makeDirectory('21 - Testing Di...')
+#12 [internal function]: App\\Http\\Controllers\\API\\UserController->registerUserCustomer(Object(Illuminate\\Http\\Request))
+#13 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): call_user_func_array(Array, Array)
+#14 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(45): Illuminate\\Routing\\Controller->callAction('registerUserCus...', Array)
+#15 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Route.php(219): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\API\\UserController), 'registerUserCus...')
+#16 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Route.php(176): Illuminate\\Routing\\Route->runController()
+#17 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(680): Illuminate\\Routing\\Route->run()
+#18 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(30): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#19 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(41): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#20 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#21 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#22 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(43): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#23 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Auth\\Middleware\\Authenticate->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'api')
+#24 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#25 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#26 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(682): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#27 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(657): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#28 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(623): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#29 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(612): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#30 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(176): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#31 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(30): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#32 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Middleware/Cors.php(18): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#33 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): App\\Http\\Middleware\\Cors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#35 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Middleware/ForceJsonResponse.php(20): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#36 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): App\\Http\\Middleware\\ForceJsonResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#39 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#41 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#42 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#45 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php(62): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#48 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\CheckForMaintenanceMode->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#50 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/fideloper/proxy/src/TrustProxies.php(57): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#51 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Fideloper\\Proxy\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#52 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#54 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#55 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#56 /Applications/XAMPP/xamppfiles/htdocs/APIS/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#57 /Applications/XAMPP/xamppfiles/htdocs/APIS/server.php(21): require_once('/Applications/X...')
+#58 {main}
+"} 
+[2022-04-21 06:35:09] local.ERROR: {
+ "error": {
+  "errors": [
+   {
+    "domain": "global",
+    "reason": "required",
+    "message": "Login Required",
+    "locationType": "header",
+    "location": "Authorization"
+   }
+  ],
+  "code": 401,
+  "message": "Login Required"
+ }
+}
+ {"userId":1,"exception":"[object] (Google\\Service\\Exception(code: 401): {
+ \"error\": {
+  \"errors\": [
+   {
+    \"domain\": \"global\",
+    \"reason\": \"required\",
+    \"message\": \"Login Required\",
+    \"locationType\": \"header\",
+    \"location\": \"Authorization\"
+   }
+  ],
+  \"code\": 401,
+  \"message\": \"Login Required\"
+ }
+}
+ at /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Http/REST.php:128)
+[stacktrace]
+#0 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Http/REST.php(103): Google\\Http\\REST::decodeHttpResponse(Object(GuzzleHttp\\Psr7\\Response), Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...')
+#1 [internal function]: Google\\Http\\REST::doExecute(Object(GuzzleHttp\\Client), Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...')
+#2 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Task/Runner.php(182): call_user_func_array(Array, Array)
+#3 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Http/REST.php(66): Google\\Task\\Runner->run()
+#4 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Client.php(918): Google\\Http\\REST::execute(Object(GuzzleHttp\\Client), Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...', Array, NULL)
+#5 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Service/Resource.php(238): Google\\Client->execute(Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...')
+#6 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient-services/src/Drive/Resource/Files.php(101): Google\\Service\\Resource->call('create', Array, 'Google\\\\Service\\\\...')
+#7 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/nao-pon/flysystem-google-drive/src/GoogleDriveAdapter.php(1077): Google\\Service\\Drive\\Resource\\Files->create(Object(Google\\Service\\Drive\\DriveFile), Array)
+#8 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/nao-pon/flysystem-google-drive/src/GoogleDriveAdapter.php(400): Hypweb\\Flysystem\\GoogleDrive\\GoogleDriveAdapter->createDirectory('22 - Testing Di...', '1SZ7wUhKraQq7k6...')
+#9 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/league/flysystem/src/Filesystem.php(262): Hypweb\\Flysystem\\GoogleDrive\\GoogleDriveAdapter->createDir('22 - Testing Di...', Object(League\\Flysystem\\Config))
+#10 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemAdapter.php(653): League\\Flysystem\\Filesystem->createDir('22 - Testing Di...')
+#11 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Controllers/API/UserController.php(77): Illuminate\\Filesystem\\FilesystemAdapter->makeDirectory('22 - Testing Di...')
+#12 [internal function]: App\\Http\\Controllers\\API\\UserController->registerUserCustomer(Object(Illuminate\\Http\\Request))
+#13 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): call_user_func_array(Array, Array)
+#14 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(45): Illuminate\\Routing\\Controller->callAction('registerUserCus...', Array)
+#15 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Route.php(219): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\API\\UserController), 'registerUserCus...')
+#16 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Route.php(176): Illuminate\\Routing\\Route->runController()
+#17 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(680): Illuminate\\Routing\\Route->run()
+#18 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(30): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#19 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(41): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#20 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#21 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#22 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(43): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#23 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Auth\\Middleware\\Authenticate->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'api')
+#24 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#25 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#26 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(682): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#27 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(657): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#28 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(623): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#29 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(612): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#30 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(176): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#31 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(30): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#32 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Middleware/Cors.php(18): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#33 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): App\\Http\\Middleware\\Cors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#35 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Middleware/ForceJsonResponse.php(20): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#36 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): App\\Http\\Middleware\\ForceJsonResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#39 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#41 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#42 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#45 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php(62): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#48 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\CheckForMaintenanceMode->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#50 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/fideloper/proxy/src/TrustProxies.php(57): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#51 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Fideloper\\Proxy\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#52 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#54 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#55 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#56 /Applications/XAMPP/xamppfiles/htdocs/APIS/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#57 /Applications/XAMPP/xamppfiles/htdocs/APIS/server.php(21): require_once('/Applications/X...')
+#58 {main}
+"} 
+[2022-04-21 06:43:03] local.ERROR: {
+ "error": {
+  "errors": [
+   {
+    "domain": "global",
+    "reason": "required",
+    "message": "Login Required",
+    "locationType": "header",
+    "location": "Authorization"
+   }
+  ],
+  "code": 401,
+  "message": "Login Required"
+ }
+}
+ {"userId":1,"exception":"[object] (Google\\Service\\Exception(code: 401): {
+ \"error\": {
+  \"errors\": [
+   {
+    \"domain\": \"global\",
+    \"reason\": \"required\",
+    \"message\": \"Login Required\",
+    \"locationType\": \"header\",
+    \"location\": \"Authorization\"
+   }
+  ],
+  \"code\": 401,
+  \"message\": \"Login Required\"
+ }
+}
+ at /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Http/REST.php:128)
+[stacktrace]
+#0 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Http/REST.php(103): Google\\Http\\REST::decodeHttpResponse(Object(GuzzleHttp\\Psr7\\Response), Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...')
+#1 [internal function]: Google\\Http\\REST::doExecute(Object(GuzzleHttp\\Client), Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...')
+#2 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Task/Runner.php(182): call_user_func_array(Array, Array)
+#3 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Http/REST.php(66): Google\\Task\\Runner->run()
+#4 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Client.php(918): Google\\Http\\REST::execute(Object(GuzzleHttp\\Client), Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...', Array, NULL)
+#5 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Service/Resource.php(238): Google\\Client->execute(Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...')
+#6 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient-services/src/Drive/Resource/Files.php(101): Google\\Service\\Resource->call('create', Array, 'Google\\\\Service\\\\...')
+#7 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/nao-pon/flysystem-google-drive/src/GoogleDriveAdapter.php(1077): Google\\Service\\Drive\\Resource\\Files->create(Object(Google\\Service\\Drive\\DriveFile), Array)
+#8 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/nao-pon/flysystem-google-drive/src/GoogleDriveAdapter.php(400): Hypweb\\Flysystem\\GoogleDrive\\GoogleDriveAdapter->createDirectory('23 - Testing Di...', '1SZ7wUhKraQq7k6...')
+#9 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/league/flysystem/src/Filesystem.php(262): Hypweb\\Flysystem\\GoogleDrive\\GoogleDriveAdapter->createDir('23 - Testing Di...', Object(League\\Flysystem\\Config))
+#10 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemAdapter.php(653): League\\Flysystem\\Filesystem->createDir('23 - Testing Di...')
+#11 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Controllers/API/UserController.php(77): Illuminate\\Filesystem\\FilesystemAdapter->makeDirectory('23 - Testing Di...')
+#12 [internal function]: App\\Http\\Controllers\\API\\UserController->registerUserCustomer(Object(Illuminate\\Http\\Request))
+#13 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): call_user_func_array(Array, Array)
+#14 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(45): Illuminate\\Routing\\Controller->callAction('registerUserCus...', Array)
+#15 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Route.php(219): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\API\\UserController), 'registerUserCus...')
+#16 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Route.php(176): Illuminate\\Routing\\Route->runController()
+#17 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(680): Illuminate\\Routing\\Route->run()
+#18 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(30): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#19 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(41): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#20 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#21 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#22 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(43): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#23 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Auth\\Middleware\\Authenticate->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'api')
+#24 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#25 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#26 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(682): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#27 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(657): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#28 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(623): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#29 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(612): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#30 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(176): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#31 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(30): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#32 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Middleware/Cors.php(18): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#33 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): App\\Http\\Middleware\\Cors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#35 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Middleware/ForceJsonResponse.php(20): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#36 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): App\\Http\\Middleware\\ForceJsonResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#39 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#41 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#42 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#45 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php(62): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#48 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\CheckForMaintenanceMode->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#50 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/fideloper/proxy/src/TrustProxies.php(57): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#51 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Fideloper\\Proxy\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#52 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#54 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#55 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#56 /Applications/XAMPP/xamppfiles/htdocs/APIS/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#57 /Applications/XAMPP/xamppfiles/htdocs/APIS/server.php(21): require_once('/Applications/X...')
+#58 {main}
+"} 
+[2022-04-21 06:45:23] local.ERROR: syntax error, unexpected 'else' (T_ELSE), expecting function (T_FUNCTION) or const (T_CONST) {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalThrowableError(code: 0): syntax error, unexpected 'else' (T_ELSE), expecting function (T_FUNCTION) or const (T_CONST) at /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Controllers/API/UserController.php:147)
+[stacktrace]
+#0 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/composer/ClassLoader.php(428): Composer\\Autoload\\includeFile('/Applications/X...')
+#1 [internal function]: Composer\\Autoload\\ClassLoader->loadClass('App\\\\Http\\\\Contro...')
+#2 [internal function]: spl_autoload_call('App\\\\Http\\\\Contro...')
+#3 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Container/Container.php(788): ReflectionClass->__construct('App\\\\Http\\\\Contro...')
+#4 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Container/Container.php(667): Illuminate\\Container\\Container->build('App\\\\Http\\\\Contro...')
+#5 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Container/Container.php(615): Illuminate\\Container\\Container->resolve('App\\\\Http\\\\Contro...', Array)
+#6 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(767): Illuminate\\Container\\Container->make('App\\\\Http\\\\Contro...', Array)
+#7 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Route.php(233): Illuminate\\Foundation\\Application->make('App\\\\Http\\\\Contro...')
+#8 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Route.php(833): Illuminate\\Routing\\Route->getController()
+#9 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Route.php(794): Illuminate\\Routing\\Route->controllerMiddleware()
+#10 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(693): Illuminate\\Routing\\Route->gatherMiddleware()
+#11 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(673): Illuminate\\Routing\\Router->gatherRouteMiddleware(Object(Illuminate\\Routing\\Route))
+#12 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(657): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#13 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(623): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#14 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(612): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#15 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(176): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#16 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(30): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#17 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Middleware/Cors.php(18): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#18 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): App\\Http\\Middleware\\Cors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#19 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#20 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Middleware/ForceJsonResponse.php(20): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#21 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): App\\Http\\Middleware\\ForceJsonResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#22 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#23 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#24 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#25 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#26 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#27 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#30 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php(62): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#33 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\CheckForMaintenanceMode->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#35 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/fideloper/proxy/src/TrustProxies.php(57): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#36 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Fideloper\\Proxy\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#39 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#40 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#41 /Applications/XAMPP/xamppfiles/htdocs/APIS/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#42 /Applications/XAMPP/xamppfiles/htdocs/APIS/server.php(21): require_once('/Applications/X...')
+#43 {main}
+"} 
+[2022-04-21 06:46:03] local.ERROR: Undefined variable: ir {"userId":1,"exception":"[object] (ErrorException(code: 0): Undefined variable: ir at /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Controllers/API/UserController.php:87)
+[stacktrace]
+#0 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Controllers/API/UserController.php(87): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8, 'Undefined varia...', '/Applications/X...', 87, Array)
+#1 [internal function]: App\\Http\\Controllers\\API\\UserController->registerUserCustomer(Object(Illuminate\\Http\\Request))
+#2 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): call_user_func_array(Array, Array)
+#3 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(45): Illuminate\\Routing\\Controller->callAction('registerUserCus...', Array)
+#4 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Route.php(219): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\API\\UserController), 'registerUserCus...')
+#5 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Route.php(176): Illuminate\\Routing\\Route->runController()
+#6 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(680): Illuminate\\Routing\\Route->run()
+#7 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(30): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#8 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(41): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#9 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#10 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#11 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(43): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#12 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Auth\\Middleware\\Authenticate->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'api')
+#13 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#14 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#15 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(682): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#16 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(657): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#17 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(623): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#18 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(612): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#19 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(176): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#20 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(30): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#21 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Middleware/Cors.php(18): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#22 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): App\\Http\\Middleware\\Cors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#23 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#24 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Middleware/ForceJsonResponse.php(20): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#25 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): App\\Http\\Middleware\\ForceJsonResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#26 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#28 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#29 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#30 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#31 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#32 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#33 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#34 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#35 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php(62): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#37 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\CheckForMaintenanceMode->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#38 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#39 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/fideloper/proxy/src/TrustProxies.php(57): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#40 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Fideloper\\Proxy\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#41 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#42 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#43 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#44 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#45 /Applications/XAMPP/xamppfiles/htdocs/APIS/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#46 /Applications/XAMPP/xamppfiles/htdocs/APIS/server.php(21): require_once('/Applications/X...')
+#47 {main}
+"} 
+[2022-04-21 06:51:27] local.ERROR: {
+ "error": {
+  "errors": [
+   {
+    "domain": "global",
+    "reason": "required",
+    "message": "Login Required",
+    "locationType": "header",
+    "location": "Authorization"
+   }
+  ],
+  "code": 401,
+  "message": "Login Required"
+ }
+}
+ {"userId":1,"exception":"[object] (Google\\Service\\Exception(code: 401): {
+ \"error\": {
+  \"errors\": [
+   {
+    \"domain\": \"global\",
+    \"reason\": \"required\",
+    \"message\": \"Login Required\",
+    \"locationType\": \"header\",
+    \"location\": \"Authorization\"
+   }
+  ],
+  \"code\": 401,
+  \"message\": \"Login Required\"
+ }
+}
+ at /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Http/REST.php:128)
+[stacktrace]
+#0 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Http/REST.php(103): Google\\Http\\REST::decodeHttpResponse(Object(GuzzleHttp\\Psr7\\Response), Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...')
+#1 [internal function]: Google\\Http\\REST::doExecute(Object(GuzzleHttp\\Client), Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...')
+#2 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Task/Runner.php(182): call_user_func_array(Array, Array)
+#3 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Http/REST.php(66): Google\\Task\\Runner->run()
+#4 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Client.php(918): Google\\Http\\REST::execute(Object(GuzzleHttp\\Client), Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...', Array, NULL)
+#5 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient/src/Service/Resource.php(238): Google\\Client->execute(Object(GuzzleHttp\\Psr7\\Request), 'Google\\\\Service\\\\...')
+#6 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/google/apiclient-services/src/Drive/Resource/Files.php(101): Google\\Service\\Resource->call('create', Array, 'Google\\\\Service\\\\...')
+#7 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/nao-pon/flysystem-google-drive/src/GoogleDriveAdapter.php(1077): Google\\Service\\Drive\\Resource\\Files->create(Object(Google\\Service\\Drive\\DriveFile), Array)
+#8 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/nao-pon/flysystem-google-drive/src/GoogleDriveAdapter.php(400): Hypweb\\Flysystem\\GoogleDrive\\GoogleDriveAdapter->createDirectory('28 - a14', '1SZ7wUhKraQq7k6...')
+#9 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/league/flysystem/src/Filesystem.php(262): Hypweb\\Flysystem\\GoogleDrive\\GoogleDriveAdapter->createDir('28 - a14', Object(League\\Flysystem\\Config))
+#10 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemAdapter.php(653): League\\Flysystem\\Filesystem->createDir('28 - a14')
+#11 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Controllers/API/UserController.php(77): Illuminate\\Filesystem\\FilesystemAdapter->makeDirectory('28 - a14')
+#12 [internal function]: App\\Http\\Controllers\\API\\UserController->registerUserCustomer(Object(Illuminate\\Http\\Request))
+#13 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): call_user_func_array(Array, Array)
+#14 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(45): Illuminate\\Routing\\Controller->callAction('registerUserCus...', Array)
+#15 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Route.php(219): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\API\\UserController), 'registerUserCus...')
+#16 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Route.php(176): Illuminate\\Routing\\Route->runController()
+#17 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(680): Illuminate\\Routing\\Route->run()
+#18 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(30): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#19 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(41): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#20 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#21 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#22 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(43): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#23 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Auth\\Middleware\\Authenticate->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'api')
+#24 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#25 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#26 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(682): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#27 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(657): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#28 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(623): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#29 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Router.php(612): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#30 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(176): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#31 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(30): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#32 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Middleware/Cors.php(18): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#33 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): App\\Http\\Middleware\\Cors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#35 /Applications/XAMPP/xamppfiles/htdocs/APIS/app/Http/Middleware/ForceJsonResponse.php(20): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#36 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): App\\Http\\Middleware\\ForceJsonResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#39 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#41 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#42 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#45 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php(62): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#48 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\CheckForMaintenanceMode->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#50 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/fideloper/proxy/src/TrustProxies.php(57): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#51 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(163): Fideloper\\Proxy\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#52 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#54 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#55 /Applications/XAMPP/xamppfiles/htdocs/APIS/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#56 /Applications/XAMPP/xamppfiles/htdocs/APIS/public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#57 /Applications/XAMPP/xamppfiles/htdocs/APIS/server.php(21): require_once('/Applications/X...')
+#58 {main}
+"} 

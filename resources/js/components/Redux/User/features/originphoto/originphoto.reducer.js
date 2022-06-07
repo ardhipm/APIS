@@ -72,7 +72,8 @@ const initialState = {
     // confirm dialog
     openConfirmDialog: false,
     confirmDialogMessage: '',
-    confirmDialogType: null
+    confirmDialogType: null,
+    deletePhotoSuccess: true
 
 }
 

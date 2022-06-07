@@ -55,7 +55,7 @@ class PhotoSelectedController extends Controller
             // die(var_dump($fileFromChoicePhoto == null));
             
             if($fileFromChoicePhoto == null){
-                return response(['success' => false, 'data' => null, 'message' => 'Penghapusan gagal, Foto sedang dalam pengeditan']);
+                return response(['success' => false, 'data' => null, 'message' => 'Penghapusan gagal, Foto sedang dalam pengeditan'], 500);
             }else{
                 \Storage::cloud()->delete($fileFromChoicePhoto['path']);
             }
