@@ -30,7 +30,10 @@ import {
     UPDATE_TOTAL_SELECTED_PRINT_FAIL,
     CHECKOUT_ALBUM_PRINT_PHOTO, 
     CHECKOUT_ALBUM_PRINT_PHOTO_SUCCESS,
-    CHECKOUT_ALBUM_PRINT_PHOTO_FAIL
+    CHECKOUT_ALBUM_PRINT_PHOTO_FAIL,
+    GET_SUBPACKAGE,
+    GET_SUBPACKAGE_SUCCESS,
+    GET_SUBPACKAGE_FAIL,
 } from '../../../actionTypes';
 
 const initialState = {
@@ -67,6 +70,7 @@ const initialState = {
 const choicePhotoReducer = (state = initialState, action) => {
     switch (action.type) {
         case UPDATE_SUBPACKAGE_IDX:
+            console.log('UPDATE_SUBPACKAGE_IDX',action.payload);
             return {
                 ...state,
                 selectedSubPackageIdx: action.payload
@@ -77,6 +81,7 @@ const choicePhotoReducer = (state = initialState, action) => {
                 loadingMetadata: true
             };
         case GET_CHOICE_PHOTO_METADATA_SUCCESS:
+            console.log('GET_CHOICE_PHOTO_METADATA',action.payload.data);
             return {
                 ...state,
                 loadingMetadata: false,
@@ -84,8 +89,8 @@ const choicePhotoReducer = (state = initialState, action) => {
                 selectedSubPackageIdx: action.payload.data.subpackage[0].id,
                 packageTitle: action.payload.data.package_name,
                 packageDescription: action.payload.data.package_description,
-                totalLimitAlbumPhoto: action.payload.data.num_album_photo,
-                totalLimitPrintPhoto: action.payload.data.num_print_photo,
+                totalLimitAlbumPhoto: action.payload.data.subpackage[0].num_album_photo,
+                totalLimitPrintPhoto: action.payload.data.subpackage[0].num_print_photo,
                 restrictedAlbumPhoto: action.payload.data.restrict_album_print
 
             };
@@ -250,6 +255,24 @@ const choicePhotoReducer = (state = initialState, action) => {
         case CHECKOUT_ALBUM_PRINT_PHOTO_FAIL:
             return {
                 ...state
+            };
+        case GET_SUBPACKAGE:
+            return {
+                ...state,
+
+            };
+        case GET_SUBPACKAGE_SUCCESS:
+            console.log('GET_SUBPACKAGE', action.payload.data);
+            return {
+                    ...state,
+                    totalLimitAlbumPhoto: action.payload.data.num_limit_album_photo,
+                    totalLimitPrintPhoto: action.payload.data.num_limit_print_photo,
+    
+            };
+        case GET_SUBPACKAGE_FAIL:
+            return {
+                ...state,
+
             };
         default:
             return state;

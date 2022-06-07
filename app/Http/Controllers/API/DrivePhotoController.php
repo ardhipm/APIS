@@ -305,6 +305,9 @@ class DrivePhotoController extends Controller
     }
 
     public function getAlbumCache(){
+        if (!class_exists('Memcached')) {
+            include ("memcached.php");
+        }
         if (\Cache::has('album_user_'.Auth::Id())) {
             $response = \Cache::get('album_user_'.Auth::Id());
             return $response;
@@ -551,6 +554,10 @@ class DrivePhotoController extends Controller
     }
 
     public function getAlbumMagazine(){
+
+        if (!class_exists('Memcached')) {
+            include ("memcached.php");
+        }
     
         $customer = DB::table('customers')
         ->leftJoin('users', 'customers.id_user', 'users.id')

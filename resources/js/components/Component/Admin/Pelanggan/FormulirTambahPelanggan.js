@@ -57,8 +57,8 @@ const customerSchema = Yup.object().shape({
     oldPassword: Yup.string(),
     packageName: Yup.string('Masukkan Nama Paket').required('Nama Paket Dibutuhkan'),
     packageDescription: Yup.string('Masukkan Deskripsi Paket'),
-    albumPhotoQuantity: Yup.number().min(0).integer().required('Limit Foto Album dibutuhkan'),
-    printPhotoQuantity: Yup.number().min(0).integer().required('Limit Foto Cetak dibutuhkan'),
+    // albumPhotoQuantity: Yup.number().min(0).integer().required('Limit Foto Album dibutuhkan'),
+    // printPhotoQuantity: Yup.number().min(0).integer().required('Limit Foto Cetak dibutuhkan'),
     subPackage: Yup.array().min(1, 'Minimal memiliki 1 sub paket')
 });
 
@@ -81,8 +81,8 @@ let initValue = {
     restrictDelete: false,
     packageName: '',
     packageDescription: '',
-    albumPhotoQuantity: 0,
-    printPhotoQuantity: 0,
+    // albumPhotoQuantity: 0,
+    // printPhotoQuantity: 0,
     subPackage: [],
 };
 
@@ -115,6 +115,8 @@ function FormulirTambahPelanggan(props) {
                 "sub_package_name": item.subPackageName,
                 "sub_package_description": item.subPackageDetail,
                 "num_edit_photo": item.editPhotoQuantity,
+                "num_album_photo": values.albumPhotoQuantity,
+                "num_print_photo": values.printPhotoQuantity,
             })
         })
 
@@ -131,8 +133,8 @@ function FormulirTambahPelanggan(props) {
             "password_confirmation": values.confirmPassword,
             "package_name": values.packageName,
             "package_description": values.packageDescription,
-            "num_album_photo": values.albumPhotoQuantity,
-            "num_print_photo": values.printPhotoQuantity,
+            // "num_album_photo": values.albumPhotoQuantity,
+            // "num_print_photo": values.printPhotoQuantity,
             "sub_package": subPackage
         }
 
@@ -185,6 +187,8 @@ function FormulirTambahPelanggan(props) {
                 "sub_package_name": item.subPackageName,
                 "sub_package_description": item.subPackageDetail,
                 "num_edit_photo": item.editPhotoQuantity,
+                "num_album_photo" : item.albumPhotoQuantity,
+                "num_print_photo": item.printPhotoQuantity
             })
         })
 
@@ -206,8 +210,8 @@ function FormulirTambahPelanggan(props) {
             "password_confirmation": values.confirmPassword,
             "package_name": values.packageName,
             "package_description": values.packageDescription,
-            "num_album_photo": values.albumPhotoQuantity,
-            "num_print_photo": values.printPhotoQuantity,
+            // "num_album_photo": values.albumPhotoQuantity,
+            // "num_print_photo": values.printPhotoQuantity,
             "sub_package": subPackage
         }
 
@@ -296,11 +300,12 @@ function FormulirTambahPelanggan(props) {
                         formik.setFieldValue('isActive', values.is_active > 0 ? true : false);
                         formik.setFieldValue('packageName', values.package_name);
                         formik.setFieldValue('packageDescription', values.package_description);
-                        formik.setFieldValue('albumPhotoQuantity', values.num_album_photo);
-                        formik.setFieldValue('printPhotoQuantity', values.num_print_photo);
+                        // formik.setFieldValue('albumPhotoQuantity', values.num_album_photo);
+                        // formik.setFieldValue('printPhotoQuantity', values.num_print_photo);
                         formik.setFieldValue('password', values.plain_password);
                         formik.setFieldValue('confirmPassword', values.plain_password);
                         formik.setFieldValue('oldPassword', values.password);
+                        
                         setLinkToFolderDrive(values.basename_gdrive);
 
                         let subPackage = [];
@@ -312,6 +317,7 @@ function FormulirTambahPelanggan(props) {
                                 subPackageDetail: item.sub_package_description,
                                 editPhotoQuantity: item.num_edit_photo,
                                 printPhotoQuantity: item.num_print_photo,
+                                albumPhotoQuantity: item.num_album_photo,
                                 isSelected: false,
                             }
                             subPackage.push(subPackageItem);

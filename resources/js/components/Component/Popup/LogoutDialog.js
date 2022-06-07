@@ -34,7 +34,7 @@ const LogoutDialog = (props) => {
                     //console.log('keluar');
                     localStorage.removeItem('authToken');
                     localStorage.removeItem("user");
-                    window.location.href= "/";
+                    window.location.href= "/login";
 
                 } else {
                 }

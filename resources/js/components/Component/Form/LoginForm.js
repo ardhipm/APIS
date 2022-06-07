@@ -320,7 +320,7 @@ const LoginForm = (props) => {
                     </Button>
                     <Typography className={classes.errorMsg} color="textSecondary" gutterBottom
                         style={{ fontSize: 12 + 'px', display: 'inline', lineHeight: 'normal' }}>
-                        {state.errorMsg}
+                        {loginReducer.errorMsg}
                     </Typography>
                 </Grid>
             </Grid>

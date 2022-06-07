@@ -335,14 +335,14 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::get('drive/choice/selected_album_photo', 'API\SelectedAlbumPhotoController@insertSelectedAlbum');
     Route::get('drive/choice/delete_album_photo/{basename}', 'API\SelectedAlbumPhotoController@deleteSelectedAlbum');
-    Route::get('drive/choice/get_count_selected_album_photo', 'API\SelectedAlbumPhotoController@countSelectedAlbumPhoto');
+    Route::get('drive/choice/get_count_selected_album_photo/{subpackageId}', 'API\SelectedAlbumPhotoController@countSelectedAlbumPhoto');
 });
 
 //selected print photo
 Route::middleware('auth:api')->group(function () {
     Route::get('drive/choice/selected_print_photo', 'API\SelectedPrintPhotoController@insertSelectedPrint');
     Route::get('drive/choice/delete_print_photo/{basename}', 'API\SelectedPrintPhotoController@deleteSelectedPrint');
-    Route::get('drive/choice/get_count_selected_print_photo', 'API\SelectedPrintPhotoController@countSelectedPrintPhoto');
+    Route::get('drive/choice/get_count_selected_print_photo/{subpackageId}', 'API\SelectedPrintPhotoController@countSelectedPrintPhoto');
 });
 
 Route::middleware('auth:api')->group(function () {

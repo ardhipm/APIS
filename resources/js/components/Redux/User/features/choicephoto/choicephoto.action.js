@@ -54,13 +54,15 @@ export const getChoicePhotoWithPagination = (subpackageId, page) => async dispat
     })
 
     const response = api.getChoicePhotoWithPagination(subpackageId, page);
+    
     response.then(
-        response => { dispatch({type: GET_CHOICE_PHOTO_WITH_PAGINATION_SUCCESS, payload: response}) },
+        response => { console.log(response);dispatch({type: GET_CHOICE_PHOTO_WITH_PAGINATION_SUCCESS, payload: response}) },
         err => { dispatch({type: GET_CHOICE_PHOTO_WITH_PAGINATION_FAIL, payload:err }) }
     )
 }
 
 export const updateSubpackageIdx = (idx) => dispatch =>{
+    console.log('lksdalkfj', idx);
     dispatch({
         type: UPDATE_SUBPACKAGE_IDX,
         payload: idx
@@ -150,24 +152,24 @@ export const deleteSelectPrintPhoto = (basename, subpackageId) => async (dispatc
     )
 }
 
-export const countSelectedAlbumPhoto = () => async dispatch => {
+export const countSelectedAlbumPhoto = (idx) => async dispatch => {
     await dispatch({
         type: UPDATE_TOTAL_SELECTED_ALBUM
     })
 
-    const response = api.countSelectedAlbumPhoto();
+    const response = api.countSelectedAlbumPhoto(idx);
     return response.then(
         response => dispatch({type: UPDATE_TOTAL_SELECTED_ALBUM_SUCCESS, payload: response.data}),
         err => dispatch({type: UPDATE_TOTAL_SELECTED_ALBUM_FAIL, payload: err})
     )
 }
 
-export const countSelectedPrintPhoto = () => async dispatch => {
+export const countSelectedPrintPhoto = (idx) => async dispatch => {
     await dispatch({
         type: UPDATE_TOTAL_SELECTED_PRINT
     })
 
-    const response = api.countSelectedPrintPhoto();
+    const response = api.countSelectedPrintPhoto(idx);
     return response.then(
         response => dispatch({type: UPDATE_TOTAL_SELECTED_PRINT_SUCCESS, payload: response.data}),
         err => dispatch({type: UPDATE_TOTAL_SELECTED_PRINT_FAIL, payload: err})

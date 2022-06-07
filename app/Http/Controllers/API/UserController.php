@@ -324,7 +324,7 @@ class UserController extends Controller
             return $validator->errors();
         } else {
             if (!Auth::attempt(['username' => $bodyJson['username'], 'password' => $bodyJson['password'], 'is_active' => 1])) {
-                return response(['success' => false, 'message' => 'This User does not exist, check your details'], 400);
+                return response(['success' => false, 'message' => 'Pengguna tidak ditemukan'], 400);
             }
             $accessToken = auth()->user()->createToken('authToken')->accessToken;
             $user = new \stdClass();
@@ -332,7 +332,7 @@ class UserController extends Controller
             $user->role = auth()->user()->role_id;
             $user->is_active = auth()->user()->is_active;
             
-            return response(['success' => true, 'message' => 'Login successfully','user'=> $user, 'access_token' => $accessToken]);
+            return response(['success' => true, 'message' => 'Login berhasil','user'=> $user, 'access_token' => $accessToken]);
         }
        
     }

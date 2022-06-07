@@ -144,7 +144,7 @@ export const removeSelectedPhoto = (basename) => async (dispatch, getState) => {
 
     const response = api.removeSelectedOriginPhoto(basename);
 
-    return response.then(
+    response.then(
         async response => {
             dispatch(setOpenLoadingPopup(false, ''));
             dispatch({type: ORIGIN_DELETE_PHOTO_SUCCESS, payload: response.data})
@@ -160,11 +160,13 @@ export const removeSelectedPhoto = (basename) => async (dispatch, getState) => {
             // dispatch(getOriginPhotoWithPagination(getState().originPhotoReducer.selectedSubPackageIdx, 1));
         },
         err => {
+            // console.log('====> delete foto gagal', err);
             dispatch(setOpenLoadingPopup(false, ''));
             dispatch({type: ORIGIN_DELETE_PHOTO_FAIL, payload: err})
             dispatch(setOpenAlertPopup(true, 'Hapus foto gagal', 'error'))
         }    
     )
+    return response
 }
 
 export const updatePageNumber = (pageNumber) => ({

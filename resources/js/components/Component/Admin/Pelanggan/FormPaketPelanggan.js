@@ -12,6 +12,8 @@ const initial = {
     subPackageName: "",
     subPackageDetail: "",
     editPhotoQuantity: 0,
+    printPhotoQuantity: 0,
+    albumPhotoQuantity: 0,
     isSelected: false
 }
 
@@ -93,6 +95,8 @@ const FormPaketPelanggan = (props) => {
                     subPackageName: item.subPackageName,
                     subPackageDetail: item.subPackageDetail,
                     editPhotoQuantity: item.editPhotoQuantity,
+                    printPhotoQuantity: item.printPhotoQuantity,
+                    albumPhotoQuantity: item.albumPhotoQuantity,
                     isSelected: item.isSelected
                 }
             })
@@ -116,6 +120,8 @@ const FormPaketPelanggan = (props) => {
                 subPackageName: "",
                 subPackageDetail: "",
                 editPhotoQuantity: 0,
+                printPhotoQuantity: 0,
+                albumPhotoQuantity: 0,
                 isSelected: false
             }
         })
@@ -130,6 +136,8 @@ const FormPaketPelanggan = (props) => {
                 currentData.subPackage[index].subPackageName = data.subPackageName;
                 currentData.subPackage[index].subPackageDetail = data.subPackageDetail;
                 currentData.subPackage[index].editPhotoQuantity = data.editPhotoQuantity;
+                currentData.subPackage[index].printPhotoQuantity = data.printPhotoQuantity;
+                currentData.subPackage[index].albumPhotoQuantity = data.albumPhotoQuantity;
                 currentData.subPackage[index].isSelected = data.isSelected;
             } else {
                 currentData.subPackage.push(data);
@@ -199,7 +207,7 @@ const FormPaketPelanggan = (props) => {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
                 <Grid container>
                     <Grid item xs={12}>
                         <Grid container spacing={0}>
@@ -234,7 +242,7 @@ const FormPaketPelanggan = (props) => {
                         </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
+            </Grid> */}
             <Grid item xs={12}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
@@ -279,6 +287,8 @@ const FormPaketPelanggan = (props) => {
                             title={item.subPackageName}
                             desc={item.subPackageDetail}
                             editQty={item.editPhotoQuantity}
+                            albumQty={item.albumPhotoQuantity}
+                            printQty={item.printPhotoQuantity}
                             onDetail={handleOpenSubPackagePopup} />)
                     }) : null}
                 </Grid>

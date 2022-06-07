@@ -420,8 +420,8 @@ class CustomerController extends Controller
                 $package = Package::find($bodyJson['id_package']);
                 $package->package_name = $bodyJson['package_name'];
                 $package->package_description = $bodyJson['package_description'];
-                $package->num_album_photo = $bodyJson['num_album_photo'];
-                $package->num_print_photo = $bodyJson['num_print_photo'];
+                // $package->num_album_photo = $bodyJson['num_album_photo'];
+                // $package->num_print_photo = $bodyJson['num_print_photo'];
                 $package->save();
 
                 $subPackageList = $bodyJson['sub_package'];
@@ -478,11 +478,15 @@ class CustomerController extends Controller
                             $subPackage->sub_package_name = $item['sub_package_name'];
                             $subPackage->sub_package_description = $item['sub_package_description'];
                             $subPackage->num_edit_photo = $item['num_edit_photo'];
+                            $subPackage->num_album_photo = $item['num_album_photo'];
+                            $subPackage->num_print_photo = $item['num_print_photo'];
                             $subPackage->save();
                         }else{
                             $subPackage->sub_package_name = $item['sub_package_name'];
                             $subPackage->sub_package_description = $item['sub_package_description'];
                             $subPackage->num_edit_photo = $item['num_edit_photo'];
+                            $subPackage->num_album_photo = $item['num_album_photo'];
+                            $subPackage->num_print_photo = $item['num_print_photo'];
                             $subPackage->save();
                         }
                     }else{
@@ -582,6 +586,7 @@ class CustomerController extends Controller
             ->where('id_package', '=', $package[0]->id)
             ->get()->toArray();
             
+            
             $data = new \stdClass();
             $data->package_name = $package[0]->package_name;
             $data->restrict_delete = $customer[0]->restrict_delete;
@@ -594,6 +599,8 @@ class CustomerController extends Controller
                 $subpackagetemp->description = $value->sub_package_description;
                 $subpackagetemp->num_limit_edit_photo = $value->num_edit_photo;
                 $subpackagetemp->num_selected_edit_photo = $value->num_selected_edit_photo;
+                $subpackagetemp->num_album_photo = $value->num_print_photo;
+                $subpackagetemp->num_print_photo = $value->num_print_photo;
                 
                 array_push($data->subpackage, $subpackagetemp);
             }
@@ -627,6 +634,8 @@ class CustomerController extends Controller
             $subpackagetemp->name = $subpackage->sub_package_name;
             $subpackagetemp->description = $subpackage->sub_package_description;
             $subpackagetemp->num_limit_edit_photo = $subpackage->num_edit_photo;
+            $subpackagetemp->num_limit_print_photo = $subpackage->num_print_photo;
+            $subpackagetemp->num_limit_album_photo = $subpackage->num_album_photo;
             $subpackagetemp->num_selected_edit_photo = $subpackage->num_selected_edit_photo;
                 
             //     array_push($data->subpackage, $subpackagetemp);

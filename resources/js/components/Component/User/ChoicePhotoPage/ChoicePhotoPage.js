@@ -13,7 +13,8 @@ import {
 } from '../../../Redux/User/features/choicephoto/choicephoto.action';
 import{ 
     setOpenDownloadPopup,
-    getDownloadLink
+    getDownloadLink,
+    getSubpackage
 } from '../../../Redux/User/features/originphoto/originphoto.action';
 import {
     setOpenAlertPopup
@@ -106,10 +107,13 @@ const ChoicePhotoPage = () => {
 
     ////////////////////////////////////////////
 
-    useEffect(() => {
-        dispatch(getChoicePhotoMetadata());
-        dispatch(countSelectedAlbumPhoto());
-        dispatch(countSelectedPrintPhoto());
+    useEffect(async() => {
+        let test = await dispatch(getChoicePhotoMetadata());
+        if (test != null) {
+            dispatch(countSelectedAlbumPhoto(choicePhotoProps.selectedSubPackageIdx));
+            dispatch(countSelectedPrintPhoto(choicePhotoProps.selectedSubPackageIdx));
+        }
+        
         dispatch(getDownloadLink('choice'));
     }, [])
 
@@ -125,6 +129,8 @@ const ChoicePhotoPage = () => {
     useEffect(() => {
         dispatch(resetChoicePhoto())
         dispatch(getChoicePhotoWithPagination(choicePhotoProps.selectedSubPackageIdx, choicePhotoProps.pageNumber));
+        dispatch(countSelectedAlbumPhoto(choicePhotoProps.selectedSubPackageIdx))
+        dispatch(countSelectedPrintPhoto(choicePhotoProps.selectedSubPackageIdx))
     }, [choicePhotoProps.selectedSubPackageIdx])
 
     useEffect(() => {
@@ -133,6 +139,8 @@ const ChoicePhotoPage = () => {
 
     const handleTabChange = (event, tabValue) => {
         dispatch(updateSubpackageIdx(tabValue));
+        dispatch(getSubpackage(tabValue))
+        
         dispatch(updatePageNumber(1));
     }
 

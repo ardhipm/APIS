@@ -73,7 +73,7 @@ const OriginPhotoPicture = ({ id, src, choice, filename, innerRef, isSelected, i
         }
     }
 
-    const handleSelectedPhoto = (e) => {
+    const handleSelectedPhoto =  (e) =>{
         
         if (e.target.checked) {
             if (originPhotoProps.subPackageNumSelectedEditPhoto >= originPhotoProps.subPackageNumEditPhoto) {
@@ -93,8 +93,12 @@ const OriginPhotoPicture = ({ id, src, choice, filename, innerRef, isSelected, i
             if(choice != null){
                 dispatch(setOpenConfirmDialog(true, "Foto telah masuk pada foto pilihan, lanjutan untuk menghapus ?", confirmDialogType.DELETE_CHOICE_PHOTO_AFTER_CHECKOUT))
             }else{
-                dispatch(removeSelectedPhoto(src));
-                setIsSelectedState(e.target.checked);
+                dispatch(removeSelectedPhoto(src)).then( response => {setIsSelectedState(e.target.checked)}, error => {});
+
+                // if(originPhotoProps.deletePhotoSuccess)
+                //     setIsSelectedState(e.target.checked)
+                // else
+                //     return
                 // refreshOriginPhoto();
             }
             

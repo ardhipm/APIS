@@ -143,10 +143,10 @@ async function deletePrintPhoto(basename){
     }
 }
 
-async function countSelectedAlbumPhoto(){
+async function countSelectedAlbumPhoto(idx){
     const defaultHeaders = getHeader();
     try{
-        const url = `${BASE_URL}/api/drive/choice/get_count_selected_album_photo`;
+        const url = `${BASE_URL}/api/drive/choice/get_count_selected_album_photo/${idx}`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',
@@ -162,10 +162,10 @@ async function countSelectedAlbumPhoto(){
     }
 }
 
-async function countSelectedPrintPhoto(){
+async function countSelectedPrintPhoto(idx){
     const defaultHeaders = getHeader();
     try{
-        const url = `${BASE_URL}/api/drive/choice/get_count_selected_print_photo`;
+        const url = `${BASE_URL}/api/drive/choice/get_count_selected_print_photo/${idx}`;
         const headers = { ...defaultHeaders };
         const response = await axios({
             method: 'GET',

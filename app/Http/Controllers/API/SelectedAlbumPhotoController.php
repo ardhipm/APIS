@@ -67,26 +67,26 @@ class SelectedAlbumPhotoController extends Controller
         return response(['success' => true, 'data' => $basename, 'message' => 'Photo Deleted'], 201);
     }
 
-    public function countSelectedAlbumPhoto(){
+    public function countSelectedAlbumPhoto($subpackageId){
         $customer = Customer::where('id_user', '=', Auth::id())->get()->first();
-        $subpackageCustomer = DB::table('sub_packages as sp')
-            ->join('packages as p', 'p.id', 'sp.id_package')
-            ->join('customers as c', 'c.id', 'p.id_customer')
-            ->select('sp.id')
-            ->where('c.id','=', $customer->id)->get();
+        // $subpackageCustomer = DB::table('sub_packages as sp')
+        //     ->join('packages as p', 'p.id', 'sp.id_package')
+        //     ->join('customers as c', 'c.id', 'p.id_customer')
+        //     ->select('sp.id')
+        //     ->where('c.id','=', $customer->id)
+        //     ->where('sp.id', '=', $subpackageId)->get();
 
-        $idSubpackageArray = array();
-        foreach($subpackageCustomer as $value){
-            array_push($idSubpackageArray, $value->id);
-        }
+        // $idSubpackageArray = array();
+        // foreach($subpackageCustomer as $value){
+        //     array_push($idSubpackageArray, $value->id);
+        // }
 
 
         // die(print_r($testArray));
         $tbl = DB::table('selected_album_photo as sap')
             ->select('sap.basename')
             ->where('sap.id_customer', '=', $customer->id)
-            ->whereIn('sap.id_subpackage',
-            $idSubpackageArray)->count();
+            ->where('sap.id_subpackage','=',$subpackageId)->count();
         // die(print_r($tbl));
         return response(['success' => true,'data'=>$tbl, 'message' => 'Synchronize Successfully']);
     }

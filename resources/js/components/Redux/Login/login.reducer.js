@@ -18,7 +18,8 @@ const initialState = {
         username:'',
         roleId: '',
         isActive:false,
-    }
+    },
+    errorMsg: ''
 }
 
 const loginReducer = (state = initialState, action) => {
@@ -28,7 +29,8 @@ const loginReducer = (state = initialState, action) => {
         case LOGIN:
             return {
                 ...state,
-                loading: true
+                loading: true,
+                errorMsg: ''
             }
         case LOGIN_SUCCESS:
             // console.log(action.payload);
@@ -52,10 +54,12 @@ const loginReducer = (state = initialState, action) => {
                 }
             }
         case LOGIN_FAIL:
+            console.log('---> login fail', action.payload.message)
             return {
                 ...state,
                 loading: false,
-                splashscreen: false
+                splashscreen: false,
+                errorMsg: action.payload.data.message
             }
 
         case IS_TOKEN_EXISTS:

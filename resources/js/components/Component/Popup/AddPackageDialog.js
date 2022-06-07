@@ -93,7 +93,7 @@ const AddPackageDialog = (props) => {
               fullWidth
             />
           </Grid>
-          <Grid item xs={6}>
+          {/* <Grid item xs={6}>
             <TextField
               autoFocus
               margin="dense"
@@ -116,7 +116,7 @@ const AddPackageDialog = (props) => {
               onChange={formik.handleChange}
               fullWidth
             />
-          </Grid>
+          </Grid> */}
         </Grid>
 
       </DialogContent>

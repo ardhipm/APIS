@@ -51,6 +51,24 @@ const AddSubPackageDialog = (props) => {
         })
     }
 
+    const handleAlbumQty = (e) => {
+        setCurrentSubPackageData(prevState => {
+            return {
+                ...prevState,
+                albumPhotoQuantity: e.target.value
+            }
+        })
+    }
+
+    const handlePrintQty = (e) => {
+        setCurrentSubPackageData(prevState => {
+            return {
+                ...prevState,
+                printPhotoQuantity: e.target.value
+            }
+        })
+    }
+
     return (
         <Dialog open={props.open} onClose={handleClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">Tambah Sub Paket</DialogTitle>
@@ -80,14 +98,36 @@ const AddSubPackageDialog = (props) => {
                             fullWidth
                         />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={4}>
                         <TextField
                             margin="dense"
                             id="photoEditQuantity"
-                            label="Kuantitas Edit Foto"
+                            label="Kuantitas Foto Edit"
                             value={currentSubPackageData.editPhotoQuantity}
                             type="text"
                             onChange={handleEditQty}
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <TextField
+                            margin="dense"
+                            id="albumPhotoQuantity"
+                            label="Kuantitas Foto Album"
+                            value={currentSubPackageData.albumPhotoQuantity}
+                            type="text"
+                            onChange={handleAlbumQty}
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <TextField
+                            margin="dense"
+                            id="printPhotoQuantity"
+                            label="Kuantitas Foto Cetak"
+                            value={currentSubPackageData.printPhotoQuantity}
+                            type="text"
+                            onChange={handlePrintQty}
                             fullWidth
                         />
                     </Grid>
