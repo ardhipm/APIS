@@ -54,7 +54,6 @@ const loginReducer = (state = initialState, action) => {
                 }
             }
         case LOGIN_FAIL:
-            console.log('---> login fail', action.payload.message)
             return {
                 ...state,
                 loading: false,

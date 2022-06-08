@@ -150,13 +150,31 @@ const ChoicePhotoPreveiwPicture = () => {
                 setPrintSelect(element.is_print_selected);
             }
         })
+
+        // register key listener
+        document.addEventListener('keydown', handleKeyNextPrev)
+        return () => {
+            document.removeEventListener('keydown', handleKeyNextPrev)
+        }
     }, [choicePhotoProps.showPreview,choicePhotoProps.currentPhotoPreview])
+
+    // add arrow left and right listener
+    const handleKeyNextPrev = (e) => {
+        if (e.keyCode == 39) {
+            let btnNext = document.getElementById("choice-btn-next")
+            btnNext.click();
+        }
+        if (e.keyCode == 37) {
+            let btnNPrev = document.getElementById("choice-btn-prev")
+            btnNPrev.click();
+        }
+    }
 
     
 
     const handleOnClose = (e) => {
-        // console.log(e)
-        if (e.target.id === 'choice-photo-preview-layout' || e.target.id === 'choice-photo-preview-container' || e.target.id !== '') dispatch(openPicturePreview(false))
+        console.log('=====>',e)
+        if (e.target.id === 'choice-photo-preview-layout' || e.target.id === 'choice-photo-preview-container') dispatch(openPicturePreview(false))
         if (e.target.tagName === 'IMG') return
     }
 
@@ -272,12 +290,14 @@ const ChoicePhotoPreveiwPicture = () => {
 
                     </div> : null}
                     <Button
+                        id="choice-btn-prev"
                         className={classes.prevBtn}
                         key={1}
                         onClick={(e) => handlePrevNext(e, prevEl.basename)}
                         endIcon={<Icon icon="grommet-icons:previous" style={{ color: 'white', fontSize: '60px' }} />}
                     ></Button>
                     <Button
+                        id="choice-btn-next"
                         className={classes.nextBtn}
                         key={2}
                         onClick={(e) => handlePrevNext(e, nextEl.basename)}
