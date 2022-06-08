@@ -123,12 +123,31 @@ const OriginPhotoPreviewPicture = (props) => {
                 // setPrintSelect(element.is_print_selected);
             }
         })
+        
+        //register key listener
+        document.addEventListener('keydown', handleKeyNextPrev)
+        return () => {
+            document.removeEventListener('keydown', handleKeyNextPrev)
+        }
     }, [originPhotoProps.basename, originPhotoProps.currentPhotoPreview])
 
     useEffect(() => {
         setError(false);
         if (originPhotoProps.showPreview) setLoading(true);
+
     }, [originPhotoProps.showPreview])
+
+    // add arrow left and right listener
+    const handleKeyNextPrev = (e) => {
+        if (e.keyCode == 39) {
+            let btnNext = document.getElementById("btn-next")
+            btnNext.click();
+        }
+        if (e.keyCode == 37) {
+            let btnNPrev = document.getElementById("btn-prev")
+            btnNPrev.click();
+        }
+    }
 
     const handleOnClose = (e) => {
         // console.log(e)
@@ -226,12 +245,14 @@ const OriginPhotoPreviewPicture = (props) => {
                                         name="checkedA" />
                                     {/* <span>isSelect : {element.isSelected}</span> */}
                                     <Button
+                                        id='btn-prev'
                                         className={classes.prevBtn}
                                         key={1}
                                         onClick={(e) => handlePrevNext(e, prevEl.basename)}
                                         endIcon={<Icon icon="grommet-icons:previous" style={{ color: 'white', fontSize: '60px' }} />}
                                     ></Button>
                                     <Button
+                                        id='btn-next'
                                         className={classes.nextBtn}
                                         key={2}
                                         onClick={(e) => handlePrevNext(e, nextEl.basename)}
