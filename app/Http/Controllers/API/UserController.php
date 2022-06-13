@@ -116,12 +116,12 @@ class UserController extends Controller
                 ->where('filename', '=', "Foto Album")
                 ->first(); // There could be duplicate directory names!
 
-//                 $dir5 = $contents->where('type', '=', 'dir')
-//                 ->where('filename', '=', "Album")
-//                 ->first(); // There could be duplicate directory names!
+                $dir5 = $contents->where('type', '=', 'dir')
+                ->where('filename', '=', "Album")
+                ->first(); // There could be duplicate directory names!
 
-//                 \Storage::cloud()->makeDirectory($dir5['path'] . '/Magazine');
-//                 \Storage::cloud()->makeDirectory($dir5['path'] . '/Kolase');
+                \Storage::cloud()->makeDirectory($dir5['path'] . '/Album1');
+                \Storage::cloud()->makeDirectory($dir5['path'] . '/Album2');
 
 
                 // if (!$dir) {$response = [
