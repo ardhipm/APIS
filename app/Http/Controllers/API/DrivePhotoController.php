@@ -553,11 +553,89 @@ class DrivePhotoController extends Controller
         return $response;
     }
 
-    public function getAlbumMagazine(){
+    // public function getAlbum1(){
 
-        if (!class_exists('Memcached')) {
-            include ("memcached.php");
-        }
+    //     if (!class_exists('Memcached')) {
+    //         include ("memcached.php");
+    //     }
+    
+    //     $customer = DB::table('customers')
+    //     ->leftJoin('users', 'customers.id_user', 'users.id')
+    //     ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
+    //     ->where('customers.id_user', '=', Auth::Id())
+    //     ->get()->toArray();
+
+        
+    //     $folder = $customer[0]->id .' - ' .$customer[0]->name;
+
+    //     $contents = collect(\Storage::cloud()->listContents('/', false));
+    //     $dir = $contents->where('type', '=', 'dir')
+    //             ->where('filename', '=', $folder)
+    //             ->first(); // There could be duplicate directory names!
+        
+    //     $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+    //     $dir = $contents->where('type', '=', 'dir')
+    //     ->where('filename', '=', 'Album')
+    //     ->first(); // There could be duplicate directory names!
+
+    //     $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+    //     $dir = $contents->where('type', '=', 'dir')
+    //     ->where('filename', '=', 'Album1')
+    //     ->first(); // There could be duplicate directory names!
+
+    //     $filedirchild = collect(\Storage::cloud()->listContents($dir['path'], false))->where('type', '=', 'file');
+
+    //     $response = [
+    //         'success' => true,
+    //         'data' => $filedirchild,
+    //         'message' => 'Album 1 retrieved successfully.',   
+    //     ];
+
+    //     \Cache::put('album_user_'.Auth::Id(), $response, 600);
+
+    //     return $response;
+    // }
+
+    // public function getAlbum2(){
+    
+    //     $customer = DB::table('customers')
+    //     ->leftJoin('users', 'customers.id_user', 'users.id')
+    //     ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
+    //     ->where('customers.id_user', '=', Auth::Id())
+    //     ->get()->toArray();
+
+        
+    //     $folder = $customer[0]->id .' - ' .$customer[0]->name;
+
+    //     $contents = collect(\Storage::cloud()->listContents('/', false));
+    //     $dir = $contents->where('type', '=', 'dir')
+    //             ->where('filename', '=', $folder)
+    //             ->first(); // There could be duplicate directory names!
+        
+    //     $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+    //     $dir = $contents->where('type', '=', 'dir')
+    //     ->where('filename', '=', 'Album')
+    //     ->first(); // There could be duplicate directory names!
+
+    //     $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+    //     $dir = $contents->where('type', '=', 'dir')
+    //     ->where('filename', '=', 'Album2')
+    //     ->first(); // There could be duplicate directory names!
+
+    //     $filedirchild = collect(\Storage::cloud()->listContents($dir['path'], false))->where('type', '=', 'file');
+
+    //     $response = [
+    //         'success' => true,
+    //         'data' => $filedirchild,
+    //         'message' => 'Album Album2 retrieved successfully.',   
+    //     ];
+
+    //     \Cache::put('album_user_'.Auth::Id(), $response, 600);
+
+    //     return $response;
+    // }
+
+    public function getAlbumPhoto($album){
     
         $customer = DB::table('customers')
         ->leftJoin('users', 'customers.id_user', 'users.id')
@@ -580,7 +658,7 @@ class DrivePhotoController extends Controller
 
         $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
         $dir = $contents->where('type', '=', 'dir')
-        ->where('filename', '=', 'Magazine')
+        ->where('filename', '=', $album)
         ->first(); // There could be duplicate directory names!
 
         $filedirchild = collect(\Storage::cloud()->listContents($dir['path'], false))->where('type', '=', 'file');
@@ -588,46 +666,7 @@ class DrivePhotoController extends Controller
         $response = [
             'success' => true,
             'data' => $filedirchild,
-            'message' => 'Album Magazine retrieved successfully.',   
-        ];
-
-        \Cache::put('album_user_'.Auth::Id(), $response, 600);
-
-        return $response;
-    }
-
-    public function getAlbumKolase(){
-    
-        $customer = DB::table('customers')
-        ->leftJoin('users', 'customers.id_user', 'users.id')
-        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
-        ->where('customers.id_user', '=', Auth::Id())
-        ->get()->toArray();
-
-        
-        $folder = $customer[0]->id .' - ' .$customer[0]->name;
-
-        $contents = collect(\Storage::cloud()->listContents('/', false));
-        $dir = $contents->where('type', '=', 'dir')
-                ->where('filename', '=', $folder)
-                ->first(); // There could be duplicate directory names!
-        
-        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
-        $dir = $contents->where('type', '=', 'dir')
-        ->where('filename', '=', 'Album')
-        ->first(); // There could be duplicate directory names!
-
-        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
-        $dir = $contents->where('type', '=', 'dir')
-        ->where('filename', '=', 'Kolase')
-        ->first(); // There could be duplicate directory names!
-
-        $filedirchild = collect(\Storage::cloud()->listContents($dir['path'], false))->where('type', '=', 'file');
-
-        $response = [
-            'success' => true,
-            'data' => $filedirchild,
-            'message' => 'Album Kolase retrieved successfully.',   
+            'message' => 'Album Album2 retrieved successfully.',   
         ];
 
         \Cache::put('album_user_'.Auth::Id(), $response, 600);
