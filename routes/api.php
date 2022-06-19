@@ -228,6 +228,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('drive/get_origin_photo', 'API\DrivePhotoController@getOriginCachePhoto');
 });
 
+Route::middleware('auth:api')->group(function () {
+    Route::get('drive/get_album_photo/{album}', 'API\DrivePhotoController@getAlbumPhoto');
+});
+
+
 Route::get('drive/get_origin_photo_test', 'API\DrivePhotoController@getOriginPhoto');
 
 // Route::middleware('auth:api')->group(function () {

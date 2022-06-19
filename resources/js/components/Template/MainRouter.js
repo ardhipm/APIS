@@ -26,6 +26,7 @@ import Faq from '../Component/Admin/Bantuan/FAQ';
 import OriginPhotoPage from '../Component/User/OriginPhotoPage/OriginPhotoPage';
 import ChoicePhotoPage from '../Component/User/ChoicePhotoPage/ChoicePhotoPage';
 import NotificationPage from '../Component/Admin/Notifikasi/NotificationPage';
+import AlbumPhotoPage from '../Component/User/AlbumPhotoPage/AlbumPhotoPage';
 
 // const history = createBrowserHistory();
 
@@ -71,7 +72,7 @@ const MainRouter = () => (
                     showTab={true}
                     tabValue={2}
                     name="Video"/>
-                <PrivateRoute path="/pelanggan/paket/album" exact component={UserPictureSimplePage} 
+                <PrivateRoute path="/pelanggan/paket/album" exact component={AlbumPhotoPage} 
                     role={[1]} key="/api/drive/get_album" 
                     apiLink="/api/drive/get_album" 
                     showTab={true}

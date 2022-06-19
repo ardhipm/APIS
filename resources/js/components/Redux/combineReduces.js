@@ -8,6 +8,7 @@ import loginReducer from './Login/login.reducer';
 import loadingReducer from './Popup/Loading/loading.reducer';
 import alertReducer from './Popup/Alert/alert.reducer';
 import notifReducer from './Notification/notification.reducer';
+import albumPhotoReducer from './User/features/albumphoto/albumphoto.reducer';
 import axios from 'axios';
 
 axios.interceptors.response.use((response) => {
@@ -33,7 +34,8 @@ const createRootReducer = (history) => (combineReducers({
     loginReducer,
     loadingReducer,
     alertReducer,
-    notifReducer
+    notifReducer,
+    albumPhotoReducer
     
 }));
 
