@@ -294,6 +294,9 @@ class DrivePhotoController extends Controller
     }
 
     public function getVideoCache(){
+        if (!class_exists('Memcached')) {
+            include ("memcached.php");
+        }
         if (\Cache::has('video_user_'.Auth::Id())) {
             $response = \Cache::get('video_user_'.Auth::Id());
             return $response;
@@ -637,41 +640,56 @@ class DrivePhotoController extends Controller
 
     public function getAlbumPhoto($album){
     
-        $customer = DB::table('customers')
-        ->leftJoin('users', 'customers.id_user', 'users.id')
-        ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
-        ->where('customers.id_user', '=', Auth::Id())
-        ->get()->toArray();
+        try{
 
-        
-        $folder = $customer[0]->id .' - ' .$customer[0]->name;
 
-        $contents = collect(\Storage::cloud()->listContents('/', false));
-        $dir = $contents->where('type', '=', 'dir')
-                ->where('filename', '=', $folder)
-                ->first(); // There could be duplicate directory names!
-        
-        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
-        $dir = $contents->where('type', '=', 'dir')
-        ->where('filename', '=', 'Album')
-        ->first(); // There could be duplicate directory names!
+            $customer = DB::table('customers')
+            ->leftJoin('users', 'customers.id_user', 'users.id')
+            ->select('customers.id','customers.id_user', 'users.email', 'customers.name', 'customers.phone_no', 'customers.partner_name')
+            ->where('customers.id_user', '=', Auth::Id())
+            ->get()->toArray();
+    
+            
+            $folder = $customer[0]->id .' - ' .$customer[0]->name;
+    
+            $contents = collect(\Storage::cloud()->listContents('/', false));
+            $dir = $contents->where('type', '=', 'dir')
+                    ->where('filename', '=', $folder)
+                    ->first(); // There could be duplicate directory names!
+            
+            $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+            $dir = $contents->where('type', '=', 'dir')
+            ->where('filename', '=', 'Album')
+            ->first(); // There could be duplicate directory names!
+    
+            $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
+            $dir = $contents->where('type', '=', 'dir')
+            ->where('filename', '=', $album)
+            ->first(); // There could be duplicate directory names!
+    
+            $filedirchild = collect(\Storage::cloud()->listContents($dir['path'], false))->where('type', '=', 'file');
+    
+            $response = [
+                'success' => true,
+                'data' => $filedirchild,
+                'message' => 'Album Album2 retrieved successfully.',   
+            ];
 
-        $contents = collect(\Storage::cloud()->listContents($dir['path'], false));
-        $dir = $contents->where('type', '=', 'dir')
-        ->where('filename', '=', $album)
-        ->first(); // There could be duplicate directory names!
-
-        $filedirchild = collect(\Storage::cloud()->listContents($dir['path'], false))->where('type', '=', 'file');
-
-        $response = [
-            'success' => true,
-            'data' => $filedirchild,
-            'message' => 'Album Album2 retrieved successfully.',   
-        ];
-
-        \Cache::put('album_user_'.Auth::Id(), $response, 600);
-
-        return $response;
+            if (!class_exists('Memcached')) {
+                include ("memcached.php");
+            }
+    
+            \Cache::put('album_user_'.Auth::Id(), $response, 600);
+    
+            return $response;
+        }
+        catch(\Exception $e){
+            return \Response::json([
+                'success' => false,
+                'data' => '',
+                'message' => 'Something went wrong',
+            ], 500); // Status code here
+        }
     }
 
     public function createZipFile($folderName){
