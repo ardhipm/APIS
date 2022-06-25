@@ -667,7 +667,7 @@ class DrivePhotoController extends Controller
             ->where('filename', '=', $album)
             ->first(); // There could be duplicate directory names!
     
-            $filedirchild = collect(\Storage::cloud()->listContents($dir['path'], false))->where('type', '=', 'file');
+            $filedirchild = collect(\Storage::cloud()->listContents($dir['path'], false))->where('type', '=', 'file')->sortBy('filename', SORT_NATURAL|SORT_FLAG_CASE)->values()->all();
     
             $response = [
                 'success' => true,
