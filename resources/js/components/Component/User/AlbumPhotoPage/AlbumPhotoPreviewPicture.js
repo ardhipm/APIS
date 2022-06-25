@@ -168,7 +168,7 @@ const AlbumPhotoPreviewPicture = (props) => {
                         onError={handleImageErrored}
                         src={`https://drive.google.com/thumbnail?id=${albumPhotoProps.currentBasenamePreview}&sz=h1000`}
                         // src={`https://drive.google.com/thumbnail?id=1E49DRQ6vyxQoz0Ny885B-xL_ESV35sRM&sz=h1000`}
-                        style={{ objectFit: 'contain', height: '100%' }}
+                        style={{ objectFit: 'contain', height: '100%',width: '100%' }}
                         alt="JPEG Image"
                         loading="eager" />
                         {albumPhotoProps.photoAlbumData.map((element, index) => {

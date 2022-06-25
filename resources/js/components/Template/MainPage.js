@@ -137,6 +137,7 @@ export default function MainPage(props) {
     const [openSplashScreen, setOpenSplashScreen] = React.useState(true)
     const [openNotif, setOpenNotif] = React.useState(false);
     const dispatch = useDispatch();
+    const notifProps = useSelector((state) => state.notifReducer)
 
     const history = useHistory();
     const handleCloseTerms =()=>{
@@ -154,6 +155,8 @@ export default function MainPage(props) {
         }
         dispatch(getNotificationUser());
     }, []);
+
+    useEffect(() => {console.log('heres')},[notifProps.newNotif])
 
     const handleOnTabChange = (e, value) => {
         // console.log(value);
@@ -211,10 +214,7 @@ export default function MainPage(props) {
 
     let notif = (role == 1 ? (
         <div className={classes.badge} >
-                        <Badge classes={{
-                            dot: classes.dot
-                        }}
-                            onClick={handleOpenNotif}>
+                        <Badge color="error" variant="dot" onClick={handleOpenNotif} invisible={!notifProps.newNotif}>
                             <Icon icon="bx:bx-bell" style={{ fontSize: '24px', color: 'white', cursor: 'pointer' }} />
                         </Badge>
                     </div>
