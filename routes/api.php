@@ -252,7 +252,9 @@ Route::middleware('auth:api')->group(function () {
             DB::raw('(CASE WHEN sp.basename is null THEN false ELSE true END) AS is_selected')
         )
         ->where('op.id_customer', '=', $customer->id)
-        ->where('op.sub_package_id', '=', $id)->paginate(50);
+        ->where('op.sub_package_id', '=', $id)
+        ->orderBy('op.filename', 'asc')
+        ->paginate(50);
         // ->orWhere('sp.id_subpackage', '=', $id)
         return $tbl;
     });
