@@ -119,9 +119,10 @@ const AlbumPhotoPreviewPicture = (props) => {
     
 
     const handleOnClose = (e) => {
-        // console.log(e)
         document.removeEventListener('keydown', handleKeyNextPrev)
-        if (e.target.id === 'album-photo-preview-layout' || e.target.id === 'album-photo-preview-container') dispatch(showPreviewAlbumPhoto(false))
+        if (e.target.id === 'album-photo-preview-layout' 
+            || e.target.id === 'album-photo-preview-container'
+            || e.target.id === 'btnClose') dispatch(showPreviewAlbumPhoto(false))
         if (e.target.tagName === 'IMG') return
     }
 
@@ -156,6 +157,9 @@ const AlbumPhotoPreviewPicture = (props) => {
                 onClick={handleOnClose}
                 // 1E49DRQ6vyxQoz0Ny885B-xL_ESV35sRM
                 >
+                <Button
+                        style={{ position: 'absolute', right: 0, top: 0, padding: '16px', cursor: 'pointer', zIndex: 10000 }}
+                        className={classes.btnNav}><Icon id="btnClose" icon="bx:bx-x-circle" style={{ color: 'white', fontSize: '60px' }} /></Button>
 
 
                 <div id="album-photo-preview-container" className={classes.imgContainer}>
