@@ -71,7 +71,8 @@ class ChoicePhotoController extends Controller
             DB::raw('(CASE WHEN pp.basename is null THEN false ELSE true END) AS is_print_selected')
         )
         ->where('cp.id_customer', '=', $customer->id)
-        ->where('cp.sub_package_id', '=', $subpackageId)->paginate(50);
+        ->where('cp.sub_package_id', '=', $subpackageId)
+        ->orderBy('cp.filename','asc')->paginate(50);
         return $tbl;
     }
 

@@ -18,7 +18,8 @@ export const login = (user, pass, rememberMe) => dispatch => {
     });
     const request = api.login(user, pass,rememberMe);
     return request.then(
-        response => dispatch({type: LOGIN_SUCCESS, payload: response.data}),        
+        response => dispatch({type: LOGIN_SUCCESS, payload: response.data}), 
+        err => {console.log('====> err ',err ); dispatch({type: LOGIN_FAIL, payload: err})} 
     );
 }
 

@@ -11,7 +11,7 @@ const TextDescription = ({description}) =>{
     return(
         <React.Fragment>
            <Typography variant="subtitle1" >
-                <div dangerouslySetInnerHTML={{ __html: description }}/>
+                <div dangerouslySetInnerHTML={{ __html: description }} style={{overflowX: 'hidden', overflowY: 'auto', maxHeight: '68vh'}}/>
             </Typography>
         </React.Fragment>
     )
