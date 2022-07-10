@@ -119,7 +119,6 @@ const AlbumPhotoPreviewPicture = (props) => {
     
 
     const handleOnClose = (e) => {
-        console.log(e)
         document.removeEventListener('keydown', handleKeyNextPrev)
         if (e.target.id === 'album-photo-preview-layout' 
             || e.target.id === 'album-photo-preview-container'
