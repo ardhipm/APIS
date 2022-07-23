@@ -73,7 +73,8 @@ const initialState = {
     openConfirmDialog: false,
     confirmDialogMessage: '',
     confirmDialogType: null,
-    deletePhotoSuccess: true
+    deletePhotoSuccess: true,
+    disableCheckoutButton: false
 
 }
 
@@ -283,16 +284,19 @@ const originPhotoReducer = (state = initialState, action) => {
         case CHECKOUT_SELECTED_PHOTO:
             return {
                 ...state,
+                disableCheckoutButton: true,
                 loadingCheckout: true
             }
         case CHECKOUT_SELECTED_PHOTO_SUCCESS:
             return {
                 ...state,
+                disableCheckoutButton: false,
                 loadingCheckout: false
             }
         case CHECKOUT_SELECTED_PHOTO_FAIL:
             return {
                 ...state,
+                disableCheckoutButton: false,
                 loadingCheckout: false
             }
         case GET_DOWNLOAD_LINK:

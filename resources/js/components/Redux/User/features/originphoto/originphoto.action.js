@@ -206,7 +206,7 @@ export const openPicturePreview = (show) => ({
 })
 
 export const checkoutSelectedPhoto = (subpackageId) => async dispatch => {
-    dispatch(setOpenLoadingPopup(true, 'Loading...'));
+    dispatch(setOpenLoadingPopup(true, 'Foto sedang dalam tahap penyalinan, dimohon untuk tidak menutup halaman'));
     dispatch({type: CHECKOUT_SELECTED_PHOTO});
     const response = api.checkoutSelectedPhoto(subpackageId);
 

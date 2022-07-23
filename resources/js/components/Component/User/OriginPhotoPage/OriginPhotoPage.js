@@ -99,6 +99,7 @@ const OriginPhotoPage = () => {
         dispatch(countSelectedOriginPhoto(originPhotoProps.selectedSubPackageIdx));
     }, [originPhotoProps.currentOriginPhoto])
 
+    useEffect(() => {}, [originPhotoProps.disableCheckoutButton])
     //////////////////////////////////////////////////////
 
     useEffect(() => {
@@ -179,7 +180,7 @@ const OriginPhotoPage = () => {
                         variant="contained"
                         color="primary"
                         endIcon={<Send />}
-                        disabled={originPhotoProps.subPackageNumSelectedEditPhoto < 1 }
+                        disabled={originPhotoProps.subPackageNumSelectedEditPhoto < 1 || originPhotoProps.disableCheckoutButton}
                         onClick={handleSelectedPhoto}>
                         Kirim
                     </Button>
